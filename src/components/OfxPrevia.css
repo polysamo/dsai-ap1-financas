@@ -1,0 +1,93 @@
+.ofx-previa {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ofx-previa__linha {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--esp-2);
+  align-items: center;
+  padding: var(--esp-3) var(--esp-2);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.ofx-previa__linha--erro {
+  background: var(--cor-perigo-suave);
+}
+
+.ofx-previa__linha--duplicata {
+  background: var(--cor-aviso-suave);
+}
+
+.ofx-previa__marca {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--cor-primaria);
+}
+
+.ofx-previa__dados {
+  min-width: 0;
+}
+
+.ofx-previa__descricao {
+  margin: 0;
+  font-weight: 500;
+  color: var(--cor-texto);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ofx-previa__detalhe {
+  margin: 0;
+  font-size: var(--texto-xs);
+  color: var(--cor-texto-suave);
+}
+
+.ofx-previa__situacao {
+  margin: 0;
+  font-size: var(--texto-xs);
+  font-weight: 600;
+}
+
+.ofx-previa__situacao--pronta {
+  color: var(--cor-sucesso);
+}
+
+.ofx-previa__situacao--duplicata {
+  color: var(--cor-aviso);
+}
+
+.ofx-previa__situacao--erro {
+  color: var(--cor-perigo);
+}
+
+.ofx-previa__categoria {
+  grid-column: 2;
+  min-width: 0;
+  padding: var(--esp-2);
+  font: inherit;
+  font-size: var(--texto-sm);
+  color: var(--cor-texto);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-pequeno);
+}
+
+.ofx-previa__categoria:focus-visible,
+.ofx-previa__marca:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+@media (min-width: 640px) {
+  .ofx-previa__linha {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .ofx-previa__categoria {
+    grid-column: auto;
+  }
+}

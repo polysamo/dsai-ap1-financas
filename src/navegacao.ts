@@ -17,5 +17,6 @@ export const itensNavegacao: ItemNavegacao[] = [
   { to: '/relatorios', rotulo: 'Relatórios' },
   { to: '/regras', rotulo: 'Regras' },
   { to: '/importar', rotulo: 'Importar CSV' },
+  { to: '/importar-ofx', rotulo: 'Importar OFX' },
   { to: '/ajuda', rotulo: 'Ajuda' },
 ];

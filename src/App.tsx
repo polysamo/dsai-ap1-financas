@@ -8,6 +8,7 @@ import { ContasPage } from './pages/ContasPage';
 import { ConfiguracoesPage } from './pages/ConfiguracoesPage';
 import { DividasPage } from './pages/DividasPage';
 import { ImportarCsvPage } from './pages/ImportarCsvPage';
+import { ImportarOfxPage } from './pages/ImportarOfxPage';
 import { InvestimentosPage } from './pages/InvestimentosPage';
 import { MetasPage } from './pages/MetasPage';
 import { AjudaPage } from './pages/AjudaPage';
@@ -35,6 +36,7 @@ export function AppRoutes() {
         <Route path="/investimentos" element={<InvestimentosPage />} />
         <Route path="/dividas" element={<DividasPage />} />
         <Route path="/importar" element={<ImportarCsvPage />} />
+        <Route path="/importar-ofx" element={<ImportarOfxPage />} />
         <Route path="/relatorios" element={<RelatoriosPage />} />
         <Route path="/configuracoes" element={<ConfiguracoesPage />} />
         <Route path="/dados" element={<Navigate to="/configuracoes" replace />} />
