@@ -5,6 +5,7 @@ Aplicativo de finanças pessoais que roda só no navegador, sem backend e sem lo
 - **URL pública:** https://dsai-ap1-financas.vercel.app
 - **Repositório:** https://github.com/polysamo/dsai-ap1-financas
 - **Dupla:** Antonio Roger Sousa de Morais e Polyana dos Santos Moraes
+- **Roteiro da apresentação:** [apresentacao-2026-10-01.pdf](apresentacao-2026-10-01.pdf)
 
 ## O que o app faz
 
@@ -75,7 +76,7 @@ SUM:                           235           1692            409          17658
 Só os testes (`src/test`):
 
 ```
-github.com/AlDanial/cloc v 2.06  T=3.07 s (8.8 files/s, 2406.0 lines/s)
+github.com/AlDanial/cloc v 2.06  T=6.34 s (4.3 files/s, 1163.3 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
@@ -88,5 +89,5 @@ SUM:                            27            732             37           6612
 ## Estado dos testes e do repositório
 
 - 516 testes passando na última execução completa (`npm test`) e build de produção compilando (`npm run build`).
-- 94 commits, com os trailers `Agent:` e, nas partes, `Spec:`.
+- 97 commits, com os trailers `Agent:` e, nas partes, `Spec:`.
 - Limitações conhecidas: a amortização extra de dívidas abate só o saldo devedor e não recalcula a tabela; o PDF dos relatórios usa a impressão do navegador; subcategorias, edição em lote e busca global ficaram de fora.
