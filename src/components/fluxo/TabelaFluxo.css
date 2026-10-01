@@ -1,0 +1,52 @@
+.fluxo-tabela__rolagem {
+  overflow-x: auto;
+}
+.fluxo-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--texto-sm);
+  text-align: left;
+}
+.fluxo-tabela th,
+.fluxo-tabela td {
+  padding: var(--esp-2);
+  border-top: 1px solid var(--cor-borda);
+  vertical-align: top;
+  font-weight: 400;
+}
+.fluxo-tabela thead th {
+  border-top: 0;
+  font-weight: 500;
+  color: var(--cor-texto-suave);
+}
+.fluxo-tabela tbody th {
+  white-space: nowrap;
+}
+.fluxo-tabela__linha--negativa {
+  background: var(--cor-perigo-suave);
+}
+.fluxo-tabela__num {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.fluxo-tabela__saldo--negativo,
+.fluxo-tabela__negativo {
+  color: var(--cor-perigo);
+  font-weight: 600;
+}
+.fluxo-tabela__mudo,
+.fluxo-tabela__origem {
+  color: var(--cor-texto-mudo);
+}
+.fluxo-tabela__itens {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.fluxo-tabela__itens li + li {
+  margin-top: var(--esp-1);
+}
+.fluxo-tabela code {
+  font-size: var(--texto-xs);
+}

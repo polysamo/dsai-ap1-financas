@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { FluxoPage } from './pages/FluxoPage';
 import { FalhaCarregamento } from './components/FalhaCarregamento';
 import { Layout } from './components/Layout';
 import { DashboardPage } from './pages/DashboardPage';
@@ -29,6 +30,7 @@ export function AppRoutes() {
         <Route path="/contas" element={<ContasPage />} />
         <Route path="/cartoes" element={<CartoesPage />} />
         <Route path="/calendario" element={<CalendarioPage />} />
+        <Route path="/fluxo" element={<FluxoPage />} />
         <Route path="/orcamento" element={<OrcamentoPage />} />
         <Route path="/metas" element={<MetasPage />} />
         <Route path="/regras" element={<RegrasPage />} />
