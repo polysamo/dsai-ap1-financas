@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { FalhaCarregamento } from './components/FalhaCarregamento';
 import { Layout } from './components/Layout';
 import { DashboardPage } from './pages/DashboardPage';
+import { AlertasPage } from './pages/AlertasPage';
 import { CalendarioPage } from './pages/CalendarioPage';
 import { CartoesPage } from './pages/CartoesPage';
 import { ContasPage } from './pages/ContasPage';
@@ -29,6 +30,7 @@ export function AppRoutes() {
         <Route path="/contas" element={<ContasPage />} />
         <Route path="/cartoes" element={<CartoesPage />} />
         <Route path="/calendario" element={<CalendarioPage />} />
+        <Route path="/alertas" element={<AlertasPage />} />
         <Route path="/orcamento" element={<OrcamentoPage />} />
         <Route path="/metas" element={<MetasPage />} />
         <Route path="/regras" element={<RegrasPage />} />

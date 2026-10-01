@@ -1,3 +1,5 @@
+import type { PreferenciasAlertas } from './alertas';
+
 export type Centavos = number;
 /** Data no formato AAAA-MM-DD. */
 export type DataISO = string;
@@ -212,6 +214,8 @@ export interface AppState {
   regras: RegraCategoria[];
   investimentos: Ativo[];
   dividas: Divida[];
+  /** Opcional para dados antigos e para o exemplo; leia com `preferenciasDe`. */
+  preferenciasAlertas?: PreferenciasAlertas;
 }
 
 export type Resultado<T> = { ok: true; valor: T } | { ok: false; erro: string; campo?: string };

@@ -108,7 +108,8 @@ describe('visão geral: exportar, importar e apagar (critérios 7 e 8)', () => {
   it('exporta e reimporta o mesmo conteúdo', () => {
     const estado = gerarExemplo('2026-10-01');
     const r = importarJson(exportarJson(estado));
-    expect(r.ok && r.valor).toEqual(estado);
+    // A importação completa chaves aditivas ausentes (exemplo.ts não define preferenciasAlertas).
+    expect(r.ok && r.valor).toEqual({ ...estado, preferenciasAlertas: estadoInicial().preferenciasAlertas });
   });
 
   it('recusa arquivo inválido ou de versão futura', () => {

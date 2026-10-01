@@ -1,4 +1,5 @@
 import { categoriasPadrao } from '../data/categoriasPadrao';
+import { preferenciasPadrao } from '../domain/alertas';
 import { falha, ok, type AppState, type Resultado } from '../domain/types';
 
 /** Toda chave escrita pelo app começa com este prefixo. */
@@ -22,6 +23,7 @@ export function estadoInicial(): AppState {
     regras: [],
     investimentos: [],
     dividas: [],
+    preferenciasAlertas: preferenciasPadrao(),
   };
 }
 
