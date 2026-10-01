@@ -1,0 +1,33 @@
+.orcanual-editor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--esp-3);
+  padding: var(--esp-4);
+  border: 1px solid var(--cor-primaria);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+}
+
+.orcanual-editor-titulo {
+  flex: 1 0 100%;
+  margin: 0;
+  color: var(--cor-texto);
+  font-weight: 600;
+}
+
+.orcanual-editor-titulo span {
+  text-transform: capitalize;
+}
+
+.orcanual-editor-campo {
+  flex: 1 1 12rem;
+  max-width: 18rem;
+}
+
+.orcanual-editor-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+  padding-top: var(--esp-6);
+}

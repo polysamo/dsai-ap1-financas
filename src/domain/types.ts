@@ -1,3 +1,4 @@
+import type { RolloverCategorias } from './orcamentoAnual';
 export type Centavos = number;
 /** Data no formato AAAA-MM-DD. */
 export type DataISO = string;
@@ -212,6 +213,8 @@ export interface AppState {
   regras: RegraCategoria[];
   investimentos: Ativo[];
   dividas: Divida[];
+  /** Ausente em estados antigos e no exemplo; tratado como lista vazia. */
+  rolloverCategorias?: RolloverCategorias;
 }
 
 export type Resultado<T> = { ok: true; valor: T } | { ok: false; erro: string; campo?: string };
