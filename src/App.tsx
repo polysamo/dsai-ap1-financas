@@ -5,7 +5,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { CalendarioPage } from './pages/CalendarioPage';
 import { CartoesPage } from './pages/CartoesPage';
 import { ContasPage } from './pages/ContasPage';
-import { DadosPage } from './pages/DadosPage';
+import { ConfiguracoesPage } from './pages/ConfiguracoesPage';
 import { DividasPage } from './pages/DividasPage';
 import { ImportarCsvPage } from './pages/ImportarCsvPage';
 import { InvestimentosPage } from './pages/InvestimentosPage';
@@ -36,7 +36,8 @@ export function AppRoutes() {
         <Route path="/dividas" element={<DividasPage />} />
         <Route path="/importar" element={<ImportarCsvPage />} />
         <Route path="/relatorios" element={<RelatoriosPage />} />
-        <Route path="/dados" element={<DadosPage />} />
+        <Route path="/configuracoes" element={<ConfiguracoesPage />} />
+        <Route path="/dados" element={<Navigate to="/configuracoes" replace />} />
         <Route path="/ajuda" element={<AjudaPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

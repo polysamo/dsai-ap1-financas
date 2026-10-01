@@ -69,7 +69,7 @@ describe('visão geral: persistência (critérios 2, 3 e 4)', () => {
   it('com versão maior que a conhecida, mostra aviso e não sobrescreve os dados', async () => {
     const bruto = JSON.stringify({ schemaVersion: SCHEMA_ATUAL + 5, coisa: 'futuro' });
     localStorage.setItem(CHAVE_ESTADO, bruto);
-    renderizarApp('/dados');
+    renderizarApp('/configuracoes');
     expect(screen.getByText(/versão mais nova do app/i)).toBeInTheDocument();
     expect(localStorage.getItem(CHAVE_ESTADO)).toBe(bruto);
   });
@@ -77,7 +77,7 @@ describe('visão geral: persistência (critérios 2, 3 e 4)', () => {
   it('com JSON corrompido, não quebra, oferece exportar o bruto e só então recomeçar', async () => {
     const usuario = userEvent.setup();
     localStorage.setItem(CHAVE_ESTADO, '{nao e json');
-    const { store } = renderizarApp('/dados');
+    const { store } = renderizarApp('/configuracoes');
     expect(screen.getByText(/estão corrompidos/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Exportar conteúdo bruto' })).toBeInTheDocument();
     expect(localStorage.getItem(CHAVE_ESTADO)).toBe('{nao e json');
@@ -119,7 +119,7 @@ describe('visão geral: exportar, importar e apagar (critérios 7 e 8)', () => {
 
   it('importar pede confirmação e substitui o conteúdo atual', async () => {
     const usuario = userEvent.setup();
-    const { store } = renderizarApp('/dados', gerarExemplo('2026-10-01'));
+    const { store } = renderizarApp('/configuracoes', gerarExemplo('2026-10-01'));
     const outro = estadoInicial();
     outro.contas.push({ id: 'z', nome: 'Importada', tipo: 'corrente', saldoInicial: 100, arquivada: false, criadaEm: 1 });
     const arquivo = new File([exportarJson(outro)], 'dados.json', { type: 'application/json' });
@@ -130,7 +130,7 @@ describe('visão geral: exportar, importar e apagar (critérios 7 e 8)', () => {
 
   it('apagar tudo exige digitar APAGAR e volta ao primeiro uso', async () => {
     const usuario = userEvent.setup();
-    const { store } = renderizarApp('/dados', gerarExemplo('2026-10-01'));
+    const { store } = renderizarApp('/configuracoes', gerarExemplo('2026-10-01'));
     await usuario.click(screen.getByRole('button', { name: 'Apagar todos os dados' }));
     const dialogo = screen.getByRole('dialog');
     const confirmar = within(dialogo).getByRole('button', { name: 'Apagar tudo' });
@@ -146,20 +146,20 @@ describe('visão geral: execução (critérios 1, 9, 10 e 11)', () => {
   it('não faz requisições de rede ao renderizar', () => {
     const fetchEspiao = vi.fn();
     vi.stubGlobal('fetch', fetchEspiao);
-    renderizarApp('/dados');
+    renderizarApp('/configuracoes');
     vi.unstubAllGlobals();
     expect(fetchEspiao).not.toHaveBeenCalled();
   });
 
   it('primeiro uso não gera erros no console', () => {
     const erro = vi.spyOn(console, 'error').mockImplementation(() => {});
-    renderizarApp('/dados');
+    renderizarApp('/configuracoes');
     expect(erro).not.toHaveBeenCalled();
     erro.mockRestore();
   });
 
   it('a navegação tem landmark rotulado e os controles têm rótulo acessível', () => {
-    renderizarApp('/dados');
+    renderizarApp('/configuracoes');
     expect(screen.getByRole('navigation', { name: 'Principal' })).toBeInTheDocument();
     expect(screen.getByRole('main')).toBeInTheDocument();
     expect(screen.getByLabelText('Arquivo de dados para importar')).toBeInTheDocument();
@@ -169,14 +169,14 @@ describe('visão geral: execução (critérios 1, 9, 10 e 11)', () => {
   });
 
   it('o cabeçalho quebra linha e a página não rola na horizontal em telas estreitas', () => {
-    const { container } = renderizarApp('/dados');
+    const { container } = renderizarApp('/configuracoes');
     expect(container.querySelector('nav')?.className).toContain('flex-wrap');
     expect(container.firstElementChild?.className).toContain('overflow-x-hidden');
   });
 
   it('carregar dados de exemplo preenche o estado', async () => {
     const usuario = userEvent.setup();
-    const { store } = renderizarApp('/dados');
+    const { store } = renderizarApp('/configuracoes');
     await usuario.click(screen.getByRole('button', { name: 'Carregar dados de exemplo' }));
     expect(store.getSnapshot().estado.contas.length).toBeGreaterThan(0);
     expect(store.getSnapshot().estado.transacoes.length).toBeGreaterThan(20);
