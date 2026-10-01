@@ -4,6 +4,7 @@ import { hojeISO } from '../domain/date';
 import { formatarMoeda, parseValor } from '../domain/money';
 import type { Categoria, Resultado } from '../domain/types';
 import { Alerta, Botao, CampoSelect, CampoTexto } from './ui';
+import './CompraParceladaForm.css';
 
 interface Props {
   contaId: string;
@@ -38,7 +39,7 @@ export function CompraParceladaForm({ contaId, categorias, onSalvar }: Props) {
   };
 
   return (
-    <form onSubmit={enviar} noValidate aria-label="Compra parcelada" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <form onSubmit={enviar} noValidate aria-label="Compra parcelada" className="compra-parcelada">
       <CampoTexto label="Descrição da compra" value={descricao} onChange={(e) => setDescricao(e.target.value)} erro={erros.descricao} autoComplete="off" />
       <CampoTexto label="Valor total" value={valor} onChange={(e) => setValor(e.target.value)} erro={erros.valorTotal} inputMode="decimal" placeholder="0,00" />
       <CampoTexto label="Número de parcelas" value={parcelas} onChange={(e) => setParcelas(e.target.value)} erro={erros.parcelas} inputMode="numeric" placeholder={`${PARCELAS_MIN} a ${PARCELAS_MAX}`} />
@@ -53,15 +54,15 @@ export function CompraParceladaForm({ contaId, categorias, onSalvar }: Props) {
             </option>
           ))}
       </CampoSelect>
-      <p className="self-end pb-2 text-sm text-slate-700" aria-live="polite" data-testid="previa-parcelas">
+      <p className="compra-parcelada__previa" aria-live="polite" data-testid="previa-parcelas">
         {previa ? `${n} parcelas: 1ª de ${formatarMoeda(previa[0])}, demais de ${formatarMoeda(previa[1] ?? previa[0])}` : 'Informe valor e parcelas para ver a divisão.'}
       </p>
       {erros.geral ? (
-        <div className="sm:col-span-2 lg:col-span-3">
+        <div className="compra-parcelada__linha">
           <Alerta>{erros.geral}</Alerta>
         </div>
       ) : null}
-      <div className="sm:col-span-2 lg:col-span-3">
+      <div className="compra-parcelada__linha">
         <Botao type="submit">Lançar compra parcelada</Botao>
       </div>
     </form>

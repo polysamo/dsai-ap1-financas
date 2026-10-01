@@ -4,6 +4,7 @@ import { parseValor, valorParaCampo } from '../domain/money';
 import type { DadosPagamento } from '../domain/cartoes';
 import type { Conta, Mes, Resultado } from '../domain/types';
 import { Alerta, Botao, CampoSelect, CampoTexto } from './ui';
+import './PagamentoFaturaForm.css';
 
 interface Props {
   contaCartaoId: string;
@@ -35,7 +36,7 @@ export function PagamentoFaturaForm({ contaCartaoId, mesFatura, restante, contas
   };
 
   return (
-    <form onSubmit={enviar} noValidate aria-label="Pagar fatura" className="grid gap-3 sm:grid-cols-3">
+    <form onSubmit={enviar} noValidate aria-label="Pagar fatura" className="pagamento-fatura">
       <CampoTexto label="Valor do pagamento" value={valor} onChange={(e) => setValor(e.target.value)} erro={erros.valor} inputMode="decimal" placeholder="0,00" />
       <CampoTexto label="Data do pagamento" type="date" value={data} onChange={(e) => setData(e.target.value)} erro={erros.data} />
       <CampoSelect label="Pagar com a conta" value={origem} onChange={(e) => setOrigem(e.target.value)} erro={erros.contaOrigemId}>
@@ -46,11 +47,11 @@ export function PagamentoFaturaForm({ contaCartaoId, mesFatura, restante, contas
         ))}
       </CampoSelect>
       {erros.geral ? (
-        <div className="sm:col-span-3">
+        <div className="pagamento-fatura__linha">
           <Alerta>{erros.geral}</Alerta>
         </div>
       ) : null}
-      <div className="sm:col-span-3">
+      <div className="pagamento-fatura__linha">
         <Botao type="submit">Registrar pagamento</Botao>
       </div>
     </form>

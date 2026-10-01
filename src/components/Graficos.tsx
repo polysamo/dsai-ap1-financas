@@ -2,6 +2,8 @@ import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAx
 import { nomeMesCurto } from '../domain/date';
 import { formatarMoeda } from '../domain/money';
 import type { FatiaCategoria, PontoMensal } from '../domain/projecao';
+import '../styles/tabela-dados.css';
+import './Graficos.css';
 
 const COR_RECEITA = '#1d4ed8';
 const COR_DESPESA = '#c2410c';
@@ -15,7 +17,7 @@ export function GraficoDespesasPorCategoria({ dados }: { dados: FatiaCategoria[]
   const pontos = dados.map((d) => ({ nome: d.nome, valor: emReais(d.valor) }));
   return (
     <div>
-      <div role="img" aria-label="Gráfico de barras das despesas por categoria no mês" className="h-56 w-full">
+      <div role="img" aria-label="Gráfico de barras das despesas por categoria no mês" className="grafico__area">
         <ResponsiveContainer width="100%" height="100%" minWidth={0}>
           <BarChart data={pontos} layout="vertical" margin={{ left: 8, right: 16 }}>
             <CartesianGrid horizontal={false} strokeDasharray="3 3" />
@@ -26,27 +28,27 @@ export function GraficoDespesasPorCategoria({ dados }: { dados: FatiaCategoria[]
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <details className="mt-2 text-sm">
-        <summary className="cursor-pointer text-emerald-800">Ver como tabela</summary>
-        <table className="mt-2 w-full text-left" aria-label="Despesas por categoria">
+      <details className="grafico__detalhes">
+        <summary className="grafico__resumo">Ver como tabela</summary>
+        <table className="tabela-dados tabela-dados--grafico" aria-label="Despesas por categoria">
           <thead>
-            <tr className="text-slate-600">
-              <th scope="col" className="py-1 font-medium">Categoria</th>
-              <th scope="col" className="py-1 text-right font-medium">Valor</th>
+            <tr>
+              <th scope="col">Categoria</th>
+              <th scope="col" className="tabela-dados__num">Valor</th>
             </tr>
           </thead>
           <tbody>
             {dados.map((d) => (
-              <tr key={d.nome} className="border-t border-slate-200">
-                <th scope="row" className="py-1 font-normal">{d.nome}</th>
-                <td className="py-1 text-right tabular-nums">{formatarMoeda(d.valor)}</td>
+              <tr key={d.nome}>
+                <th scope="row">{d.nome}</th>
+                <td className="tabela-dados__num">{formatarMoeda(d.valor)}</td>
               </tr>
             ))}
           </tbody>
           <tfoot>
-            <tr className="border-t border-slate-300 font-medium">
-              <th scope="row" className="py-1">Total</th>
-              <td className="py-1 text-right tabular-nums" data-testid="total-categorias">{formatarMoeda(total)}</td>
+            <tr className="tabela-dados__total">
+              <th scope="row">Total</th>
+              <td className="tabela-dados__num" data-testid="total-categorias">{formatarMoeda(total)}</td>
             </tr>
           </tfoot>
         </table>
@@ -59,7 +61,7 @@ export function GraficoReceitasDespesas({ dados }: { dados: PontoMensal[] }) {
   const pontos = dados.map((d) => ({ mes: nomeMesCurto(d.mes), Receitas: emReais(d.receitas), Despesas: emReais(d.despesas) }));
   return (
     <div>
-      <div role="img" aria-label="Gráfico de barras de receitas e despesas dos últimos 6 meses" className="h-56 w-full">
+      <div role="img" aria-label="Gráfico de barras de receitas e despesas dos últimos 6 meses" className="grafico__area">
         <ResponsiveContainer width="100%" height="100%" minWidth={0}>
           <BarChart data={pontos} margin={{ left: 8, right: 8 }}>
             <CartesianGrid vertical={false} strokeDasharray="3 3" />
@@ -72,22 +74,22 @@ export function GraficoReceitasDespesas({ dados }: { dados: PontoMensal[] }) {
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <details className="mt-2 text-sm">
-        <summary className="cursor-pointer text-emerald-800">Ver como tabela</summary>
-        <table className="mt-2 w-full text-left" aria-label="Receitas e despesas por mês">
+      <details className="grafico__detalhes">
+        <summary className="grafico__resumo">Ver como tabela</summary>
+        <table className="tabela-dados tabela-dados--grafico" aria-label="Receitas e despesas por mês">
           <thead>
-            <tr className="text-slate-600">
-              <th scope="col" className="py-1 font-medium">Mês</th>
-              <th scope="col" className="py-1 text-right font-medium">Receitas</th>
-              <th scope="col" className="py-1 text-right font-medium">Despesas</th>
+            <tr>
+              <th scope="col">Mês</th>
+              <th scope="col" className="tabela-dados__num">Receitas</th>
+              <th scope="col" className="tabela-dados__num">Despesas</th>
             </tr>
           </thead>
           <tbody>
             {dados.map((d) => (
-              <tr key={d.mes} className="border-t border-slate-200">
-                <th scope="row" className="py-1 font-normal">{nomeMesCurto(d.mes)}</th>
-                <td className="py-1 text-right tabular-nums">{formatarMoeda(d.receitas)}</td>
-                <td className="py-1 text-right tabular-nums">{formatarMoeda(d.despesas)}</td>
+              <tr key={d.mes}>
+                <th scope="row">{nomeMesCurto(d.mes)}</th>
+                <td className="tabela-dados__num">{formatarMoeda(d.receitas)}</td>
+                <td className="tabela-dados__num">{formatarMoeda(d.despesas)}</td>
               </tr>
             ))}
           </tbody>

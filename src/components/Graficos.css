@@ -1,0 +1,24 @@
+.grafico__area {
+  width: 100%;
+  height: 14rem;
+}
+
+.grafico__detalhes {
+  margin-top: var(--esp-2);
+  font-size: var(--texto-sm);
+}
+
+.grafico__resumo {
+  cursor: pointer;
+  color: var(--cor-primaria);
+}
+
+.grafico__resumo:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.grafico__detalhes .tabela-dados {
+  display: block;
+  overflow-x: auto;
+}

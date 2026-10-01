@@ -11,6 +11,7 @@ import { acumulado, ordenarMetas } from '../domain/metas';
 import { linhasOrcamento } from '../domain/orcamento';
 import { calcularProjecao, despesasPorCategoria, resumoMes, serieMensal } from '../domain/projecao';
 import { useEstado } from '../state/store';
+import './DashboardPage.css';
 
 const ROTULO_ESTADO = { atencao: 'Atenção', estourado: 'Estourado' } as const;
 
@@ -35,19 +36,19 @@ export function DashboardPage() {
   return (
     <div>
       <TituloPagina>Dashboard</TituloPagina>
-      <div className="space-y-4">
+      <div className="dashboard">
         {semContas && estado.transacoes.length === 0 ? (
           <EstadoVazio
             titulo="Bem-vindo! Comece criando uma conta"
             acao={
-              <span className="flex flex-wrap justify-center gap-2">
-                <Link to="/contas" className="rounded-md bg-emerald-700 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-800">
+              <span className="dashboard__boas-vindas-acoes">
+                <Link to="/contas" className="dashboard__link dashboard__link--primario">
                   Criar conta
                 </Link>
-                <Link to="/transacoes" className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-800 hover:bg-slate-100">
+                <Link to="/transacoes" className="dashboard__link dashboard__link--secundario">
                   Registrar transação
                 </Link>
-                <Link to="/configuracoes" className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-800 hover:bg-slate-100">
+                <Link to="/configuracoes" className="dashboard__link dashboard__link--secundario">
                   Carregar dados de exemplo
                 </Link>
               </span>
@@ -58,66 +59,66 @@ export function DashboardPage() {
         ) : null}
 
         <Cartao>
-          <div className="flex flex-wrap items-end gap-3">
+          <div className="dashboard__navegacao">
             <Botao variante="secundario" onClick={() => irPara(somarMeses(mes, -1))}>
               Mês anterior
             </Botao>
-            <div className="w-44">
+            <div className="dashboard__campo-mes">
               <CampoTexto label="Mês" type="month" value={mes} onChange={(e) => mesValido(e.target.value) && irPara(e.target.value)} />
             </div>
             <Botao variante="secundario" onClick={() => irPara(somarMeses(mes, 1))}>
               Próximo mês
             </Botao>
-            <p className="ml-auto text-lg font-semibold capitalize text-slate-800" aria-live="polite">
+            <p className="dashboard__mes-atual" aria-live="polite">
               {nomeMes(mes)}
             </p>
           </div>
         </Cartao>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" role="group" aria-label="Resumo do mês">
+        <div className="dashboard__resumo" role="group" aria-label="Resumo do mês">
           <Cartao>
-            <p className="text-sm text-slate-600">Receitas do mês</p>
-            <p className="text-xl font-bold" data-testid="receitas">{formatarMoeda(resumo.receitas)}</p>
+            <p className="dashboard__texto-mudo">Receitas do mês</p>
+            <p className="dashboard__valor" data-testid="receitas">{formatarMoeda(resumo.receitas)}</p>
           </Cartao>
           <Cartao>
-            <p className="text-sm text-slate-600">Despesas do mês</p>
-            <p className="text-xl font-bold" data-testid="despesas">{formatarMoeda(resumo.despesas)}</p>
+            <p className="dashboard__texto-mudo">Despesas do mês</p>
+            <p className="dashboard__valor" data-testid="despesas">{formatarMoeda(resumo.despesas)}</p>
           </Cartao>
           <Cartao>
-            <p className="text-sm text-slate-600">Resultado do mês</p>
-            <p className="text-xl font-bold" data-testid="resultado">
+            <p className="dashboard__texto-mudo">Resultado do mês</p>
+            <p className="dashboard__valor" data-testid="resultado">
               <Valor centavos={resumo.resultado} texto={formatarMoeda(resumo.resultado)} />
             </p>
           </Cartao>
           <Cartao>
-            <p className="text-sm text-slate-600">Saldo total atual</p>
-            <p className="text-xl font-bold" data-testid="saldo-total">
+            <p className="dashboard__texto-mudo">Saldo total atual</p>
+            <p className="dashboard__valor" data-testid="saldo-total">
               <Valor centavos={saldo.total} texto={formatarMoeda(saldo.total)} />
             </p>
           </Cartao>
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="dashboard__duas-colunas">
           <Cartao titulo="Despesas por categoria">
-            {categorias.length === 0 ? <p className="text-sm text-slate-600">Sem despesas em {nomeMes(mes)}.</p> : <GraficoDespesasPorCategoria dados={categorias} />}
+            {categorias.length === 0 ? <p className="dashboard__texto-mudo">Sem despesas em {nomeMes(mes)}.</p> : <GraficoDespesasPorCategoria dados={categorias} />}
           </Cartao>
           <Cartao titulo="Receitas e despesas (6 meses)">
-            {estado.transacoes.length === 0 ? <p className="text-sm text-slate-600">Registre transações para ver a evolução.</p> : <GraficoReceitasDespesas dados={serie} />}
+            {estado.transacoes.length === 0 ? <p className="dashboard__texto-mudo">Registre transações para ver a evolução.</p> : <GraficoReceitasDespesas dados={serie} />}
           </Cartao>
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-2">
-          <Cartao titulo="Orçamento do mês" acoes={<Link to={`/orcamento?mes=${mes}`} className="text-sm text-emerald-800 underline">Abrir orçamento</Link>}>
+        <div className="dashboard__duas-colunas">
+          <Cartao titulo="Orçamento do mês" acoes={<Link to={`/orcamento?mes=${mes}`} className="dashboard__link-cartao">Abrir orçamento</Link>}>
             {!temLimites ? (
-              <p className="text-sm text-slate-600">Nenhum limite definido para {nomeMes(mes)}. Defina limites na tela Orçamento.</p>
+              <p className="dashboard__texto-mudo">Nenhum limite definido para {nomeMes(mes)}. Defina limites na tela Orçamento.</p>
             ) : alertasOrcamento.length === 0 ? (
-              <p className="text-sm text-slate-700">Todas as categorias estão dentro do limite.</p>
+              <p className="dashboard__texto">Todas as categorias estão dentro do limite.</p>
             ) : (
-              <ul className="space-y-1 text-sm" aria-label="Categorias em alerta">
+              <ul className="dashboard__lista" aria-label="Categorias em alerta">
                 {alertasOrcamento.map((l) => (
-                  <li key={l.categoria.id} className="flex justify-between gap-2">
+                  <li key={l.categoria.id} className="dashboard__item">
                     <span>{l.categoria.nome}</span>
-                    <span className={l.estado === 'estourado' ? 'font-medium text-red-800' : 'font-medium text-amber-800'}>
+                    <span className={l.estado === 'estourado' ? 'dashboard__estado dashboard__estado--estourado' : 'dashboard__estado dashboard__estado--atencao'}>
                       {ROTULO_ESTADO[l.estado as 'atencao' | 'estourado']}
                       {l.percentual !== null ? ` · ${l.percentual}%` : ''}
                     </span>
@@ -126,15 +127,15 @@ export function DashboardPage() {
               </ul>
             )}
           </Cartao>
-          <Cartao titulo="Metas ativas" acoes={<Link to="/metas" className="text-sm text-emerald-800 underline">Abrir metas</Link>}>
+          <Cartao titulo="Metas ativas" acoes={<Link to="/metas" className="dashboard__link-cartao">Abrir metas</Link>}>
             {metasAtivas.length === 0 ? (
-              <p className="text-sm text-slate-600">Nenhuma meta ativa.</p>
+              <p className="dashboard__texto-mudo">Nenhuma meta ativa.</p>
             ) : (
-              <ul className="space-y-2 text-sm" aria-label="Metas ativas">
+              <ul className="dashboard__lista dashboard__lista--larga" aria-label="Metas ativas">
                 {metasAtivas.map((m) => (
-                  <li key={m.id} className="flex flex-wrap justify-between gap-x-3">
-                    <span className="font-medium text-slate-900">{m.nome}</span>
-                    <span className="text-slate-700">
+                  <li key={m.id} className="dashboard__item dashboard__item--quebra">
+                    <span className="dashboard__meta-nome">{m.nome}</span>
+                    <span className="dashboard__meta-detalhe">
                       {percentual(acumulado(m), m.valorAlvo)}% · {m.prazo ? `prazo ${formatarData(m.prazo)}` : 'sem prazo'}
                     </span>
                   </li>

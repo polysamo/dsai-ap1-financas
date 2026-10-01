@@ -1,0 +1,15 @@
+.pagamento-fatura {
+  display: grid;
+  gap: var(--esp-3);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.pagamento-fatura__linha {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 640px) {
+  .pagamento-fatura {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

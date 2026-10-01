@@ -1,0 +1,147 @@
+.cartoes {
+  display: grid;
+  gap: var(--esp-4);
+  min-width: 0;
+}
+
+.cartoes > * {
+  min-width: 0;
+}
+
+.cartoes__link {
+  font-weight: 500;
+  color: var(--cor-primaria);
+  text-decoration: underline;
+}
+
+.cartoes__link:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.cartoes__seletor {
+  display: grid;
+  gap: var(--esp-3);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.cartoes__navegacao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--esp-3);
+}
+
+.cartoes__campo-mes {
+  width: 11rem;
+  max-width: 100%;
+}
+
+.cartoes__situacao {
+  display: inline-block;
+  padding: 0.125rem 0.625rem;
+  border-radius: var(--raio-total);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+}
+
+.cartoes__situacao--aberta {
+  background: var(--cor-info-suave);
+  color: var(--cor-info);
+}
+
+.cartoes__situacao--fechada {
+  background: var(--cor-aviso-suave);
+  color: var(--cor-aviso);
+}
+
+.cartoes__situacao--paga {
+  background: var(--cor-sucesso-suave);
+  color: var(--cor-sucesso);
+}
+
+.cartoes__ciclo {
+  margin: 0 0 var(--esp-3);
+  font-size: var(--texto-sm);
+  color: var(--cor-texto-mudo);
+}
+
+.cartoes__texto-mudo {
+  margin: 0;
+  font-size: var(--texto-sm);
+  color: var(--cor-texto-mudo);
+}
+
+.cartoes__fatura-resumo {
+  display: grid;
+  gap: var(--esp-2);
+  grid-template-columns: minmax(0, 1fr);
+  margin: 0 0 var(--esp-3);
+  font-size: var(--texto-sm);
+}
+
+.cartoes__fatura-resumo dt {
+  color: var(--cor-texto-suave);
+}
+
+.cartoes__fatura-resumo dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.cartoes__fatura-resumo .cartoes__fatura-total {
+  font-size: var(--texto-lg);
+  font-weight: 700;
+}
+
+.cartoes__lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cartoes__lista--espaco {
+  margin-bottom: var(--esp-4);
+}
+
+.cartoes__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-2);
+  padding: var(--esp-2) 0;
+  font-size: var(--texto-sm);
+}
+
+.cartoes__item + .cartoes__item {
+  border-top: 1px solid var(--cor-borda);
+}
+
+.cartoes__item-texto {
+  min-width: 0;
+}
+
+.cartoes__item-titulo {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+  color: var(--cor-texto);
+}
+
+.cartoes__item-detalhe {
+  font-size: var(--texto-xs);
+  color: var(--cor-texto-suave);
+}
+
+@media (min-width: 640px) {
+  .cartoes__seletor {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cartoes__fatura-resumo {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

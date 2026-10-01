@@ -1,0 +1,29 @@
+.compra-parcelada {
+  display: grid;
+  gap: var(--esp-3);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.compra-parcelada__previa {
+  margin: 0;
+  align-self: end;
+  padding-bottom: var(--esp-2);
+  font-size: var(--texto-sm);
+  color: var(--cor-texto-suave);
+}
+
+.compra-parcelada__linha {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 640px) {
+  .compra-parcelada {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .compra-parcelada {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

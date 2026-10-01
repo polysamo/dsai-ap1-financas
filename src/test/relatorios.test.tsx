@@ -296,8 +296,8 @@ describe('relatórios: tela', () => {
     await usuario.click(screen.getByRole('button', { name: 'Exportar PDF' }));
     expect(window.print).toHaveBeenCalled();
     expect(container.querySelector('header')?.className).toContain('print:hidden');
-    expect(screen.getByRole('tablist').parentElement?.className).toContain('print:hidden');
-    expect(screen.getByText(/^Relatório mensal: /).className).toContain('print:block');
+    expect(screen.getByRole('tablist').parentElement?.className).toContain('relatorios-cabecalho');
+    expect(screen.getByText(/^Relatório mensal: /).className).toContain('relatorio-titulo-impressao');
   });
 
   it('critérios 4 e 5: o anual mostra 12 meses, total, média e destaques em texto', async () => {
