@@ -166,3 +166,10 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+.dashboard__mes { display: flex; justify-content: flex-start; }
+.dashboard__resumo { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--esp-3); }
+.dashboard__saldo { grid-column: 1 / -1; }
+@media (max-width: 40rem) { .dashboard__resumo { grid-template-columns: 1fr; } }
+.dashboard__passos { display: flex; flex-direction: column; gap: var(--esp-2); align-items: stretch; text-align: left; }
+.dashboard__passos li { display: flex; justify-content: space-between; align-items: center; gap: var(--esp-3); }
+.dashboard__passos li:last-child { justify-content: center; }
