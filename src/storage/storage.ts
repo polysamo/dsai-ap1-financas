@@ -22,6 +22,7 @@ export function estadoInicial(): AppState {
     regras: [],
     investimentos: [],
     dividas: [],
+    assinaturasDecisoes: [],
   };
 }
 

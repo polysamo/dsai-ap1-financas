@@ -1,3 +1,4 @@
+import type { DecisaoAssinatura } from './assinaturas';
 export type Centavos = number;
 /** Data no formato AAAA-MM-DD. */
 export type DataISO = string;
@@ -212,6 +213,7 @@ export interface AppState {
   regras: RegraCategoria[];
   investimentos: Ativo[];
   dividas: Divida[];
+  assinaturasDecisoes?: DecisaoAssinatura[];
 }
 
 export type Resultado<T> = { ok: true; valor: T } | { ok: false; erro: string; campo?: string };

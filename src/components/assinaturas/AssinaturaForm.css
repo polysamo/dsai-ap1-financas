@@ -1,0 +1,20 @@
+.assin-form {
+  display: grid;
+  gap: var(--esp-3);
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  align-items: start;
+}
+
+.assin-form__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+  grid-column: 1 / -1;
+}
+
+.assin-form__erro {
+  margin: 0;
+  grid-column: 1 / -1;
+  color: var(--cor-perigo);
+  font-size: var(--texto-sm);
+}
