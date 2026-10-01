@@ -1,0 +1,13 @@
+.contas__pilha { display: flex; flex-direction: column; gap: var(--esp-4); }
+.contas__lista { list-style: none; margin: 0; padding: 0; }
+.contas__linha { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--esp-2); padding: var(--esp-3) 0; }
+.contas__linha--edicao { display: block; }
+.contas__linha + .contas__linha { border-top: 1px solid var(--cor-borda); }
+.contas__info { min-width: 0; }
+.contas__nome { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; color: var(--cor-texto); }
+.contas__tipo { margin: 0; font-size: var(--texto-xs); color: var(--cor-texto-mudo); }
+.contas__acoes { display: flex; flex-wrap: wrap; align-items: center; gap: var(--esp-3); }
+.contas__total { margin: 0; font-size: var(--texto-2xl); font-weight: 700; }
+.contas__resumo { margin: var(--esp-2) 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--esp-2); font-size: var(--texto-sm); }
+.contas__resumo dt { color: var(--cor-texto-mudo); }
+.contas__resumo dd { margin: 0; }

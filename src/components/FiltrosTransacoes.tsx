@@ -2,6 +2,7 @@ import { listarTags } from '../domain/tags';
 import type { FiltrosTransacoes } from '../domain/transacoes';
 import type { AppState, TipoMovimento } from '../domain/types';
 import { Botao, CampoSelect, CampoTexto } from './ui';
+import './FiltrosTransacoes.css';
 
 interface Props {
   estado: AppState;
@@ -16,7 +17,7 @@ export function FiltrosTransacoesForm({ estado, filtros, onChange, onLimpar }: P
     <form
       aria-label="Filtros de transações"
       onSubmit={(e) => e.preventDefault()}
-      className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
+      className="transacoes-filtros"
     >
       <CampoTexto label="De" type="date" value={filtros.de ?? ''} onChange={(e) => atualizar({ de: e.target.value || undefined })} />
       <CampoTexto label="Até" type="date" value={filtros.ate ?? ''} onChange={(e) => atualizar({ ate: e.target.value || undefined })} />
@@ -51,7 +52,7 @@ export function FiltrosTransacoesForm({ estado, filtros, onChange, onLimpar }: P
         ))}
       </CampoSelect>
       <CampoTexto label="Buscar na descrição" value={filtros.texto ?? ''} onChange={(e) => atualizar({ texto: e.target.value || undefined })} autoComplete="off" />
-      <div className="flex items-end">
+      <div className="transacoes-filtros__limpar">
         <Botao variante="secundario" onClick={onLimpar}>
           Limpar filtros
         </Botao>

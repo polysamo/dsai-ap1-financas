@@ -10,6 +10,7 @@ import {
 import type { Categoria, TipoMovimento } from '../domain/types';
 import { useEstado, useStore } from '../state/store';
 import { Alerta, Botao, Cartao, CampoSelect, CampoTexto } from './ui';
+import './CategoriasPanel.css';
 
 function NovaCategoria() {
   const store = useStore();
@@ -27,13 +28,13 @@ function NovaCategoria() {
   };
 
   return (
-    <form onSubmit={enviar} noValidate aria-label="Nova categoria" className="grid gap-3 sm:grid-cols-3 sm:items-start">
+    <form onSubmit={enviar} noValidate aria-label="Nova categoria" className="categorias__nova">
       <CampoTexto label="Nome da categoria" value={nome} onChange={(e) => setNome(e.target.value)} erro={erro} maxLength={60} autoComplete="off" />
       <CampoSelect label="Tipo da categoria" value={tipo} onChange={(e) => setTipo(e.target.value as TipoMovimento)}>
         <option value="despesa">Despesa</option>
         <option value="receita">Receita</option>
       </CampoSelect>
-      <div className="sm:pt-6">
+      <div className="categorias__nova-acao">
         <Botao type="submit">Adicionar categoria</Botao>
       </div>
     </form>
@@ -67,12 +68,12 @@ function LinhaCategoria({ categoria }: { categoria: Categoria }) {
 
   if (editando) {
     return (
-      <li className="py-3">
-        <form onSubmit={salvarNome} noValidate aria-label={`Renomear ${categoria.nome}`} className="flex flex-wrap items-start gap-2">
-          <div className="min-w-[12rem] flex-1">
+      <li className="categorias__item">
+        <form onSubmit={salvarNome} noValidate aria-label={`Renomear ${categoria.nome}`} className="categorias__renomear">
+          <div className="categorias__renomear-campo">
             <CampoTexto label={`Novo nome de ${categoria.nome}`} value={nome} onChange={(e) => setNome(e.target.value)} erro={erro} maxLength={60} />
           </div>
-          <div className="flex gap-2 pt-6">
+          <div className="categorias__renomear-acoes">
             <Botao type="submit">Salvar nome</Botao>
             <Botao
               variante="secundario"
@@ -91,13 +92,13 @@ function LinhaCategoria({ categoria }: { categoria: Categoria }) {
   }
 
   return (
-    <li className="py-3">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="min-w-0 truncate font-medium text-slate-900">
+    <li className="categorias__item">
+      <div className="categorias__linha">
+        <p className="categorias__nome">
           {categoria.nome}
-          {categoria.arquivada ? <span className="ml-2 rounded bg-slate-200 px-1.5 py-0.5 text-xs font-normal text-slate-700">arquivada</span> : null}
+          {categoria.arquivada ? <span className="categorias__selo">arquivada</span> : null}
         </p>
-        <div className="flex flex-wrap gap-2">
+        <div className="categorias__botoes">
           <Botao variante="secundario" aria-label={`Renomear ${categoria.nome}`} onClick={() => setEditando(true)}>
             Renomear
           </Botao>
@@ -114,10 +115,10 @@ function LinhaCategoria({ categoria }: { categoria: Categoria }) {
         </div>
       </div>
       {excluindo ? (
-        <div className="mt-3 rounded-md border border-slate-200 bg-slate-50 p-3" role="group" aria-label={`Excluir ${categoria.nome}`}>
+        <div className="categorias__exclusao" role="group" aria-label={`Excluir ${categoria.nome}`}>
           {emUso ? (
             <>
-              <p className="mb-2 text-sm text-slate-800">
+              <p className="categorias__exclusao-texto">
                 Esta categoria está em uso. Escolha para qual categoria mover as transações, ou arquive-a em vez de excluir.
               </p>
               <CampoSelect label="Categoria de destino" value={destino} onChange={(e) => setDestino(e.target.value)}>
@@ -130,10 +131,10 @@ function LinhaCategoria({ categoria }: { categoria: Categoria }) {
               </CampoSelect>
             </>
           ) : (
-            <p className="text-sm text-slate-800">Excluir a categoria "{categoria.nome}"? Os limites de orçamento dela também serão removidos.</p>
+            <p className="categorias__exclusao-texto categorias__exclusao-texto--so">Excluir a categoria "{categoria.nome}"? Os limites de orçamento dela também serão removidos.</p>
           )}
-          {erro ? <div className="mt-2"><Alerta>{erro}</Alerta></div> : null}
-          <div className="mt-3 flex gap-2">
+          {erro ? <div className="categorias__exclusao-erro"><Alerta>{erro}</Alerta></div> : null}
+          <div className="categorias__exclusao-acoes">
             <Botao variante="perigo" disabled={emUso && !destino} onClick={confirmarExclusao}>
               {emUso ? 'Mover e excluir' : 'Confirmar exclusão'}
             </Botao>
@@ -161,15 +162,15 @@ export function CategoriasPanel() {
     ['Receitas', ordenar(categorias.filter((c) => c.tipo === 'receita'))],
   ];
   return (
-    <div className="space-y-4">
+    <div className="categorias">
       <Cartao titulo="Nova categoria">
         <NovaCategoria />
-        <p className="mt-2 text-xs text-slate-600">Nomes com até {CATEGORIA_NOME_MAX} caracteres, únicos dentro de cada tipo.</p>
+        <p className="categorias__dica">Nomes com até {CATEGORIA_NOME_MAX} caracteres, únicos dentro de cada tipo.</p>
       </Cartao>
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="categorias__grupos">
         {grupos.map(([titulo, lista]) => (
           <Cartao key={titulo} titulo={titulo}>
-            <ul className="divide-y divide-slate-200">
+            <ul className="categorias__lista">
               {lista.map((c) => (
                 <LinhaCategoria key={c.id} categoria={c} />
               ))}

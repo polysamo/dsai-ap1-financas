@@ -18,6 +18,7 @@ import {
 import { formatarMoeda } from '../domain/money';
 import type { Conta } from '../domain/types';
 import { useEstado, useStore } from '../state/store';
+import './ContasPage.css';
 
 export function ContasPage() {
   const store = useStore();
@@ -43,7 +44,7 @@ export function ContasPage() {
     const temTransacoes = contaTemTransacoes(estado, conta.id);
     if (editandoId === conta.id) {
       return (
-        <li key={conta.id} className="py-3">
+        <li key={conta.id} className="contas__linha contas__linha--edicao">
           <ContaForm
             inicial={conta}
             onCancelar={() => setEditandoId(null)}
@@ -57,12 +58,12 @@ export function ContasPage() {
       );
     }
     return (
-      <li key={conta.id} className="flex flex-wrap items-center justify-between gap-2 py-3">
-        <div className="min-w-0">
-          <p className="truncate font-medium text-slate-900">{conta.nome}</p>
-          <p className="text-xs text-slate-600">{ROTULO_TIPO_CONTA[conta.tipo]}</p>
+      <li key={conta.id} className="contas__linha">
+        <div className="contas__info">
+          <p className="contas__nome">{conta.nome}</p>
+          <p className="contas__tipo">{ROTULO_TIPO_CONTA[conta.tipo]}</p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="contas__acoes">
           <Valor centavos={saldo} texto={formatarMoeda(saldo)} />
           <Botao variante="secundario" aria-label={`Editar ${conta.nome}`} onClick={() => setEditandoId(conta.id)}>
             Editar
@@ -89,7 +90,7 @@ export function ContasPage() {
   return (
     <div>
       <TituloPagina acoes={!criando ? <Botao onClick={() => setCriando(true)}>Nova conta</Botao> : undefined}>Contas</TituloPagina>
-      <div className="space-y-4">
+      <div className="contas__pilha">
         {erro ? <Alerta>{erro}</Alerta> : null}
         {criando ? (
           <Cartao titulo="Nova conta">
@@ -113,29 +114,29 @@ export function ContasPage() {
         {ativas.length > 0 ? (
           <>
             <Cartao titulo="Saldo total">
-              <p className="text-2xl font-bold">
+              <p className="contas__total">
                 <Valor centavos={total.total} texto={formatarMoeda(total.total)} data-testid="saldo-total" />
               </p>
-              <dl className="mt-2 grid grid-cols-2 gap-2 text-sm">
+              <dl className="contas__resumo">
                 <div>
-                  <dt className="text-slate-600">Contas</dt>
+                  <dt>Contas</dt>
                   <dd data-testid="saldo-contas">{formatarMoeda(total.contas)}</dd>
                 </div>
                 <div>
-                  <dt className="text-slate-600">Cartões (fatura em aberto)</dt>
+                  <dt>Cartões (fatura em aberto)</dt>
                   <dd data-testid="saldo-cartoes">{formatarMoeda(total.cartoes)}</dd>
                 </div>
               </dl>
             </Cartao>
             <Cartao titulo="Contas ativas">
-              <ul className="divide-y divide-slate-200">{ativas.map(linha)}</ul>
+              <ul className="contas__lista">{ativas.map(linha)}</ul>
             </Cartao>
           </>
         ) : null}
 
         {arquivadas.length > 0 ? (
           <Cartao titulo="Contas arquivadas">
-            <ul className="divide-y divide-slate-200">{arquivadas.map(linha)}</ul>
+            <ul className="contas__lista">{arquivadas.map(linha)}</ul>
           </Cartao>
         ) : null}
       </div>

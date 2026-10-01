@@ -22,6 +22,7 @@ import {
 } from '../domain/transacoes';
 import type { Transacao } from '../domain/types';
 import { useEstado, useStore } from '../state/store';
+import './TransacoesPage.css';
 
 const TAMANHO_PAGINA = 50;
 const TEMPO_DESFAZER_MS = 8000;
@@ -70,9 +71,7 @@ export function TransacoesPage() {
   };
 
   const abaClasse = (a: Aba) =>
-    `rounded-t-md px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-600 ${
-      aba === a ? 'border-b-2 border-emerald-700 text-emerald-900' : 'text-slate-600 hover:text-slate-900'
-    }`;
+    `transacoes__aba${aba === a ? ' transacoes__aba--ativa' : ''}`;
 
   return (
     <div>
@@ -82,7 +81,7 @@ export function TransacoesPage() {
         Transações
       </TituloPagina>
 
-      <div role="tablist" aria-label="Seções" className="mb-4 flex gap-1 border-b border-slate-200">
+      <div role="tablist" aria-label="Seções" className="transacoes__abas">
         <button role="tab" type="button" id="aba-transacoes" aria-selected={aba === 'transacoes'} aria-controls="painel-transacoes" className={abaClasse('transacoes')} onClick={() => setAba('transacoes')}>
           Transações
         </button>
@@ -96,11 +95,11 @@ export function TransacoesPage() {
           <CategoriasPanel />
         </div>
       ) : (
-        <div role="tabpanel" id="painel-transacoes" aria-labelledby="aba-transacoes" className="space-y-4">
+        <div role="tabpanel" id="painel-transacoes" aria-labelledby="aba-transacoes" className="transacoes__painel">
           {erro ? <Alerta>{erro}</Alerta> : null}
           {removida ? (
             <Alerta tipo="aviso">
-              <span className="flex flex-wrap items-center justify-between gap-2">
+              <span className="transacoes__desfazer">
                 Transação excluída.
                 <Botao variante="secundario" onClick={desfazer}>
                   Desfazer
@@ -127,18 +126,18 @@ export function TransacoesPage() {
             <FiltrosTransacoesForm estado={estado} filtros={filtros} onChange={mudarFiltros} onLimpar={() => mudarFiltros(filtrosPadrao())} />
           </Cartao>
 
-          <div className="grid gap-3 sm:grid-cols-3" aria-label="Totais do filtro" role="group">
+          <div className="transacoes__totais" aria-label="Totais do filtro" role="group">
             <Cartao>
-              <p className="text-sm text-slate-600">Receitas</p>
-              <p className="text-xl font-bold" data-testid="total-receitas">{formatarMoeda(totais.receitas)}</p>
+              <p className="transacoes__rotulo-total">Receitas</p>
+              <p className="transacoes__total" data-testid="total-receitas">{formatarMoeda(totais.receitas)}</p>
             </Cartao>
             <Cartao>
-              <p className="text-sm text-slate-600">Despesas</p>
-              <p className="text-xl font-bold" data-testid="total-despesas">{formatarMoeda(totais.despesas)}</p>
+              <p className="transacoes__rotulo-total">Despesas</p>
+              <p className="transacoes__total" data-testid="total-despesas">{formatarMoeda(totais.despesas)}</p>
             </Cartao>
             <Cartao>
-              <p className="text-sm text-slate-600">Resultado</p>
-              <p className="text-xl font-bold" data-testid="total-resultado">
+              <p className="transacoes__rotulo-total">Resultado</p>
+              <p className="transacoes__total" data-testid="total-resultado">
                 <Valor centavos={totais.resultado} texto={formatarMoeda(totais.resultado)} />
               </p>
             </Cartao>
@@ -155,14 +154,14 @@ export function TransacoesPage() {
             <EstadoVazio titulo="Nenhuma transação encontrada">Ajuste ou limpe os filtros para ver mais resultados.</EstadoVazio>
           ) : (
             <Cartao>
-              <p className="mb-2 text-sm text-slate-600" aria-live="polite">
+              <p className="transacoes__contagem" aria-live="polite">
                 {filtradas.length} {filtradas.length === 1 ? 'transação' : 'transações'}
               </p>
-              <ul className="divide-y divide-slate-200" aria-label="Lista de transações">
+              <ul className="transacoes__lista" aria-label="Lista de transações">
                 {visiveis.map((t) => {
                   if (editandoId === t.id) {
                     return (
-                      <li key={t.id} className="py-3">
+                      <li key={t.id} className="transacoes__linha transacoes__linha--edicao">
                         <TransacaoForm
                           estado={estado}
                           inicial={t}
@@ -180,16 +179,16 @@ export function TransacoesPage() {
                   const efeito = efeitoTransacao(t);
                   const rotulo = t.descricao || cat?.nome || 'Sem descrição';
                   return (
-                    <li key={t.id} className="flex flex-wrap items-center justify-between gap-2 py-3">
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate font-medium text-slate-900">{rotulo}</p>
-                        <p className="text-xs text-slate-600">
+                    <li key={t.id} className="transacoes__linha">
+                      <div className="transacoes__info">
+                        <p className="transacoes__descricao">{rotulo}</p>
+                        <p className="transacoes__meta">
                           {formatarData(t.data)} · {cat?.nome ?? 'Sem categoria'}
                           {cat?.arquivada ? ' (arquivada)' : ''} · {nomeConta.get(t.contaId) ?? 'Conta removida'}
                         </p>
-                        {t.tags?.length ? <p className="text-xs text-slate-600">Tags: {formatarTags(t.tags)}</p> : null}
+                        {t.tags?.length ? <p className="transacoes__meta">Tags: {formatarTags(t.tags)}</p> : null}
                       </div>
-                      <div className="flex flex-wrap items-center gap-2">
+                      <div className="transacoes__acoes">
                         <Valor centavos={efeito} texto={`${efeito > 0 ? '+' : ''}${formatarMoeda(efeito)}`} />
                         <Botao variante="secundario" aria-label={`Editar ${rotulo}`} onClick={() => { setEditandoId(t.id); setCriando(false); }}>
                           Editar
@@ -203,7 +202,7 @@ export function TransacoesPage() {
                 })}
               </ul>
               {filtradas.length > visiveis.length ? (
-                <div className="mt-3 flex justify-center">
+                <div className="transacoes__mais">
                   <Botao variante="secundario" onClick={() => setLimite((l) => l + TAMANHO_PAGINA)}>
                     Mostrar mais ({filtradas.length - visiveis.length} restantes)
                   </Botao>

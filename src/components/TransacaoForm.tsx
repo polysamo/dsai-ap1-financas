@@ -6,6 +6,7 @@ import { formatarTags, parseTags, TAG_TAMANHO_MAX, TAGS_MAX } from '../domain/ta
 import type { DadosTransacao } from '../domain/transacoes';
 import type { AppState, Resultado, TipoMovimento, Transacao } from '../domain/types';
 import { Alerta, Botao, CampoSelect, CampoTexto } from './ui';
+import './TransacaoForm.css';
 
 interface Props {
   estado: AppState;
@@ -31,7 +32,7 @@ export function TransacaoForm({ estado, inicial, onSalvar, onCancelar }: Props) 
     return (
       <Alerta tipo="aviso">
         Você precisa de ao menos uma conta ativa para registrar transações.{' '}
-        <Link to="/contas" className="font-medium underline">
+        <Link to="/contas" className="transacao-form__link">
           Criar uma conta
         </Link>
       </Alerta>
@@ -57,7 +58,7 @@ export function TransacaoForm({ estado, inicial, onSalvar, onCancelar }: Props) 
   };
 
   return (
-    <form onSubmit={enviar} noValidate aria-label={inicial ? 'Editar transação' : 'Nova transação'} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <form onSubmit={enviar} noValidate aria-label={inicial ? 'Editar transação' : 'Nova transação'} className="transacao-form">
       <CampoSelect label="Tipo" value={tipo} onChange={(e) => trocarTipo(e.target.value as TipoMovimento)}>
         <option value="despesa">Despesa</option>
         <option value="receita">Receita</option>
@@ -90,11 +91,11 @@ export function TransacaoForm({ estado, inicial, onSalvar, onCancelar }: Props) 
         autoComplete="off"
       />
       {erros.geral ? (
-        <div className="sm:col-span-2 lg:col-span-3">
+        <div className="transacao-form__largo">
           <Alerta>{erros.geral}</Alerta>
         </div>
       ) : null}
-      <div className="flex gap-2 sm:col-span-2 lg:col-span-3">
+      <div className="transacao-form__acoes">
         <Botao type="submit">{inicial ? 'Salvar alterações' : 'Adicionar transação'}</Botao>
         <Botao variante="secundario" onClick={onCancelar}>
           Cancelar
