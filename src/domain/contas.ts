@@ -1,3 +1,4 @@
+import type { Transferencia } from './transferencias';
 import { novoId, proximoTempo } from './id';
 import { falha, ok, type AppState, type CartaoConfig, type Centavos, type Conta, type Resultado, type TipoConta, type Transacao } from './types';
 
@@ -86,11 +87,12 @@ export function editarConta(estado: AppState, id: string, dados: DadosConta): Re
 export function contaTemTransacoes(estado: AppState, id: string): boolean {
   return (
     estado.transacoes.some((t) => t.contaId === id) ||
-    estado.pagamentosFatura.some((p) => p.contaCartaoId === id || p.contaOrigemId === id)
+    estado.pagamentosFatura.some((p) => p.contaCartaoId === id || p.contaOrigemId === id) ||
+    (estado.transferencias ?? []).some((t) => t.contaOrigemId === id || t.contaDestinoId === id)
   );
 }
 
-/** Só contas sem transações podem ser excluídas; as demais devem ser arquivadas. */
+/** Só contas sem transações, pagamentos ou transferências podem ser excluídas; as demais devem ser arquivadas. */
 export function excluirConta(estado: AppState, id: string): Resultado<AppState> {
   if (!estado.contas.some((c) => c.id === id)) return falha('Conta não encontrada.');
   if (contaTemTransacoes(estado, id)) return falha('Esta conta tem transações e não pode ser excluída. Arquive-a.');
@@ -119,7 +121,7 @@ export function saldoConta(estado: DadosDeSaldo, contaId: string): Centavos {
   return saldosPorConta(estado).get(contaId) ?? 0;
 }
 
-type DadosDeSaldo = Pick<AppState, 'contas' | 'transacoes'> & Partial<Pick<AppState, 'pagamentosFatura'>>;
+type DadosDeSaldo = Pick<AppState, 'contas' | 'transacoes'> & Partial<Pick<AppState, 'pagamentosFatura'>> & { transferencias?: Transferencia[] };
 
 export function saldosPorConta(estado: DadosDeSaldo): Map<string, Centavos> {
   const saldos = new Map<string, Centavos>(estado.contas.map((c) => [c.id, c.saldoInicial]));
@@ -131,6 +133,11 @@ export function saldosPorConta(estado: DadosDeSaldo): Map<string, Centavos> {
   for (const p of estado.pagamentosFatura ?? []) {
     somar(p.contaOrigemId, -p.valor);
     somar(p.contaCartaoId, p.valor);
+  }
+  // Transferência tira da origem e entrega ao destino; o total não muda.
+  for (const t of estado.transferencias ?? []) {
+    somar(t.contaOrigemId, -t.valor);
+    somar(t.contaDestinoId, t.valor);
   }
   return saldos;
 }

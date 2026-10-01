@@ -1,0 +1,59 @@
+.transf-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.transf-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-2) var(--esp-3);
+  padding: var(--esp-3) 0;
+  border-bottom: 1px solid var(--cor-borda);
+  font-size: var(--texto-sm);
+}
+
+.transf-item:last-child {
+  border-bottom: 0;
+}
+
+.transf-item-texto {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1 1 14rem;
+}
+
+.transf-item-rota {
+  font-weight: 600;
+  color: var(--cor-texto);
+}
+
+.transf-item-meta {
+  font-size: var(--texto-xs);
+  color: var(--cor-texto-suave);
+  overflow-wrap: anywhere;
+}
+
+.transf-item-valor {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--cor-texto);
+}
+
+.transf-item-acoes {
+  display: flex;
+  gap: var(--esp-2);
+}
+
+.transf-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

@@ -1,0 +1,10 @@
+.transf-filtros {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: var(--esp-3);
+  align-items: start;
+}
+
+.transf-filtros-limpar {
+  align-self: end;
+}

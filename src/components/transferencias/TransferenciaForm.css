@@ -1,0 +1,15 @@
+.transf-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: var(--esp-3);
+}
+
+.transf-form-larga {
+  grid-column: 1 / -1;
+}
+
+.transf-form-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+}

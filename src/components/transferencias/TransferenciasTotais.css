@@ -1,0 +1,33 @@
+.transf-totais {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--texto-sm);
+}
+
+.transf-totais-legenda {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.transf-totais th,
+.transf-totais td {
+  padding: var(--esp-2) var(--esp-2);
+  border-bottom: 1px solid var(--cor-borda);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.transf-totais th[scope='col']:first-child,
+.transf-totais th[scope='row'] {
+  text-align: left;
+  font-weight: 600;
+}
+
+.transf-totais-vazio {
+  margin: 0;
+  font-size: var(--texto-sm);
+  color: var(--cor-texto-suave);
+}
