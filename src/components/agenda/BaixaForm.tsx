@@ -3,6 +3,7 @@ import type { DadosBaixa } from '../../domain/agenda';
 import { hojeISO } from '../../domain/date';
 import type { Agendamento, Categoria, Conta, Resultado } from '../../domain/types';
 import { Alerta, Botao, CampoSelect, CampoTexto } from '../ui';
+import './agenda.css';
 
 interface Props {
   item: Agendamento;
@@ -24,7 +25,7 @@ export function BaixaForm({ item, categorias, contas, onConfirmar, onCancelar }:
 
   if (contasAtivas.length === 0) {
     return (
-      <div className="space-y-2">
+      <div className="agenda-alertas">
         <Alerta tipo="aviso">Para dar baixa é preciso ter uma conta ativa.</Alerta>
         <Botao variante="secundario" onClick={onCancelar}>
           Cancelar
@@ -40,7 +41,7 @@ export function BaixaForm({ item, categorias, contas, onConfirmar, onCancelar }:
   };
 
   return (
-    <form onSubmit={enviar} noValidate aria-label={`Marcar como pago: ${item.descricao}`} className="grid gap-3 sm:grid-cols-3">
+    <form onSubmit={enviar} noValidate aria-label={`Marcar como pago: ${item.descricao}`} className="agenda-form agenda-form-3">
       <CampoSelect label="Conta do pagamento" value={contaId} onChange={(e) => setContaId(e.target.value)} erro={erros.contaId}>
         {contasAtivas.map((c) => (
           <option key={c.id} value={c.id}>
@@ -58,11 +59,11 @@ export function BaixaForm({ item, categorias, contas, onConfirmar, onCancelar }:
       </CampoSelect>
       <CampoTexto label="Data do pagamento" type="date" value={data} onChange={(e) => setData(e.target.value)} erro={erros.data} />
       {erros.geral ? (
-        <div className="sm:col-span-3">
+        <div className="agenda-form-linha">
           <Alerta>{erros.geral}</Alerta>
         </div>
       ) : null}
-      <div className="flex gap-2 sm:col-span-3">
+      <div className="agenda-form-linha agenda-form-botoes">
         <Botao type="submit">Confirmar pagamento</Botao>
         <Botao variante="secundario" onClick={onCancelar}>
           Cancelar

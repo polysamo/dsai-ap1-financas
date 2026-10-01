@@ -2,6 +2,7 @@ import { MODOS_PADRAO } from '../../domain/regras';
 import { formatarTags } from '../../domain/tags';
 import type { RegraCategoria } from '../../domain/types';
 import { Botao } from '../ui';
+import './regras.css';
 
 interface Props {
   regra: RegraCategoria;
@@ -22,23 +23,23 @@ export function RegraItem({ regra, posicao, total, categoriaNome, atingidas, onS
   const rotulo = `regra ${posicao}: ${regra.padrao}`;
   const modo = MODOS_PADRAO.find((m) => m.valor === regra.modo)?.rotulo ?? regra.modo;
   return (
-    <li className={`grid gap-2 py-3 ${regra.ativa ? '' : 'opacity-70'}`}>
-      <div className="flex flex-wrap items-start justify-between gap-2">
-        <div className="min-w-0 flex-1">
-          <p className="font-medium text-slate-900">
-            <span className="mr-2 text-slate-600">{posicao}.</span>
+    <li className={`regras-item${regra.ativa ? '' : ' regras-item-inativa'}`}>
+      <div className="regras-item-corpo">
+        <div className="regras-item-texto">
+          <p className="regras-item-titulo">
+            <span className="regras-item-posicao">{posicao}.</span>
             Descrição {modo.toLocaleLowerCase('pt-BR')} &ldquo;{regra.padrao}&rdquo;
           </p>
-          <p className="text-xs text-slate-600">
+          <p className="regras-item-detalhe">
             {regra.tipo === 'receita' ? 'Receita' : 'Despesa'} → {categoriaNome}
             {regra.tags.length > 0 ? ` · Tags: ${formatarTags(regra.tags)}` : ''}
             {regra.ativa ? '' : ' · Inativa'}
           </p>
-          <p className="text-xs font-medium text-slate-700" data-testid={`previa-regra-${posicao}`}>
+          <p className="regras-item-previa" data-testid={`previa-regra-${posicao}`}>
             {!regra.ativa ? 'Regra inativa: não atinge transações.' : `Atingiria ${atingidas} ${atingidas === 1 ? 'transação existente' : 'transações existentes'}.`}
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="regras-item-acoes">
           <Botao variante="secundario" aria-label={`Subir ${rotulo}`} disabled={posicao === 1} onClick={onSubir}>
             Subir
           </Botao>

@@ -12,6 +12,7 @@ import { formatarData, hojeISO } from '../domain/date';
 import { criarDivida, excluirDivida, excluirPagamentoDivida, registrarPagamentoDivida, resumoDivida } from '../domain/dividas';
 import { formatarMoeda, valorParaCampo } from '../domain/money';
 import { useEstado, useStore } from '../state/store';
+import '../components/dividas/dividas.css';
 
 export function DividasPage() {
   const store = useStore();
@@ -34,7 +35,7 @@ export function DividasPage() {
   return (
     <div>
       <TituloPagina>Dívidas e empréstimos</TituloPagina>
-      <div className="space-y-4">
+      <div className="dividas-pagina">
         {erro ? <Alerta>{erro}</Alerta> : null}
 
         {!divida || !resumo || !rotulos ? (
@@ -44,8 +45,8 @@ export function DividasPage() {
         ) : (
           <>
             <Cartao>
-              <div className="flex flex-wrap items-end justify-between gap-3">
-                <div className="w-full sm:w-80">
+              <div className="dividas-seletor">
+                <div className="dividas-seletor-campo">
                   <CampoSelect label="Dívida" value={divida.id} onChange={(e) => setParams({ divida: e.target.value })}>
                     {estado.dividas.map((d) => (
                       <option key={d.id} value={d.id}>
@@ -58,7 +59,7 @@ export function DividasPage() {
                   Excluir dívida
                 </Botao>
               </div>
-              <p className="mt-3 text-sm text-slate-600" data-testid="termos">
+              <p className="dividas-termos" data-testid="termos">
                 {divida.tipo === 'devo' ? 'Eu devo' : 'Eu emprestei'} {formatarMoeda(divida.principal)} · {valorParaCampo(divida.taxaBp)}% ao mês · {divida.parcelas}x · {ROTULO_SISTEMA[divida.sistema]} ·
                 1ª parcela em {formatarData(divida.primeiraParcela)}
               </p>
@@ -74,9 +75,9 @@ export function DividasPage() {
 
             <Cartao titulo={`${rotulos.pagamento}s registrados`}>
               {divida.pagamentos.length > 0 ? (
-                <ul className="mb-4 divide-y divide-slate-200" aria-label={`${rotulos.pagamento}s registrados`}>
+                <ul className="dividas-pagamentos" aria-label={`${rotulos.pagamento}s registrados`}>
                   {divida.pagamentos.map((p) => (
-                    <li key={p.id} className="flex flex-wrap items-center justify-between gap-2 py-2 text-sm">
+                    <li key={p.id} className="dividas-pagamento">
                       <span>
                         {formatarData(p.data)} · {p.parcela === undefined ? 'Amortização extra' : `Parcela ${p.parcela}`} · {formatarMoeda(p.valor)}
                       </span>
@@ -91,10 +92,10 @@ export function DividasPage() {
                   ))}
                 </ul>
               ) : (
-                <p className="mb-4 text-sm text-slate-600">Nenhum {rotulos.pagamento.toLowerCase()} registrado.</p>
+                <p className="dividas-texto-suave dividas-espaco-baixo">Nenhum {rotulos.pagamento.toLowerCase()} registrado.</p>
               )}
               {resumo.quitada ? (
-                <p className="text-sm text-slate-600">Não há saldo em aberto.</p>
+                <p className="dividas-texto-suave">Não há saldo em aberto.</p>
               ) : (
                 <PagamentoDividaForm
                   key={`${divida.id}-${divida.pagamentos.length}`}

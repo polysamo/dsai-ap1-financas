@@ -4,6 +4,7 @@ import { formatarMoeda } from '../../domain/money';
 import type { Agendamento, DataISO } from '../../domain/types';
 import { Botao, Valor } from '../ui';
 import { SituacaoBadge } from './SituacaoBadge';
+import './agenda.css';
 
 interface Props {
   itens: Agendamento[];
@@ -16,19 +17,19 @@ interface Props {
 
 export function AgendaLista({ itens, hoje, nomesCategorias, onPagar, onReabrir, onExcluir }: Props) {
   return (
-    <ul className="divide-y divide-slate-200" aria-label="Lançamentos do mês">
+    <ul className="agenda-lista" aria-label="Lançamentos do mês">
       {itens.map((a) => {
         const situacao = situacaoAgendamento(a, hoje);
         return (
-          <li key={a.id} className="flex flex-wrap items-center justify-between gap-2 py-2 text-sm">
-            <span className="min-w-0">
-              <span className="block truncate font-medium text-slate-900">{a.descricao}</span>
-              <span className="text-xs text-slate-600">
+          <li key={a.id} className="agenda-item">
+            <span className="agenda-item-texto">
+              <span className="agenda-item-titulo">{a.descricao}</span>
+              <span className="agenda-item-detalhe">
                 {a.tipo === 'despesa' ? 'A pagar' : 'A receber'} · vence em {formatarData(a.vencimento)} · {nomesCategorias.get(a.categoriaId) ?? 'Sem categoria'}
                 {a.pagoEm ? ` · pago em ${formatarData(a.pagoEm)}` : ''}
               </span>
             </span>
-            <span className="flex flex-wrap items-center gap-2">
+            <span className="agenda-item-acoes">
               <SituacaoBadge situacao={situacao} />
               <Valor centavos={a.tipo === 'despesa' ? -a.valor : a.valor} texto={formatarMoeda(a.tipo === 'despesa' ? -a.valor : a.valor)} />
               {a.pagoEm ? (

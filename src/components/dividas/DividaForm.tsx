@@ -5,6 +5,7 @@ import { parseValor } from '../../domain/money';
 import type { Resultado, SistemaAmortizacao, TipoDivida } from '../../domain/types';
 import { Alerta, Botao, CampoSelect, CampoTexto } from '../ui';
 import { ROTULO_SISTEMA } from './rotulos';
+import './dividas.css';
 
 type Erros = Partial<Record<'nome' | 'tipo' | 'principal' | 'taxa' | 'parcelas' | 'primeiraParcela' | 'sistema' | 'geral', string>>;
 
@@ -41,7 +42,7 @@ export function DividaForm({ onSalvar }: { onSalvar: (dados: DadosDivida) => Res
   };
 
   return (
-    <form onSubmit={enviar} noValidate aria-label="Nova dívida" className="grid gap-3 sm:grid-cols-2">
+    <form onSubmit={enviar} noValidate aria-label="Nova dívida" className="dividas-form dividas-form-2">
       <CampoTexto label="Nome" value={nome} onChange={(e) => setNome(e.target.value)} erro={erros.nome} maxLength={80} />
       <CampoSelect label="Tipo" value={tipo} onChange={(e) => setTipo(e.target.value as TipoDivida)} erro={erros.tipo}>
         <option value="devo">Eu devo</option>
@@ -59,11 +60,11 @@ export function DividaForm({ onSalvar }: { onSalvar: (dados: DadosDivida) => Res
         ))}
       </CampoSelect>
       {erros.geral ? (
-        <div className="sm:col-span-2">
+        <div className="dividas-form-linha">
           <Alerta>{erros.geral}</Alerta>
         </div>
       ) : null}
-      <div className="sm:col-span-2">
+      <div className="dividas-form-linha">
         <Botao type="submit">Cadastrar dívida</Botao>
       </div>
     </form>

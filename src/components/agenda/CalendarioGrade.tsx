@@ -1,8 +1,9 @@
 import { diasDaGrade, situacaoAgendamento } from '../../domain/agenda';
 import type { Agendamento, DataISO, Mes } from '../../domain/types';
+import './agenda.css';
 
 const SEMANA = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
-const COR_BORDA = { pago: 'border-emerald-600', atrasado: 'border-red-600', pendente: 'border-amber-500' };
+const CLASSE = { pago: 'agenda-cal-item-pago', atrasado: 'agenda-cal-item-atrasado', pendente: 'agenda-cal-item-pendente' };
 const ROTULO = { pago: 'Pago', atrasado: 'Atrasado', pendente: 'Pendente' };
 
 interface Props {
@@ -15,10 +16,10 @@ interface Props {
 export function CalendarioGrade({ mes, itens, hoje }: Props) {
   const dias = diasDaGrade(mes);
   return (
-    <div className="overflow-x-auto">
-      <div className="grid min-w-[42rem] grid-cols-7 gap-1 text-xs" role="group" aria-label="Calendário do mês">
+    <div className="agenda-cal-rolagem">
+      <div className="agenda-cal" role="group" aria-label="Calendário do mês">
         {SEMANA.map((d) => (
-          <div key={d} className="px-1 text-center font-semibold uppercase text-slate-600">
+          <div key={d} className="agenda-cal-semana">
             {d}
           </div>
         ))}
@@ -29,17 +30,17 @@ export function CalendarioGrade({ mes, itens, hoje }: Props) {
             <div
               key={data}
               data-testid={`dia-${data}`}
-              className={`min-h-20 rounded-md border p-1 ${data === hoje ? 'border-emerald-700 bg-emerald-50' : 'border-slate-200 bg-white'}`}
+              className={`agenda-cal-dia${data === hoje ? ' agenda-cal-dia-hoje' : ''}`}
             >
-              <span className="block font-semibold text-slate-700">{Number(data.slice(8, 10))}</span>
-              <ul className="space-y-0.5">
+              <span className="agenda-cal-numero">{Number(data.slice(8, 10))}</span>
+              <ul className="agenda-cal-lista">
                 {itens
                   .filter((a) => a.vencimento === data)
                   .map((a) => {
                     const situacao = situacaoAgendamento(a, hoje);
                     return (
-                      <li key={a.id} className={`truncate rounded border-l-4 bg-slate-50 px-1 ${COR_BORDA[situacao]}`} title={`${a.descricao} (${ROTULO[situacao]})`}>
-                        {a.descricao} <span className="text-slate-600">· {ROTULO[situacao]}</span>
+                      <li key={a.id} className={`agenda-cal-item ${CLASSE[situacao]}`} title={`${a.descricao} (${ROTULO[situacao]})`}>
+                        {a.descricao} <span className="agenda-cal-situacao">· {ROTULO[situacao]}</span>
                       </li>
                     );
                   })}

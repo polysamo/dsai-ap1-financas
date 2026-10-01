@@ -4,6 +4,7 @@ import { formatarMoeda, parseValor } from '../../domain/money';
 import type { SistemaAmortizacao } from '../../domain/types';
 import { Botao, CampoTexto } from '../ui';
 import { NOME_SISTEMA } from './rotulos';
+import './dividas.css';
 
 type Erros = Partial<Record<'principal' | 'taxa' | 'parcelas', string>>;
 type Resultado = Record<SistemaAmortizacao, ResumoSimulacao>;
@@ -34,28 +35,28 @@ export function SimuladorDividas() {
 
   return (
     <div>
-      <form onSubmit={enviar} noValidate aria-label="Simulador" className="grid gap-3 sm:grid-cols-3">
+      <form onSubmit={enviar} noValidate aria-label="Simulador" className="dividas-form dividas-form-3">
         <CampoTexto label="Principal a simular" value={principal} onChange={(e) => setPrincipal(e.target.value)} erro={erros.principal} inputMode="decimal" placeholder="0,00" />
         <CampoTexto label="Taxa mensal a simular (%)" value={taxa} onChange={(e) => setTaxa(e.target.value)} erro={erros.taxa} inputMode="decimal" placeholder="1,99" />
         <CampoTexto label="Prazo a simular (parcelas)" value={parcelas} onChange={(e) => setParcelas(e.target.value)} erro={erros.parcelas} inputMode="numeric" />
-        <div className="sm:col-span-3">
+        <div className="dividas-form-linha">
           <Botao type="submit">Simular</Botao>
         </div>
       </form>
       {resultado ? (
-        <div className="mt-4 grid gap-3 sm:grid-cols-2" aria-label="Resultado da simulação">
+        <div className="dividas-simulacao" aria-label="Resultado da simulação">
           {(['price', 'sac'] as const).map((s) => (
-            <section key={s} aria-label={`Simulação ${NOME_SISTEMA[s]}`} className="rounded-md border border-slate-200 p-3">
-              <h3 className="mb-2 font-semibold text-slate-900">{NOME_SISTEMA[s]}</h3>
-              <dl className="grid grid-cols-2 gap-1 text-sm">
-                <dt className="text-slate-600">Primeira parcela</dt>
-                <dd className="text-right tabular-nums" data-testid={`sim-${s}-primeira`}>{formatarMoeda(resultado[s].primeiraParcela)}</dd>
-                <dt className="text-slate-600">Última parcela</dt>
-                <dd className="text-right tabular-nums" data-testid={`sim-${s}-ultima`}>{formatarMoeda(resultado[s].ultimaParcela)}</dd>
-                <dt className="text-slate-600">Total de juros</dt>
-                <dd className="text-right tabular-nums" data-testid={`sim-${s}-juros`}>{formatarMoeda(resultado[s].totalJuros)}</dd>
-                <dt className="text-slate-600">Total pago</dt>
-                <dd className="text-right tabular-nums" data-testid={`sim-${s}-total`}>{formatarMoeda(resultado[s].totalPago)}</dd>
+            <section key={s} aria-label={`Simulação ${NOME_SISTEMA[s]}`} className="dividas-simulacao-cartao">
+              <h3 className="dividas-simulacao-titulo">{NOME_SISTEMA[s]}</h3>
+              <dl className="dividas-simulacao-dados">
+                <dt className="dividas-rotulo">Primeira parcela</dt>
+                <dd className="dividas-num dividas-direita" data-testid={`sim-${s}-primeira`}>{formatarMoeda(resultado[s].primeiraParcela)}</dd>
+                <dt className="dividas-rotulo">Última parcela</dt>
+                <dd className="dividas-num dividas-direita" data-testid={`sim-${s}-ultima`}>{formatarMoeda(resultado[s].ultimaParcela)}</dd>
+                <dt className="dividas-rotulo">Total de juros</dt>
+                <dd className="dividas-num dividas-direita" data-testid={`sim-${s}-juros`}>{formatarMoeda(resultado[s].totalJuros)}</dd>
+                <dt className="dividas-rotulo">Total pago</dt>
+                <dd className="dividas-num dividas-direita" data-testid={`sim-${s}-total`}>{formatarMoeda(resultado[s].totalPago)}</dd>
               </dl>
             </section>
           ))}

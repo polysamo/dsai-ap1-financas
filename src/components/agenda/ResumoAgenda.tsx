@@ -1,5 +1,6 @@
 import type { TotaisAgenda } from '../../domain/agenda';
 import { formatarMoeda } from '../../domain/money';
+import './agenda.css';
 
 export function ResumoAgenda({ totais }: { totais: TotaisAgenda }) {
   const linhas: [string, number, string][] = [
@@ -9,11 +10,11 @@ export function ResumoAgenda({ totais }: { totais: TotaisAgenda }) {
     ['Já recebido', totais.jaRecebido, 'total-ja-recebido'],
   ];
   return (
-    <dl className="grid grid-cols-2 gap-3 text-sm lg:grid-cols-4">
+    <dl className="agenda-resumo">
       {linhas.map(([rotulo, valor, id]) => (
         <div key={id}>
-          <dt className="text-slate-600">{rotulo}</dt>
-          <dd className="text-lg font-bold" data-testid={id}>
+          <dt className="agenda-resumo-rotulo">{rotulo}</dt>
+          <dd className="agenda-resumo-valor" data-testid={id}>
             {formatarMoeda(valor)}
           </dd>
         </div>

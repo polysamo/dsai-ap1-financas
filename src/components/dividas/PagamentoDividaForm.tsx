@@ -5,6 +5,7 @@ import { formatarMoeda, parseValor, valorParaCampo } from '../../domain/money';
 import type { Resultado, TipoDivida } from '../../domain/types';
 import { Alerta, Botao, CampoSelect, CampoTexto } from '../ui';
 import { rotulosTipo } from './rotulos';
+import './dividas.css';
 
 type Erros = Partial<Record<'valor' | 'data' | 'parcela' | 'geral', string>>;
 const EXTRA = 'extra';
@@ -39,7 +40,7 @@ export function PagamentoDividaForm({ tipo, abertas, onSalvar }: Props) {
   };
 
   return (
-    <form onSubmit={enviar} noValidate aria-label={r.registrar} className="grid gap-3 sm:grid-cols-3">
+    <form onSubmit={enviar} noValidate aria-label={r.registrar} className="dividas-form dividas-form-3">
       <CampoSelect label={`${r.pagamento} de`} value={alvo} onChange={(e) => escolher(e.target.value)} erro={erros.parcela}>
         {abertas.map((l) => (
           <option key={l.numero} value={l.numero}>
@@ -51,11 +52,11 @@ export function PagamentoDividaForm({ tipo, abertas, onSalvar }: Props) {
       <CampoTexto label={`Valor do ${r.pagamento.toLowerCase()}`} value={valor} onChange={(e) => setValor(e.target.value)} erro={erros.valor} inputMode="decimal" placeholder="0,00" />
       <CampoTexto label={`Data do ${r.pagamento.toLowerCase()}`} type="date" value={data} onChange={(e) => setData(e.target.value)} erro={erros.data} />
       {erros.geral ? (
-        <div className="sm:col-span-3">
+        <div className="dividas-form-linha">
           <Alerta>{erros.geral}</Alerta>
         </div>
       ) : null}
-      <div className="sm:col-span-3">
+      <div className="dividas-form-linha">
         <Botao type="submit">{r.registrar}</Botao>
       </div>
     </form>

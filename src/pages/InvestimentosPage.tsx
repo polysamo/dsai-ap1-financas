@@ -8,6 +8,7 @@ import { Botao, Cartao, EstadoVazio, TituloPagina } from '../components/ui';
 import { hojeISO } from '../domain/date';
 import { alocacaoPorClasse, criarAtivo, desempenhoCarteira, evolucaoPatrimonio } from '../domain/investimentos';
 import { useEstado, useStore } from '../state/store';
+import '../components/investimentos/investimentos.css';
 
 export function InvestimentosPage() {
   const store = useStore();
@@ -19,7 +20,7 @@ export function InvestimentosPage() {
   return (
     <div>
       <TituloPagina acoes={!criando ? <Botao onClick={() => setCriando(true)}>Novo ativo</Botao> : undefined}>Investimentos</TituloPagina>
-      <div className="space-y-4">
+      <div className="invest-pagina">
         {criando ? (
           <Cartao titulo="Novo ativo">
             <AtivoForm
@@ -42,13 +43,13 @@ export function InvestimentosPage() {
         ) : (
           <>
             <ResumoCarteira desempenho={desempenhoCarteira(ativos)} />
-            <div className="grid gap-4 lg:grid-cols-2">
+            <div className="invest-duas-colunas">
               <AlocacaoCarteira fatias={alocacaoPorClasse(ativos)} />
               {evolucao.length > 0 ? (
                 <GraficoPatrimonio dados={evolucao} />
               ) : (
                 <Cartao titulo="Evolução do patrimônio">
-                  <p className="text-sm text-slate-600">Registre um aporte para acompanhar a evolução mês a mês.</p>
+                  <p className="invest-texto-suave">Registre um aporte para acompanhar a evolução mês a mês.</p>
                 </Cartao>
               )}
             </div>
