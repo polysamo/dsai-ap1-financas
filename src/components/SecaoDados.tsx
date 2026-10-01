@@ -1,18 +1,21 @@
 import { useRef, useState } from 'react';
-import { Alerta, Botao, Cartao, TituloPagina } from '../components/ui';
-import { ConfirmDialog } from '../components/ConfirmDialog';
+import { Alerta, Botao, Cartao } from './ui';
+import { ConfirmDialog } from './ConfirmDialog';
 import { gerarExemplo } from '../data/exemplo';
 import { hojeISO } from '../domain/date';
 import type { AppState } from '../domain/types';
 import { baixarArquivo, lerArquivoTexto } from '../lib/download';
 import { exportarJson, importarJson } from '../storage/storage';
+import { usePreferencias } from '../state/preferencias';
 import { useEstado, useStore } from '../state/store';
 
 type Acao = { tipo: 'importar'; estado: AppState } | { tipo: 'apagar' } | { tipo: 'exemplo' } | null;
 type Mensagem = { tipo: 'erro' | 'sucesso'; texto: string } | null;
 
-export function DadosPage() {
+/** Exportar, importar, exemplo e apagar tudo; vive na página Configurações. */
+export function SecaoDados() {
   const store = useStore();
+  const { redefinir } = usePreferencias();
   const estado = useEstado();
   const [acao, setAcao] = useState<Acao>(null);
   const [mensagem, setMensagem] = useState<Mensagem>(null);
@@ -41,6 +44,7 @@ export function DadosPage() {
     if (!acao) return;
     if (acao.tipo === 'apagar') {
       store.apagarTudo();
+      redefinir();
       setMensagem({ tipo: 'sucesso', texto: 'Todos os dados foram apagados.' });
     } else {
       const novo = acao.tipo === 'importar' ? acao.estado : gerarExemplo(hojeISO());
@@ -55,8 +59,10 @@ export function DadosPage() {
   };
 
   return (
-    <div>
-      <TituloPagina>Dados</TituloPagina>
+    <section aria-labelledby="secao-dados">
+      <h2 id="secao-dados" className="mb-3 text-xl font-semibold text-slate-900">
+        Dados
+      </h2>
       <div className="space-y-4">
         {mensagem ? <Alerta tipo={mensagem.tipo}>{mensagem.texto}</Alerta> : null}
         <Cartao titulo="Backup">
@@ -123,7 +129,7 @@ export function DadosPage() {
           onConfirmar={confirmar}
         />
       ) : null}
-    </div>
+    </section>
   );
 
   function confirmarDireto() {

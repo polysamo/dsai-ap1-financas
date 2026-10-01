@@ -1,5 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { itensNavegacao } from '../navegacao';
+import { PreferenciasProvider } from '../state/preferencias';
+import { BotaoOcultarValores } from './BotaoOcultarValores';
 
 const classeLink = ({ isActive }: { isActive: boolean }) =>
   `whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-600 ${
@@ -8,6 +10,7 @@ const classeLink = ({ isActive }: { isActive: boolean }) =>
 
 export function Layout() {
   return (
+    <PreferenciasProvider>
     <div className="min-h-screen overflow-x-hidden">
       <header className="border-b border-slate-200 bg-white print:hidden">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
@@ -19,8 +22,9 @@ export function Layout() {
               </NavLink>
             ))}
           </nav>
-          <NavLink to="/dados" className={classeLink}>
-            Dados
+          <BotaoOcultarValores />
+          <NavLink to="/configuracoes" className={classeLink}>
+            Configurações
           </NavLink>
         </div>
       </header>
@@ -28,5 +32,6 @@ export function Layout() {
         <Outlet />
       </main>
     </div>
+    </PreferenciasProvider>
   );
 }

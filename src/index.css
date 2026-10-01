@@ -3,3 +3,59 @@
 body {
   @apply bg-slate-50 text-slate-900;
 }
+
+/*
+ * Tema escuro: redefine as variáveis de cor do Tailwind v4 sob a classe `dark` do <html>,
+ * então todo utilitário (bg-white, text-slate-600, ...) muda sem editar componentes.
+ * A escala slate é invertida; verde, vermelho, âmbar e azul trocam para tons claros em texto
+ * e escuros em fundos. Botões com `text-white` sobre `bg-*-700` ficam escuro sobre tom claro.
+ */
+html.dark {
+  color-scheme: dark;
+  --color-white: #111b2e;
+  --color-slate-50: #0a1020;
+  --color-slate-100: #1e293b;
+  --color-slate-200: #334155;
+  --color-slate-300: #475569;
+  --color-slate-400: #64748b;
+  --color-slate-500: #94a3b8;
+  --color-slate-600: #cbd5e1;
+  --color-slate-700: #e2e8f0;
+  --color-slate-800: #f1f5f9;
+  --color-slate-900: #f8fafc;
+  --color-slate-950: #ffffff;
+
+  --color-emerald-50: #052e22;
+  --color-emerald-100: #064e3b;
+  --color-emerald-300: #047857;
+  --color-emerald-600: #34d399;
+  --color-emerald-700: #34d399;
+  --color-emerald-800: #6ee7b7;
+  --color-emerald-900: #a7f3d0;
+  --color-emerald-950: #d1fae5;
+
+  --color-red-50: #450a0a;
+  --color-red-100: #7f1d1d;
+  --color-red-300: #b91c1c;
+  --color-red-600: #f87171;
+  --color-red-700: #f87171;
+  --color-red-800: #fca5a5;
+  --color-red-900: #fecaca;
+
+  --color-amber-50: #451a03;
+  --color-amber-100: #78350f;
+  --color-amber-300: #b45309;
+  --color-amber-500: #fbbf24;
+  --color-amber-800: #fcd34d;
+  --color-amber-900: #fde68a;
+
+  --color-sky-100: #0c4a6e;
+  --color-sky-600: #38bdf8;
+  --color-sky-900: #bae6fd;
+}
+
+/* Privacidade: desfoca valores monetários (o componente Valor e qualquer .tabular-nums). */
+html.ocultar-valores .tabular-nums {
+  filter: blur(6px);
+  user-select: none;
+}
