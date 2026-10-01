@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom';
+import { OnboardingEAtalhos } from './OnboardingEAtalhos';
 import { itensNavegacao } from '../navegacao';
 
 const classeLink = ({ isActive }: { isActive: boolean }) =>
@@ -24,6 +25,7 @@ export function Layout() {
           </NavLink>
         </div>
       </header>
+      <OnboardingEAtalhos />
       <main className="mx-auto max-w-6xl px-4 py-6">
         <Outlet />
       </main>

@@ -10,6 +10,7 @@ import { DividasPage } from './pages/DividasPage';
 import { ImportarCsvPage } from './pages/ImportarCsvPage';
 import { InvestimentosPage } from './pages/InvestimentosPage';
 import { MetasPage } from './pages/MetasPage';
+import { AjudaPage } from './pages/AjudaPage';
 import { OrcamentoPage } from './pages/OrcamentoPage';
 import { RelatoriosPage } from './pages/RelatoriosPage';
 import { RegrasPage } from './pages/RegrasPage';
@@ -36,6 +37,7 @@ export function AppRoutes() {
         <Route path="/importar" element={<ImportarCsvPage />} />
         <Route path="/relatorios" element={<RelatoriosPage />} />
         <Route path="/dados" element={<DadosPage />} />
+        <Route path="/ajuda" element={<AjudaPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

@@ -168,7 +168,7 @@ describe('contas: tela', () => {
     await usuario.click(screen.getByRole('button', { name: 'Criar conta' }));
     expect(screen.getByRole('alert')).toHaveTextContent('valor válido');
     expect(screen.getByLabelText('Saldo inicial')).toHaveAttribute('aria-invalid', 'true');
-    expect(localStorage.length).toBe(0);
+    expect(localStorage.getItem('financas:estado')).toBeNull();
   });
 
   it('critério 2: nome duplicado mostra erro junto ao campo', async () => {
