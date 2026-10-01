@@ -2,6 +2,7 @@ import { Alerta, Cartao, TituloPagina } from '../components/ui';
 import { SecaoDados } from '../components/SecaoDados';
 import type { Tema } from '../lib/preferencias';
 import { usePreferencias } from '../state/preferencias';
+import './ConfiguracoesPage.css';
 
 const OPCOES_TEMA: { valor: Tema; rotulo: string; descricao: string }[] = [
   { valor: 'claro', rotulo: 'Claro', descricao: 'Fundo claro, sempre.' },
@@ -16,50 +17,50 @@ export function ConfiguracoesPage() {
   return (
     <div>
       <TituloPagina>Configurações</TituloPagina>
-      <div className="space-y-8">
+      <div className="pilha pilha--g">
         {erro ? <Alerta tipo="erro">{erro}</Alerta> : null}
 
         <section aria-labelledby="secao-aparencia">
-          <h2 id="secao-aparencia" className="mb-3 text-xl font-semibold text-slate-900">
+          <h2 id="secao-aparencia" className="config-titulo-secao">
             Aparência
           </h2>
           <Cartao>
-            <div role="radiogroup" aria-labelledby="rotulo-tema" className="space-y-2">
-              <p id="rotulo-tema" className="text-sm font-medium text-slate-700">
+            <div role="radiogroup" aria-labelledby="rotulo-tema" className="pilha pilha--p">
+              <p id="rotulo-tema" className="config-rotulo-grupo">
                 Tema
               </p>
               {OPCOES_TEMA.map((o) => (
-                <label key={o.valor} className="flex cursor-pointer items-start gap-2 text-sm text-slate-800">
+                <label key={o.valor} className="config-opcao">
                   <input
                     type="radio"
                     name="tema"
                     value={o.valor}
                     checked={preferencias.tema === o.valor}
                     onChange={() => alterar({ tema: o.valor })}
-                    className="mt-0.5 h-4 w-4 accent-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                    className="config-opcao__radio"
                   />
                   <span>
-                    <span className="font-medium">{o.rotulo}</span>
-                    <span className="block text-xs text-slate-600">{o.descricao}</span>
+                    <span className="config-opcao__nome">{o.rotulo}</span>
+                    <span className="config-opcao__descricao">{o.descricao}</span>
                   </span>
                 </label>
               ))}
             </div>
-            <p className="mt-4 border-t border-slate-200 pt-3 text-sm text-slate-700">Moeda: real brasileiro (BRL)</p>
+            <p className="config-moeda">Moeda: real brasileiro (BRL)</p>
           </Cartao>
         </section>
 
         <section aria-labelledby="secao-privacidade">
-          <h2 id="secao-privacidade" className="mb-3 text-xl font-semibold text-slate-900">
+          <h2 id="secao-privacidade" className="config-titulo-secao">
             Privacidade
           </h2>
           <Cartao>
-            <div className="flex items-center justify-between gap-4">
+            <div className="config-privacidade">
               <div>
-                <p id="rotulo-ocultar" className="text-sm font-medium text-slate-800">
+                <p id="rotulo-ocultar" className="config-privacidade__titulo">
                   Ocultar valores
                 </p>
-                <p id="dica-ocultar" className="text-xs text-slate-600">
+                <p id="dica-ocultar" className="config-privacidade__dica">
                   Desfoca os valores em reais na tela, útil para usar o app em público.
                 </p>
               </div>
@@ -70,9 +71,9 @@ export function ConfiguracoesPage() {
                 aria-labelledby="rotulo-ocultar"
                 aria-describedby="dica-ocultar"
                 onClick={() => alterar({ ocultarValores: !oculto })}
-                className="inline-flex shrink-0 items-center gap-2 rounded-full border border-slate-300 px-3 py-1 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                className="config-interruptor"
               >
-                <span aria-hidden="true" className={`h-3 w-3 rounded-full ${oculto ? 'bg-emerald-700' : 'bg-slate-400'}`} />
+                <span aria-hidden="true" className={`config-interruptor__ponto${oculto ? ' config-interruptor__ponto--ligado' : ''}`} />
                 {oculto ? 'Ligado' : 'Desligado'}
               </button>
             </div>

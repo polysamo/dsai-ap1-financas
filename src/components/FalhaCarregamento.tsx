@@ -4,6 +4,7 @@ import type { Problema } from '../state/store';
 import { useStore } from '../state/store';
 import { Alerta, Botao, Cartao } from './ui';
 import { ConfirmDialog } from './ConfirmDialog';
+import './FalhaCarregamento.css';
 
 /** Tela exibida quando os dados salvos estão corrompidos ou vêm de uma versão mais nova. */
 export function FalhaCarregamento({ problema }: { problema: Problema }) {
@@ -17,15 +18,15 @@ export function FalhaCarregamento({ problema }: { problema: Problema }) {
       : `Os dados salvos foram criados por uma versão mais nova do app (esquema ${problema.versao}). Para não perdê-los, o app não vai sobrescrevê-los.`;
 
   return (
-    <main className="mx-auto max-w-xl px-4 py-10">
+    <main className="falha-raiz">
       <Cartao titulo="Não foi possível carregar seus dados">
-        <div className="space-y-4">
+        <div className="pilha">
           <Alerta tipo="aviso">{mensagem}</Alerta>
-          <p className="text-sm text-slate-700">
+          <p className="falha-texto">
             Exporte o conteúdo bruto para guardar uma cópia. Só depois, se quiser, comece do zero: isso apaga o que está salvo.
           </p>
           {erro ? <Alerta>{erro}</Alerta> : null}
-          <div className="flex flex-wrap gap-2">
+          <div className="linha">
             <Botao variante="secundario" onClick={() => baixarArquivo('financas-dados-brutos.json', problema.bruto)}>
               Exportar conteúdo bruto
             </Botao>

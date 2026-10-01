@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { Alerta, Botao, Cartao } from './ui';
 import { ConfirmDialog } from './ConfirmDialog';
+import './SecaoDados.css';
 import { gerarExemplo } from '../data/exemplo';
 import { hojeISO } from '../domain/date';
 import type { AppState } from '../domain/types';
@@ -60,16 +61,16 @@ export function SecaoDados() {
 
   return (
     <section aria-labelledby="secao-dados">
-      <h2 id="secao-dados" className="mb-3 text-xl font-semibold text-slate-900">
+      <h2 id="secao-dados" className="dados-titulo">
         Dados
       </h2>
-      <div className="space-y-4">
+      <div className="pilha">
         {mensagem ? <Alerta tipo={mensagem.tipo}>{mensagem.texto}</Alerta> : null}
         <Cartao titulo="Backup">
-          <p className="mb-3 text-sm text-slate-700">
+          <p className="dados-texto">
             Seus dados ficam apenas neste navegador. Exporte um arquivo JSON para guardar uma cópia ou levar para outro computador.
           </p>
-          <div className="flex flex-wrap gap-2">
+          <div className="linha">
             <Botao onClick={exportar}>Exportar dados</Botao>
             <Botao variante="secundario" onClick={() => entradaArquivo.current?.click()}>
               Importar dados
@@ -79,19 +80,19 @@ export function SecaoDados() {
               type="file"
               accept="application/json,.json"
               aria-label="Arquivo de dados para importar"
-              className="sr-only"
+              className="sr-somente"
               onChange={(e) => void escolherArquivo(e.target.files?.[0])}
             />
           </div>
         </Cartao>
         <Cartao titulo="Dados de exemplo">
-          <p className="mb-3 text-sm text-slate-700">Carrega contas, transações, orçamento, metas e recorrências fictícias para explorar o app.</p>
+          <p className="dados-texto">Carrega contas, transações, orçamento, metas e recorrências fictícias para explorar o app.</p>
           <Botao variante="secundario" onClick={() => (temDados ? setAcao({ tipo: 'exemplo' }) : confirmarDireto())}>
             Carregar dados de exemplo
           </Botao>
         </Cartao>
         <Cartao titulo="Zona de perigo">
-          <p className="mb-3 text-sm text-slate-700">Remove tudo o que o app guardou neste navegador e volta ao primeiro uso.</p>
+          <p className="dados-texto">Remove tudo o que o app guardou neste navegador e volta ao primeiro uso.</p>
           <Botao variante="perigo" onClick={() => setAcao({ tipo: 'apagar' })}>
             Apagar todos os dados
           </Botao>

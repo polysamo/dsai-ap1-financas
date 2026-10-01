@@ -2,6 +2,7 @@ import { useId, useState } from 'react';
 import { TabelaAtalhos } from '../components/OnboardingEAtalhos';
 import { Botao, Cartao, CampoTexto, EstadoVazio, TituloPagina } from '../components/ui';
 import { pedirTour } from '../lib/onboarding';
+import './AjudaPage.css';
 
 interface Pergunta {
   pergunta: string;
@@ -41,7 +42,7 @@ export function AjudaPage() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="pilha">
       <TituloPagina
         acoes={
           <Botao variante="secundario" onClick={pedirTour}>
@@ -54,29 +55,29 @@ export function AjudaPage() {
 
       <Cartao titulo="Perguntas frequentes">
         <CampoTexto label="Buscar nas perguntas" type="search" value={busca} onChange={(e) => setBusca(e.target.value)} autoComplete="off" />
-        <div className="mt-3">
+        <div className="ajuda-busca">
           {visiveis.length === 0 ? (
             <EstadoVazio titulo="Nenhuma pergunta encontrada">{`Nada corresponde a "${busca.trim()}". Tente outras palavras.`}</EstadoVazio>
           ) : (
-            <ul className="divide-y divide-slate-200">
+            <ul className="ajuda-lista">
               {visiveis.map((p) => {
                 const aberta = abertas.has(p.i);
                 const idResposta = `${prefixo}-r${p.i}`;
                 return (
                   <li key={p.i}>
-                    <h3>
+                    <h3 className="ajuda-pergunta">
                       <button
                         type="button"
                         aria-expanded={aberta}
                         aria-controls={idResposta}
                         onClick={() => alternar(p.i)}
-                        className="flex w-full items-center justify-between gap-3 py-3 text-left text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                        className="ajuda-pergunta__botao"
                       >
                         <span>{p.pergunta}</span>
                         <span aria-hidden="true">{aberta ? '−' : '+'}</span>
                       </button>
                     </h3>
-                    <div id={idResposta} role="region" aria-label={p.pergunta} hidden={!aberta} className="pb-3 text-sm text-slate-700">
+                    <div id={idResposta} role="region" aria-label={p.pergunta} hidden={!aberta} className="ajuda-resposta">
                       {p.resposta}
                     </div>
                   </li>

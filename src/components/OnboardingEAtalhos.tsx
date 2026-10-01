@@ -2,6 +2,7 @@ import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from 
 import { atalhos, useAtalhos } from '../lib/atalhos';
 import { EVENTO_ABRIR_TOUR, marcarTourConcluido, passosTour, tourConcluido } from '../lib/onboarding';
 import { Botao } from './ui';
+import './OnboardingEAtalhos.css';
 
 const FOCAVEIS = 'button:not([disabled]), a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
@@ -42,9 +43,9 @@ function Modal({ titulo, idTitulo, aoFechar, children }: { titulo: string; idTit
   }, [aoFechar]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 print:hidden">
-      <div ref={raiz} role="dialog" aria-modal="true" aria-labelledby={idTitulo} className="max-h-full w-full max-w-md overflow-y-auto rounded-lg bg-white p-5 shadow-xl">
-        <h2 id={idTitulo} className="text-lg font-semibold text-slate-900">
+    <div className="ui-modal-fundo ui-modal-fundo--sem-impressao">
+      <div ref={raiz} role="dialog" aria-modal="true" aria-labelledby={idTitulo} className="ui-modal">
+        <h2 id={idTitulo} className="ui-modal__titulo">
           {titulo}
         </h2>
         {children}
@@ -55,29 +56,25 @@ function Modal({ titulo, idTitulo, aoFechar, children }: { titulo: string; idTit
 
 export function TabelaAtalhos() {
   return (
-    <table className="w-full text-left text-sm">
-      <caption className="sr-only">Atalhos de teclado</caption>
+    <table className="atalhos-tabela">
+      <caption className="sr-somente">Atalhos de teclado</caption>
       <thead>
-        <tr className="border-b border-slate-200 text-slate-600">
-          <th scope="col" className="py-2 pr-4 font-medium">
-            Teclas
-          </th>
-          <th scope="col" className="py-2 font-medium">
-            Ação
-          </th>
+        <tr className="atalhos-tabela__cabecalho">
+          <th scope="col">Teclas</th>
+          <th scope="col">Ação</th>
         </tr>
       </thead>
       <tbody>
         {atalhos.map((a) => (
-          <tr key={a.teclas} className="border-b border-slate-100">
-            <td className="py-2 pr-4">
+          <tr key={a.teclas}>
+            <td>
               {a.teclas.split(' ').map((t, i) => (
-                <kbd key={i} className="mr-1 rounded border border-slate-300 bg-slate-100 px-1.5 py-0.5 font-mono text-xs">
+                <kbd key={i} className="atalhos-tecla">
                   {t}
                 </kbd>
               ))}
             </td>
-            <td className="py-2 text-slate-800">{a.descricao}</td>
+            <td className="atalhos-tabela__acao">{a.descricao}</td>
           </tr>
         ))}
       </tbody>
@@ -93,15 +90,15 @@ function Tour({ aoFechar }: { aoFechar: () => void }) {
 
   return (
     <Modal titulo={`Tour: ${passo.titulo}`} idTitulo={idTitulo} aoFechar={aoFechar}>
-      <p className="mt-1 text-xs text-slate-600" aria-live="polite">
+      <p className="tour-passo" aria-live="polite">
         Passo {indice + 1} de {passosTour.length}
       </p>
-      <p className="mt-3 text-sm text-slate-700">{passo.texto}</p>
-      <div className="mt-5 flex flex-wrap items-center justify-between gap-2">
+      <p className="tour-texto">{passo.texto}</p>
+      <div className="tour-acoes">
         <Botao variante="link" onClick={aoFechar}>
           Pular
         </Botao>
-        <div className="flex gap-2">
+        <div className="tour-botoes">
           <Botao variante="secundario" disabled={indice === 0} onClick={() => setIndice(indice - 1)}>
             Anterior
           </Botao>
@@ -138,10 +135,10 @@ export function OnboardingEAtalhos() {
       {tourAberto ? <Tour aoFechar={fecharTour} /> : null}
       {atalhosAbertos && !tourAberto ? (
         <Modal titulo="Atalhos de teclado" idTitulo={idAtalhos} aoFechar={fecharAtalhos}>
-          <div className="mt-3">
+          <div className="atalhos-corpo">
             <TabelaAtalhos />
           </div>
-          <div className="mt-4 flex justify-end">
+          <div className="atalhos-rodape">
             <Botao variante="secundario" onClick={fecharAtalhos}>
               Fechar
             </Botao>

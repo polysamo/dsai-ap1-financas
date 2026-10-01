@@ -1,0 +1,2 @@
+.dados-titulo { margin: 0 0 var(--esp-3); font-size: var(--texto-xl); font-weight: 600; color: var(--cor-texto); }
+.dados-texto { margin: 0 0 var(--esp-3); font-size: var(--texto-sm); color: var(--cor-texto-suave); }

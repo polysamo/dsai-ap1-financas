@@ -295,7 +295,7 @@ describe('relatórios: tela', () => {
     const { container } = renderizarApp('/relatorios', comDados());
     await usuario.click(screen.getByRole('button', { name: 'Exportar PDF' }));
     expect(window.print).toHaveBeenCalled();
-    expect(container.querySelector('header')?.className).toContain('print:hidden');
+    expect(container.querySelector('header')?.className).toContain('layout-cabecalho');
     expect(screen.getByRole('tablist').parentElement?.className).toContain('print:hidden');
     expect(screen.getByText(/^Relatório mensal: /).className).toContain('print:block');
   });
