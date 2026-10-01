@@ -18,6 +18,7 @@ export function estadoInicial(): AppState {
     mapeamentosCsv: {},
     importacoes: [],
     pagamentosFatura: [],
+    dividas: [],
   };
 }
 

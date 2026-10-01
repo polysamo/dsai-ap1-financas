@@ -130,5 +130,19 @@ export function gerarExemplo(hoje: string): AppState {
     mapeamentosCsv: {},
     importacoes: [],
     pagamentosFatura: [],
+    dividas: [
+      {
+        id: 'ex-divida-notebook',
+        nome: 'Financiamento do notebook',
+        tipo: 'devo',
+        principal: 360000,
+        taxaBp: 199,
+        parcelas: 12,
+        primeiraParcela: dataNoMes(somarMeses(mesAtual, -2), 10),
+        sistema: 'price',
+        pagamentos: [],
+        criadaEm: 1,
+      },
+    ],
   };
 }

@@ -11,6 +11,7 @@ export const itensNavegacao: ItemNavegacao[] = [
   { to: '/cartoes', rotulo: 'Cartões' },
   { to: '/orcamento', rotulo: 'Orçamento' },
   { to: '/metas', rotulo: 'Metas' },
+  { to: '/dividas', rotulo: 'Dívidas' },
   { to: '/relatorios', rotulo: 'Relatórios' },
   { to: '/importar', rotulo: 'Importar CSV' },
 ];
