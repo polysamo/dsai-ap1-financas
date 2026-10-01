@@ -10,6 +10,7 @@ import {
 import type { AppState, Recorrencia, Resultado, TipoMovimento } from '../domain/types';
 import { useEstado, useStore } from '../state/store';
 import { Alerta, Botao, CampoSelect, CampoTexto, Cartao } from './ui';
+import './RecorrenciasPanel.css';
 
 interface FormProps {
   estado: AppState;
@@ -43,7 +44,7 @@ function RecorrenciaForm({ estado, inicial, onSalvar, onCancelar }: FormProps) {
   };
 
   return (
-    <form onSubmit={enviar} noValidate aria-label={inicial ? 'Editar recorrência' : 'Nova recorrência'} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <form onSubmit={enviar} noValidate aria-label={inicial ? 'Editar recorrência' : 'Nova recorrência'} className="recorrencias__form">
       <CampoTexto label="Descrição da recorrência" value={descricao} onChange={(e) => setDescricao(e.target.value)} erro={erros.descricao} maxLength={RECORRENCIA_DESCRICAO_MAX + 20} autoComplete="off" />
       <CampoSelect
         label="Tipo da recorrência"
@@ -66,11 +67,11 @@ function RecorrenciaForm({ estado, inicial, onSalvar, onCancelar }: FormProps) {
       </CampoSelect>
       <CampoTexto label="Valor mensal" value={valor} onChange={(e) => setValor(e.target.value)} erro={erros.valor} inputMode="decimal" placeholder="0,00" />
       {erros.geral ? (
-        <div className="sm:col-span-2 lg:col-span-4">
+        <div className="recorrencias__form-linha">
           <Alerta>{erros.geral}</Alerta>
         </div>
       ) : null}
-      <div className="flex gap-2 sm:col-span-2 lg:col-span-4">
+      <div className="recorrencias__acoes-form">
         <Botao type="submit">{inicial ? 'Salvar recorrência' : 'Adicionar recorrência'}</Botao>
         {onCancelar ? (
           <Botao variante="secundario" onClick={onCancelar}>
@@ -90,16 +91,16 @@ export function RecorrenciasPanel() {
 
   return (
     <Cartao titulo="Recorrências usadas na projeção">
-      <p className="mb-3 text-sm text-slate-700">
+      <p className="recorrencias__intro">
         Valores fixos que se repetem todo mês, como salário e aluguel. Eles entram só na projeção: não criam transações nem mudam saldos. O histórico das categorias com recorrência ativa sai do cálculo das médias para não contar duas vezes.
       </p>
       {estado.recorrencias.length === 0 ? (
-        <p className="mb-3 text-sm text-slate-600">Nenhuma recorrência cadastrada.</p>
+        <p className="recorrencias__vazio">Nenhuma recorrência cadastrada.</p>
       ) : (
-        <ul className="mb-4 divide-y divide-slate-200" aria-label="Recorrências">
+        <ul className="recorrencias__lista" aria-label="Recorrências">
           {estado.recorrencias.map((r) =>
             editandoId === r.id ? (
-              <li key={r.id} className="py-3">
+              <li key={r.id} className="recorrencias__item">
                 <RecorrenciaForm
                   estado={estado}
                   inicial={r}
@@ -112,21 +113,21 @@ export function RecorrenciasPanel() {
                 />
               </li>
             ) : (
-              <li key={r.id} className="flex flex-wrap items-center justify-between gap-2 py-3">
-                <div className="min-w-0">
-                  <p className={`font-medium ${r.ativa ? 'text-slate-900' : 'text-slate-500 line-through'}`}>{r.descricao}</p>
-                  <p className="text-xs text-slate-600">
+              <li key={r.id} className="recorrencias__item recorrencias__item--linha">
+                <div className="recorrencias__texto">
+                  <p className={r.ativa ? 'recorrencias__nome' : 'recorrencias__nome recorrencias__nome--inativa'}>{r.descricao}</p>
+                  <p className="recorrencias__detalhe">
                     {r.tipo === 'receita' ? 'Receita' : 'Despesa'} · {nomeCategoria.get(r.categoriaId) ?? 'Sem categoria'} · {formatarMoeda(r.valor)} por mês
                   </p>
                 </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <label className="flex items-center gap-1.5 text-sm text-slate-800">
+                <div className="recorrencias__acoes">
+                  <label className="recorrencias__ativa">
                     <input
                       type="checkbox"
                       checked={r.ativa}
                       aria-label={`Recorrência ${r.descricao} ativa`}
                       onChange={(e) => store.aplicar((s) => alternarRecorrencia(s, r.id, e.target.checked))}
-                      className="h-4 w-4 accent-emerald-700"
+                      className="recorrencias__checkbox"
                     />
                     Ativa
                   </label>

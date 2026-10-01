@@ -18,12 +18,13 @@ import {
 import { formatarData, hojeISO, mesValido, nomeMes, somarMeses } from '../domain/date';
 import { formatarMoeda } from '../domain/money';
 import { useEstado, useStore } from '../state/store';
+import './CartoesPage.css';
 
 const ROTULO_SITUACAO: Record<SituacaoFatura, string> = { aberta: 'Aberta', fechada: 'Fechada', paga: 'Paga' };
 const COR_SITUACAO: Record<SituacaoFatura, string> = {
-  aberta: 'bg-sky-100 text-sky-900',
-  fechada: 'bg-amber-100 text-amber-900',
-  paga: 'bg-emerald-100 text-emerald-900',
+  aberta: 'cartoes__situacao--aberta',
+  fechada: 'cartoes__situacao--fechada',
+  paga: 'cartoes__situacao--paga',
 };
 
 export function CartoesPage() {
@@ -51,7 +52,7 @@ export function CartoesPage() {
     return (
       <div>
         <TituloPagina>Cartões</TituloPagina>
-        <EstadoVazio titulo="Nenhum cartão de crédito" acao={<Link to="/contas" className="font-medium text-emerald-800 underline">Criar um cartão em Contas</Link>}>
+        <EstadoVazio titulo="Nenhum cartão de crédito" acao={<Link to="/contas" className="cartoes__link">Criar um cartão em Contas</Link>}>
           Cadastre uma conta do tipo cartão de crédito para acompanhar faturas, limite e parcelas.
         </EstadoVazio>
       </div>
@@ -61,10 +62,10 @@ export function CartoesPage() {
   return (
     <div>
       <TituloPagina>Cartões</TituloPagina>
-      <div className="space-y-4">
+      <div className="cartoes">
         {erro ? <Alerta>{erro}</Alerta> : null}
         <Cartao>
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="cartoes__seletor">
             <CampoSelect label="Cartão" value={escolhido.id} onChange={(e) => setParams({ cartao: e.target.value })}>
               {cartoes.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -76,7 +77,7 @@ export function CartoesPage() {
         </Cartao>
 
         {!escolhido.cartao || !resumo || !limite ? (
-          <EstadoVazio titulo="Cartão sem ciclo configurado" acao={<Link to="/contas" className="font-medium text-emerald-800 underline">Configurar em Contas</Link>}>
+          <EstadoVazio titulo="Cartão sem ciclo configurado" acao={<Link to="/contas" className="cartoes__link">Configurar em Contas</Link>}>
             Edite a conta "{escolhido.nome}" e informe o dia de fechamento, o dia de vencimento e o limite.
           </EstadoVazio>
         ) : (
@@ -86,11 +87,11 @@ export function CartoesPage() {
             </Cartao>
 
             <Cartao>
-              <div className="flex flex-wrap items-end gap-3">
+              <div className="cartoes__navegacao">
                 <Botao variante="secundario" onClick={() => navegar({ mes: somarMeses(mes, -1) })}>
                   Fatura anterior
                 </Botao>
-                <div className="w-44">
+                <div className="cartoes__campo-mes">
                   <CampoTexto label="Mês da fatura" type="month" value={mes} onChange={(e) => mesValido(e.target.value) && navegar({ mes: e.target.value })} />
                 </div>
                 <Botao variante="secundario" onClick={() => navegar({ mes: somarMeses(mes, 1) })}>
@@ -102,38 +103,38 @@ export function CartoesPage() {
             <Cartao
               titulo={`Fatura de ${nomeMes(mes)}`}
               acoes={
-                <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${COR_SITUACAO[resumo.situacao]}`} data-testid="situacao">
+                <span className={`cartoes__situacao ${COR_SITUACAO[resumo.situacao]}`} data-testid="situacao">
                   {ROTULO_SITUACAO[resumo.situacao]}
                 </span>
               }
             >
-              <p className="mb-3 text-sm text-slate-600" data-testid="ciclo">
+              <p className="cartoes__ciclo" data-testid="ciclo">
                 Ciclo de {formatarData(cicloFatura(escolhido.cartao, mes).inicio)} a {formatarData(cicloFatura(escolhido.cartao, mes).fim)} · vence em{' '}
                 <span data-testid="vencimento">{formatarData(resumo.vencimento)}</span>
               </p>
-              <dl className="mb-3 grid gap-2 text-sm sm:grid-cols-3">
+              <dl className="cartoes__fatura-resumo">
                 <div>
-                  <dt className="text-slate-600">Total da fatura</dt>
-                  <dd className="text-lg font-bold" data-testid="fatura-total">{formatarMoeda(resumo.total)}</dd>
+                  <dt>Total da fatura</dt>
+                  <dd className="cartoes__fatura-total" data-testid="fatura-total">{formatarMoeda(resumo.total)}</dd>
                 </div>
                 <div>
-                  <dt className="text-slate-600">Pago</dt>
+                  <dt>Pago</dt>
                   <dd data-testid="fatura-pago">{formatarMoeda(resumo.pago)}</dd>
                 </div>
                 <div>
-                  <dt className="text-slate-600">Restante</dt>
+                  <dt>Restante</dt>
                   <dd data-testid="fatura-restante">{formatarMoeda(resumo.restante)}</dd>
                 </div>
               </dl>
               {resumo.transacoes.length === 0 ? (
-                <p className="text-sm text-slate-600">Nenhuma compra neste ciclo.</p>
+                <p className="cartoes__texto-mudo">Nenhuma compra neste ciclo.</p>
               ) : (
-                <ul className="divide-y divide-slate-200" aria-label="Compras da fatura">
+                <ul className="cartoes__lista" aria-label="Compras da fatura">
                   {resumo.transacoes.map((t) => (
-                    <li key={t.id} className="flex flex-wrap items-center justify-between gap-2 py-2 text-sm">
-                      <span className="min-w-0">
-                        <span className="block truncate font-medium text-slate-900">{t.descricao || 'Sem descrição'}</span>
-                        <span className="text-xs text-slate-600">
+                    <li key={t.id} className="cartoes__item">
+                      <span className="cartoes__item-texto">
+                        <span className="cartoes__item-titulo">{t.descricao || 'Sem descrição'}</span>
+                        <span className="cartoes__item-detalhe">
                           {formatarData(t.data)} · {categorias.get(t.categoriaId) ?? 'Sem categoria'}
                         </span>
                       </span>
@@ -146,9 +147,9 @@ export function CartoesPage() {
 
             <Cartao titulo="Pagamentos desta fatura">
               {pagamentos.length > 0 ? (
-                <ul className="mb-4 divide-y divide-slate-200" aria-label="Pagamentos registrados">
+                <ul className="cartoes__lista cartoes__lista--espaco" aria-label="Pagamentos registrados">
                   {pagamentos.map((p) => (
-                    <li key={p.id} className="flex flex-wrap items-center justify-between gap-2 py-2 text-sm">
+                    <li key={p.id} className="cartoes__item">
                       <span>
                         {formatarData(p.data)} · de {nomeConta.get(p.contaOrigemId) ?? 'conta removida'} · {formatarMoeda(p.valor)}
                       </span>
@@ -173,7 +174,7 @@ export function CartoesPage() {
                   onSalvar={(dados) => store.aplicar((s) => registrarPagamento(s, dados, hoje))}
                 />
               ) : (
-                <p className="text-sm text-slate-600">Não há valor a pagar nesta fatura.</p>
+                <p className="cartoes__texto-mudo">Não há valor a pagar nesta fatura.</p>
               )}
             </Cartao>
 

@@ -7,6 +7,8 @@ import { useEstado } from '../../state/store';
 import { CampoTexto, Cartao, EstadoVazio, Valor } from '../ui';
 import { BarraExportacao } from './BarraExportacao';
 import { TabelaQuebra } from './TabelaQuebra';
+import '../../styles/tabela-dados.css';
+import './relatorios.css';
 
 export function RelatorioMensalView() {
   const estado = useEstado();
@@ -14,42 +16,42 @@ export function RelatorioMensalView() {
   const relatorio = useMemo(() => relatorioMensal(estado, mes), [estado, mes]);
 
   return (
-    <div className="space-y-4">
-      <p className="hidden text-lg font-semibold print:block">Relatório mensal: {nomeMes(mes)}</p>
+    <div className="relatorio">
+      <p className="relatorio-titulo-impressao">Relatório mensal: {nomeMes(mes)}</p>
       <Cartao>
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div className="w-44 print:hidden">
+        <div className="relatorio-controles">
+          <div className="relatorio-campo">
             <CampoTexto label="Mês do relatório" type="month" value={mes} onChange={(e) => mesValido(e.target.value) && setMes(e.target.value)} />
           </div>
           <BarraExportacao linhas={csvMensal(relatorio)} nomeArquivo={nomeArquivoRelatorio('mensal', mes)} desabilitado={relatorio.quantidade === 0} />
         </div>
       </Cartao>
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" role="group" aria-label="Resumo do mês">
+      <div className="relatorio-resumo" role="group" aria-label="Resumo do mês">
         <Cartao>
-          <p className="text-sm text-slate-600">Receitas</p>
-          <p className="text-xl font-bold" data-testid="rel-receitas">{formatarMoeda(relatorio.receitas)}</p>
+          <p className="relatorio-resumo__rotulo">Receitas</p>
+          <p className="relatorio-resumo__valor" data-testid="rel-receitas">{formatarMoeda(relatorio.receitas)}</p>
         </Cartao>
         <Cartao>
-          <p className="text-sm text-slate-600">Despesas</p>
-          <p className="text-xl font-bold" data-testid="rel-despesas">{formatarMoeda(relatorio.despesas)}</p>
+          <p className="relatorio-resumo__rotulo">Despesas</p>
+          <p className="relatorio-resumo__valor" data-testid="rel-despesas">{formatarMoeda(relatorio.despesas)}</p>
         </Cartao>
         <Cartao>
-          <p className="text-sm text-slate-600">Resultado</p>
-          <p className="text-xl font-bold" data-testid="rel-resultado">
+          <p className="relatorio-resumo__rotulo">Resultado</p>
+          <p className="relatorio-resumo__valor" data-testid="rel-resultado">
             <Valor centavos={relatorio.resultado} texto={formatarMoeda(relatorio.resultado)} />
           </p>
         </Cartao>
         <Cartao>
-          <p className="text-sm text-slate-600">Taxa de poupança</p>
-          <p className="text-xl font-bold" data-testid="rel-taxa">{formatarPercentual(relatorio.taxaPoupanca)}</p>
+          <p className="relatorio-resumo__rotulo">Taxa de poupança</p>
+          <p className="relatorio-resumo__valor" data-testid="rel-taxa">{formatarPercentual(relatorio.taxaPoupanca)}</p>
         </Cartao>
       </div>
 
       {relatorio.quantidade === 0 ? (
         <EstadoVazio titulo={`Sem transações em ${nomeMes(mes)}`}>Escolha outro mês ou registre transações para ver o detalhamento.</EstadoVazio>
       ) : (
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="relatorio-quebras">
           <Cartao>
             <TabelaQuebra titulo="Despesas por categoria" quebra={relatorio.despesasPorCategoria} />
           </Cartao>

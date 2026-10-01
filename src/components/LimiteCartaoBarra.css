@@ -1,0 +1,43 @@
+.limite-cartao__trilho {
+  width: 100%;
+  height: 0.75rem;
+  overflow: hidden;
+  border-radius: var(--raio-total);
+  background: var(--cor-borda);
+}
+
+.limite-cartao__preenchimento {
+  height: 100%;
+  background: var(--cor-info);
+}
+
+.limite-cartao__preenchimento--alerta {
+  background: var(--cor-aviso);
+}
+
+.limite-cartao__preenchimento--excedido {
+  background: var(--cor-perigo);
+}
+
+.limite-cartao__resumo {
+  display: grid;
+  gap: var(--esp-2);
+  grid-template-columns: minmax(0, 1fr);
+  margin: var(--esp-2) 0 0;
+  font-size: var(--texto-sm);
+}
+
+.limite-cartao__resumo dt {
+  color: var(--cor-texto-suave);
+}
+
+.limite-cartao__resumo dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 640px) {
+  .limite-cartao__resumo {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

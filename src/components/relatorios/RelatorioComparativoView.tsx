@@ -6,6 +6,8 @@ import { comparativoMeses } from '../../domain/relatorios';
 import { useEstado } from '../../state/store';
 import { CampoTexto, Cartao, EstadoVazio, Valor } from '../ui';
 import { BarraExportacao } from './BarraExportacao';
+import '../../styles/tabela-dados.css';
+import './relatorios.css';
 
 export function RelatorioComparativoView() {
   const estado = useEstado();
@@ -22,17 +24,17 @@ export function RelatorioComparativoView() {
   ];
 
   return (
-    <div className="space-y-4">
-      <p className="hidden text-lg font-semibold print:block">
+    <div className="relatorio">
+      <p className="relatorio-titulo-impressao">
         Comparativo: {nomeMes(base)} e {nomeMes(comparado)}
       </p>
       <Cartao>
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div className="flex flex-wrap gap-3 print:hidden">
-            <div className="w-44">
+        <div className="relatorio-controles">
+          <div className="relatorio-campos">
+            <div className="relatorio-campo">
               <CampoTexto label="Mês-base" type="month" value={base} onChange={(e) => mesValido(e.target.value) && setBase(e.target.value)} />
             </div>
-            <div className="w-44">
+            <div className="relatorio-campo">
               <CampoTexto label="Mês comparado" type="month" value={comparado} onChange={(e) => mesValido(e.target.value) && setComparado(e.target.value)} />
             </div>
           </div>
@@ -41,22 +43,22 @@ export function RelatorioComparativoView() {
       </Cartao>
 
       <Cartao titulo="Totais">
-        <table className="w-full text-left text-sm" aria-label="Totais comparados">
+        <table className="tabela-dados" aria-label="Totais comparados">
           <thead>
-            <tr className="text-slate-600">
-              <th scope="col" className="py-1 font-medium"> </th>
-              <th scope="col" className="py-1 text-right font-medium">{nomeMes(base)}</th>
-              <th scope="col" className="py-1 text-right font-medium">{nomeMes(comparado)}</th>
-              <th scope="col" className="py-1 text-right font-medium">Diferença</th>
+            <tr>
+              <th scope="col"> </th>
+              <th scope="col" className="tabela-dados__num">{nomeMes(base)}</th>
+              <th scope="col" className="tabela-dados__num">{nomeMes(comparado)}</th>
+              <th scope="col" className="tabela-dados__num">Diferença</th>
             </tr>
           </thead>
           <tbody>
             {totais.map(([rotulo, chave]) => (
-              <tr key={chave} className="border-t border-slate-200" data-testid={`comp-${chave}`}>
-                <th scope="row" className="py-1 font-normal">{rotulo}</th>
-                <td className="py-1 text-right tabular-nums">{formatarMoeda(comparativo.totaisBase[chave])}</td>
-                <td className="py-1 text-right tabular-nums">{formatarMoeda(comparativo.totaisComparado[chave])}</td>
-                <td className="py-1 text-right"><Valor centavos={comparativo.diferencas[chave]} texto={formatarMoeda(comparativo.diferencas[chave])} /></td>
+              <tr key={chave} data-testid={`comp-${chave}`}>
+                <th scope="row">{rotulo}</th>
+                <td className="tabela-dados__num">{formatarMoeda(comparativo.totaisBase[chave])}</td>
+                <td className="tabela-dados__num">{formatarMoeda(comparativo.totaisComparado[chave])}</td>
+                <td className="tabela-dados__num"><Valor centavos={comparativo.diferencas[chave]} texto={formatarMoeda(comparativo.diferencas[chave])} /></td>
               </tr>
             ))}
           </tbody>
@@ -67,24 +69,24 @@ export function RelatorioComparativoView() {
         <EstadoVazio titulo="Sem despesas nos dois meses">Escolha outros meses para comparar as categorias.</EstadoVazio>
       ) : (
         <Cartao titulo="Despesas por categoria">
-          <table className="w-full text-left text-sm" aria-label="Comparativo por categoria">
+          <table className="tabela-dados" aria-label="Comparativo por categoria">
             <thead>
-              <tr className="text-slate-600">
-                <th scope="col" className="py-1 font-medium">Categoria</th>
-                <th scope="col" className="py-1 text-right font-medium">{nomeMes(base)}</th>
-                <th scope="col" className="py-1 text-right font-medium">{nomeMes(comparado)}</th>
-                <th scope="col" className="py-1 text-right font-medium">Diferença</th>
-                <th scope="col" className="py-1 text-right font-medium">Variação</th>
+              <tr>
+                <th scope="col">Categoria</th>
+                <th scope="col" className="tabela-dados__num">{nomeMes(base)}</th>
+                <th scope="col" className="tabela-dados__num">{nomeMes(comparado)}</th>
+                <th scope="col" className="tabela-dados__num">Diferença</th>
+                <th scope="col" className="tabela-dados__num">Variação</th>
               </tr>
             </thead>
             <tbody>
               {comparativo.linhas.map((l) => (
-                <tr key={l.categoriaId} className="border-t border-slate-200" data-testid={`comp-cat-${l.categoriaId}`}>
-                  <th scope="row" className="py-1 font-normal">{l.nome}</th>
-                  <td className="py-1 text-right tabular-nums">{formatarMoeda(l.valorBase)}</td>
-                  <td className="py-1 text-right tabular-nums">{formatarMoeda(l.valorComparado)}</td>
-                  <td className="py-1 text-right tabular-nums">{formatarMoeda(l.diferenca)}</td>
-                  <td className="py-1 text-right tabular-nums">{formatarPercentual(l.variacao)}</td>
+                <tr key={l.categoriaId} data-testid={`comp-cat-${l.categoriaId}`}>
+                  <th scope="row">{l.nome}</th>
+                  <td className="tabela-dados__num">{formatarMoeda(l.valorBase)}</td>
+                  <td className="tabela-dados__num">{formatarMoeda(l.valorComparado)}</td>
+                  <td className="tabela-dados__num">{formatarMoeda(l.diferenca)}</td>
+                  <td className="tabela-dados__num">{formatarPercentual(l.variacao)}</td>
                 </tr>
               ))}
             </tbody>

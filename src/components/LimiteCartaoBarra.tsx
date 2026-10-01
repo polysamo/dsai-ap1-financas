@@ -1,5 +1,6 @@
 import type { LimiteCartao } from '../domain/cartoes';
 import { formatarMoeda, percentual } from '../domain/money';
+import './LimiteCartaoBarra.css';
 
 export function LimiteCartaoBarra({ limite, total }: { limite: LimiteCartao; total: number }) {
   const pct = Math.min(Math.max(percentual(limite.usado, total), 0), 100);
@@ -11,21 +12,21 @@ export function LimiteCartaoBarra({ limite, total }: { limite: LimiteCartao; tot
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={pct}
-        className="h-3 w-full overflow-hidden rounded-full bg-slate-200"
+        className="limite-cartao__trilho"
       >
-        <div className={`h-full ${limite.excedido ? 'bg-red-600' : pct >= 80 ? 'bg-amber-500' : 'bg-sky-600'}`} style={{ width: `${pct}%` }} />
+        <div className={`limite-cartao__preenchimento ${limite.excedido ? 'limite-cartao__preenchimento--excedido' : pct >= 80 ? 'limite-cartao__preenchimento--alerta' : ''}`} style={{ width: `${pct}%` }} />
       </div>
-      <dl className="mt-2 grid gap-2 text-sm sm:grid-cols-3">
+      <dl className="limite-cartao__resumo">
         <div>
-          <dt className="text-slate-600">Limite</dt>
+          <dt>Limite</dt>
           <dd data-testid="limite-total">{formatarMoeda(total)}</dd>
         </div>
         <div>
-          <dt className="text-slate-600">Usado</dt>
+          <dt>Usado</dt>
           <dd data-testid="limite-usado">{formatarMoeda(limite.usado)}</dd>
         </div>
         <div>
-          <dt className="text-slate-600">Disponível</dt>
+          <dt>Disponível</dt>
           <dd data-testid="limite-disponivel">
             {limite.excedido ? `Limite excedido em ${formatarMoeda(-limite.disponivel)}` : formatarMoeda(limite.disponivel)}
           </dd>

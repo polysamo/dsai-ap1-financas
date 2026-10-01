@@ -1,0 +1,59 @@
+/* Tabela de dados compartilhada (gráficos, projeção e relatórios). */
+.tabela-dados {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: var(--texto-sm);
+}
+
+.tabela-dados thead tr {
+  color: var(--cor-texto-suave);
+}
+
+.tabela-dados th,
+.tabela-dados td {
+  padding: var(--esp-1) 0;
+}
+
+.tabela-dados thead th {
+  font-weight: 500;
+}
+
+.tabela-dados tbody th,
+.tabela-dados tfoot th {
+  font-weight: 400;
+}
+
+.tabela-dados tbody tr {
+  border-top: 1px solid var(--cor-borda);
+}
+
+.tabela-dados--grafico {
+  margin-top: var(--esp-2);
+}
+
+.tabela-dados__num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.tabela-dados__capitalizar {
+  text-transform: capitalize;
+}
+
+.tabela-dados__total {
+  border-top: 1px solid var(--cor-borda-forte);
+  font-weight: 500;
+}
+
+.tabela-dados tfoot .tabela-dados__total th {
+  font-weight: 500;
+}
+
+.tabela-dados__media {
+  color: var(--cor-texto-suave);
+}
+
+.tabela-dados caption {
+  text-align: left;
+}
