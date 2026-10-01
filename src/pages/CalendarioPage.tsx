@@ -7,6 +7,7 @@ import { BaixaForm } from '../components/agenda/BaixaForm';
 import { CalendarioGrade } from '../components/agenda/CalendarioGrade';
 import { ResumoAgenda } from '../components/agenda/ResumoAgenda';
 import { ConfirmDialog } from '../components/ConfirmDialog';
+import { Drawer } from '../components/Drawer';
 import { Alerta, Botao, Cartao, CampoTexto, EstadoVazio, TituloPagina } from '../components/ui';
 import {
   agendamentosDoMes,
@@ -17,7 +18,7 @@ import {
   reabrirAgendamento,
   totaisAgenda,
 } from '../domain/agenda';
-import { hojeISO, mesValido, nomeMes, somarMeses } from '../domain/date';
+import { formatarData, hojeISO, mesValido, nomeMes, somarMeses } from '../domain/date';
 import type { Agendamento } from '../domain/types';
 import { useEstado, useStore } from '../state/store';
 import '../components/agenda/agenda.css';
@@ -29,6 +30,8 @@ export function CalendarioPage() {
   const [erro, setErro] = useState<string | null>(null);
   const [pagando, setPagando] = useState<Agendamento | null>(null);
   const [excluindo, setExcluindo] = useState<Agendamento | null>(null);
+  const [novo, setNovo] = useState(false);
+  const [diaSel, setDiaSel] = useState<string | null>(null);
   const hoje = hojeISO();
 
   const mesParam = params.get('mes') ?? '';
@@ -45,17 +48,13 @@ export function CalendarioPage() {
 
   return (
     <div>
-      <TituloPagina>Calendário</TituloPagina>
+      <TituloPagina acoes={<Botao onClick={() => setNovo(true)}>Novo lançamento</Botao>}>Calendário</TituloPagina>
       <div className="agenda-pagina">
         {erro ? <Alerta>{erro}</Alerta> : null}
 
-        <Cartao titulo="Vencimentos próximos">
+        <div className="agenda-faixa">
           <AlertaVencimentos alerta={alertaVencimentos(estado, hoje)} />
-        </Cartao>
-
-        <Cartao titulo="Novo lançamento">
-          <AgendamentoForm categorias={estado.categorias} contas={estado.contas} onSalvar={(dados) => store.aplicar((s) => criarAgendamentos(s, dados))} />
-        </Cartao>
+        </div>
 
         <Cartao>
           <div className="agenda-navegacao">
@@ -71,12 +70,10 @@ export function CalendarioPage() {
           </div>
         </Cartao>
 
-        <Cartao titulo={`Totais de ${nomeMes(mes)}`}>
-          <ResumoAgenda totais={totaisAgenda(itens)} />
-        </Cartao>
+        <ResumoAgenda totais={totaisAgenda(itens)} />
 
-        <Cartao titulo={`Calendário de ${nomeMes(mes)}`}>
-          <CalendarioGrade mes={mes} itens={itens} hoje={hoje} />
+        <Cartao titulo={nomeMes(mes)}>
+          <CalendarioGrade mes={mes} itens={itens} hoje={hoje} onSelecionar={setDiaSel} />
         </Cartao>
 
         {pagando ? (
@@ -101,7 +98,7 @@ export function CalendarioPage() {
 
         <Cartao titulo="Lançamentos do mês">
           {estado.agenda.length === 0 ? (
-            <EstadoVazio titulo="Nenhum lançamento agendado">Cadastre contas a pagar e a receber acima para acompanhar os vencimentos.</EstadoVazio>
+            <EstadoVazio titulo="Nenhum lançamento agendado">Use o botão Novo lançamento para cadastrar contas a pagar e a receber e acompanhar os vencimentos.</EstadoVazio>
           ) : itens.length === 0 ? (
             <p className="agenda-texto-suave">Nenhum lançamento com vencimento neste mês.</p>
           ) : (
@@ -116,6 +113,39 @@ export function CalendarioPage() {
           )}
         </Cartao>
       </div>
+
+      <Drawer aberto={novo} titulo="Novo lançamento" onFechar={() => setNovo(false)}>
+        <AgendamentoForm
+          categorias={estado.categorias}
+          contas={estado.contas}
+          onSalvar={(dados) => {
+            const r = store.aplicar((s) => criarAgendamentos(s, dados));
+            if (r.ok) setNovo(false);
+            return r;
+          }}
+        />
+      </Drawer>
+
+      <Drawer aberto={diaSel !== null} titulo={diaSel ? `Lançamentos de ${formatarData(diaSel)}` : ''} onFechar={() => setDiaSel(null)}>
+        {diaSel && itens.filter((a) => a.vencimento === diaSel).length > 0 ? (
+          <AgendaLista
+            itens={itens.filter((a) => a.vencimento === diaSel)}
+            hoje={hoje}
+            nomesCategorias={nomesCategorias}
+            onPagar={(a) => {
+              setDiaSel(null);
+              setPagando(a);
+            }}
+            onReabrir={(a) => executar((s) => reabrirAgendamento(s, a.id), 'Não foi possível reabrir o lançamento.')}
+            onExcluir={(a) => {
+              setDiaSel(null);
+              setExcluindo(a);
+            }}
+          />
+        ) : (
+          <p className="agenda-texto-suave">Nenhum lançamento neste dia.</p>
+        )}
+      </Drawer>
 
       {excluindo ? (
         <ConfirmDialog

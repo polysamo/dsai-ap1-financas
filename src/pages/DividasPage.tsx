@@ -1,13 +1,14 @@
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ConfirmDialog } from '../components/ConfirmDialog';
+import { Drawer } from '../components/Drawer';
 import { DividaForm } from '../components/dividas/DividaForm';
 import { PagamentoDividaForm } from '../components/dividas/PagamentoDividaForm';
 import { ResumoDivida } from '../components/dividas/ResumoDivida';
 import { SimuladorDividas } from '../components/dividas/SimuladorDividas';
 import { TabelaAmortizacao } from '../components/dividas/TabelaAmortizacao';
 import { ROTULO_SISTEMA, rotulosTipo } from '../components/dividas/rotulos';
-import { Alerta, Botao, CampoSelect, Cartao, EstadoVazio, TituloPagina } from '../components/ui';
+import { Alerta, Botao, Cartao, EstadoVazio, TituloPagina } from '../components/ui';
 import { formatarData, hojeISO } from '../domain/date';
 import { criarDivida, excluirDivida, excluirPagamentoDivida, registrarPagamentoDivida, resumoDivida } from '../domain/dividas';
 import { formatarMoeda, valorParaCampo } from '../domain/money';
@@ -20,6 +21,8 @@ export function DividasPage() {
   const [params, setParams] = useSearchParams();
   const [erro, setErro] = useState<string | null>(null);
   const [confirmando, setConfirmando] = useState(false);
+  const [novaAberta, setNovaAberta] = useState(false);
+  const [simAberto, setSimAberto] = useState(false);
   const hoje = hojeISO();
 
   const divida = estado.dividas.find((d) => d.id === params.get('divida')) ?? estado.dividas[0];
@@ -34,26 +37,59 @@ export function DividasPage() {
 
   return (
     <div>
-      <TituloPagina>Dívidas e empréstimos</TituloPagina>
+      <TituloPagina
+        acoes={
+          <div className="dividas-acoes">
+            <Botao variante="secundario" onClick={() => setSimAberto(true)}>Simulador Price x SAC</Botao>
+            <Botao onClick={() => setNovaAberta(true)}>Nova dívida</Botao>
+          </div>
+        }
+      >
+        Dívidas e empréstimos
+      </TituloPagina>
       <div className="dividas-pagina">
         {erro ? <Alerta>{erro}</Alerta> : null}
 
         {!divida || !resumo || !rotulos ? (
           <EstadoVazio titulo="Nenhuma dívida cadastrada">
-            Cadastre um financiamento ou empréstimo para acompanhar parcelas, juros e saldo, ou use o simulador abaixo.
+            Cadastre um financiamento ou empréstimo para acompanhar parcelas, juros e saldo, ou use o simulador.
           </EstadoVazio>
         ) : (
           <>
             <Cartao>
               <div className="dividas-seletor">
-                <div className="dividas-seletor-campo">
-                  <CampoSelect label="Dívida" value={divida.id} onChange={(e) => setParams({ divida: e.target.value })}>
-                    {estado.dividas.map((d) => (
-                      <option key={d.id} value={d.id}>
-                        {d.nome}
-                      </option>
-                    ))}
-                  </CampoSelect>
+                <div className="dividas-grupos">
+                  {([['devo', 'Eu devo'], ['emprestei', 'Me devem']] as const).map(([tipo, titulo]) => {
+                    const grupo = estado.dividas.filter((d) => (d.tipo === 'devo') === (tipo === 'devo'));
+                    if (grupo.length === 0) return null;
+                    return (
+                      <section key={tipo} aria-label={titulo} className="dividas-grupo">
+                        <h2 className="dividas-grupo-titulo">{titulo}</h2>
+                        <ul className="dividas-lista">
+                          {grupo.map((d) => {
+                            const r = resumoDivida(d, hoje);
+                            const pagas = r.linhas.filter((l) => l.situacao === 'paga').length;
+                            return (
+                              <li key={d.id}>
+                                <button
+                                  type="button"
+                                  className={`dividas-linha${d.id === divida.id ? ' dividas-linha-ativa' : ''}`}
+                                  aria-pressed={d.id === divida.id}
+                                  onClick={() => setParams({ divida: d.id })}
+                                >
+                                  <span className="dividas-linha-nome">{d.nome}</span>
+                                  <span className="dividas-linha-saldo dividas-num">{formatarMoeda(r.saldoDevedor)}</span>
+                                  <span className="dividas-linha-meta">
+                                    {pagas}/{d.parcelas} parcelas pagas · {r.proxima ? `próxima em ${formatarData(r.proxima.vencimento)}` : 'quitada'}
+                                  </span>
+                                </button>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </section>
+                    );
+                  })}
                 </div>
                 <Botao variante="perigo" onClick={() => setConfirmando(true)}>
                   Excluir dívida
@@ -108,14 +144,21 @@ export function DividasPage() {
           </>
         )}
 
-        <Cartao titulo="Nova dívida ou empréstimo">
-          <DividaForm onSalvar={(dados) => store.aplicar((s) => criarDivida(s, dados))} />
-        </Cartao>
-
-        <Cartao titulo="Simulador Price x SAC">
-          <SimuladorDividas />
-        </Cartao>
       </div>
+
+      <Drawer aberto={novaAberta} titulo="Nova dívida ou empréstimo" onFechar={() => setNovaAberta(false)}>
+        <DividaForm
+          onSalvar={(dados) => {
+            const r = store.aplicar((s) => criarDivida(s, dados));
+            if (r.ok) setNovaAberta(false);
+            return r;
+          }}
+        />
+      </Drawer>
+
+      <Drawer aberto={simAberto} titulo="Simulador Price x SAC" onFechar={() => setSimAberto(false)}>
+        <SimuladorDividas />
+      </Drawer>
 
       {confirmando && divida ? (
         <ConfirmDialog

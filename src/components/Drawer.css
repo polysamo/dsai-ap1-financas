@@ -1,0 +1,6 @@
+.drawer-fundo { position: fixed; inset: 0; z-index: 50; display: flex; justify-content: flex-end; background: rgb(0 0 0 / 0.45); }
+.drawer { width: 100%; max-width: 28rem; height: 100%; overflow-y: auto; background: var(--cor-superficie); border-left: 1px solid var(--cor-borda); display: flex; flex-direction: column; }
+.drawer-cabecalho { display: flex; align-items: center; justify-content: space-between; gap: var(--esp-2); padding: var(--esp-3) var(--esp-4); border-bottom: 1px solid var(--cor-borda); }
+.drawer-titulo { margin: 0; font-size: var(--texto-lg); font-weight: 600; color: var(--cor-texto); }
+.drawer-fechar { border: 0; background: transparent; font-size: 1.5rem; line-height: 1; cursor: pointer; color: var(--cor-texto); min-width: 2.5rem; min-height: 2.5rem; }
+.drawer-corpo { padding: var(--esp-4); min-width: 0; }

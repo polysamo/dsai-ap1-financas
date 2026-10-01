@@ -58,3 +58,19 @@
 .agenda-cal-item-atrasado { border-left-color: var(--cor-perigo); }
 .agenda-cal-item-pendente { border-left-color: var(--cor-aviso); }
 .agenda-cal-situacao { color: var(--cor-texto-suave); }
+
+/* Redesenho: faixa compacta, KPIs pequenos, dias clicáveis com marcadores. */
+.agenda-faixa { padding: var(--esp-2) var(--esp-3); border: 1px solid var(--cor-borda); border-radius: var(--raio-pequeno); background: var(--cor-superficie); }
+.agenda-faixa .agenda-proximos { max-height: 6rem; overflow-y: auto; }
+.agenda-resumo { gap: var(--esp-2); }
+.agenda-resumo > div { padding: var(--esp-2) var(--esp-3); border: 1px solid var(--cor-borda); border-radius: var(--raio-pequeno); background: var(--cor-superficie); }
+.agenda-resumo-rotulo { font-size: var(--texto-xs); }
+.agenda-resumo-valor { font-size: var(--texto-base, 1rem); }
+.agenda-cal-dia-clicavel { cursor: pointer; }
+.agenda-cal-dia-clicavel:hover, .agenda-cal-dia-clicavel:focus-visible { border-color: var(--cor-primaria); }
+.agenda-cal-total { display: block; font-weight: 600; font-variant-numeric: tabular-nums; }
+.agenda-cal-marcas { display: flex; gap: 0.25rem; }
+.agenda-marca-pagar, .agenda-marca-receber { width: 0.5rem; height: 0.5rem; border-radius: 50%; }
+.agenda-marca-pagar { background: var(--cor-perigo); }
+.agenda-marca-receber { background: var(--cor-sucesso); }
+@media (max-width: 639px) { .agenda-cal { min-width: 0; } .agenda-cal-lista { display: none; } .agenda-cal-dia { min-height: 3.5rem; } }
