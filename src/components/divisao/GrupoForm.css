@@ -1,0 +1,6 @@
+.divisao-grupo-form { display: grid; gap: var(--esp-3); }
+.divisao-grupo-form__participantes { display: grid; gap: var(--esp-2); margin: 0; padding: var(--esp-3); border: 1px solid var(--cor-borda); border-radius: var(--raio); }
+.divisao-grupo-form__participantes legend { padding: 0 var(--esp-1); font-size: var(--texto-sm); font-weight: 600; color: var(--cor-texto); }
+.divisao-grupo-form__linha { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: var(--esp-2); }
+.divisao-grupo-form__erro { margin: 0; font-size: var(--texto-sm); color: var(--cor-perigo); }
+.divisao-grupo-form__acoes { display: flex; flex-wrap: wrap; gap: var(--esp-2); }
