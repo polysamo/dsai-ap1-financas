@@ -15,6 +15,7 @@ import { OrcamentoPage } from './pages/OrcamentoPage';
 import { RelatoriosPage } from './pages/RelatoriosPage';
 import { RegrasPage } from './pages/RegrasPage';
 import { TransacoesPage } from './pages/TransacoesPage';
+import { TransferenciasPage } from './pages/TransferenciasPage';
 import { useSnapshot } from './state/store';
 
 /** Rotas do app; separadas do roteador para poderem ser testadas com MemoryRouter. */
@@ -28,6 +29,7 @@ export function AppRoutes() {
         <Route path="/transacoes" element={<TransacoesPage />} />
         <Route path="/contas" element={<ContasPage />} />
         <Route path="/cartoes" element={<CartoesPage />} />
+        <Route path="/transferencias" element={<TransferenciasPage />} />
         <Route path="/calendario" element={<CalendarioPage />} />
         <Route path="/orcamento" element={<OrcamentoPage />} />
         <Route path="/metas" element={<MetasPage />} />

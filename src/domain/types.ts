@@ -1,3 +1,5 @@
+import type { Transferencia } from './transferencias';
+
 export type Centavos = number;
 /** Data no formato AAAA-MM-DD. */
 export type DataISO = string;
@@ -212,6 +214,8 @@ export interface AppState {
   regras: RegraCategoria[];
   investimentos: Ativo[];
   dividas: Divida[];
+  /** Ausente em estados montados à mão (ex.: dados de exemplo); o carregamento sempre a preenche. */
+  transferencias?: Transferencia[];
 }
 
 export type Resultado<T> = { ok: true; valor: T } | { ok: false; erro: string; campo?: string };
