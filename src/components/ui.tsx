@@ -1,4 +1,5 @@
 import { useId, type ButtonHTMLAttributes, type HTMLAttributes, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes } from 'react';
+import { EmptyState } from './novos';
 import '../styles/layout.css';
 import './ui.css';
 
@@ -108,15 +109,7 @@ export function TituloPagina({ children, acoes }: { children: ReactNode; acoes?:
   );
 }
 
-export function EstadoVazio({ titulo, children, acao }: { titulo: string; children?: ReactNode; acao?: ReactNode }) {
-  return (
-    <div className="ui-vazio">
-      <p className="ui-vazio__titulo">{titulo}</p>
-      {children ? <p className="ui-vazio__texto">{children}</p> : null}
-      {acao ? <div className="ui-vazio__acao">{acao}</div> : null}
-    </div>
-  );
-}
+export const EstadoVazio = EmptyState;
 
 export function Alerta({ tipo = 'erro', children }: { tipo?: 'erro' | 'aviso' | 'sucesso'; children: ReactNode }) {
   return (

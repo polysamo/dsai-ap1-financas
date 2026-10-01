@@ -28,3 +28,23 @@ export const itensNavegacao: ItemNavegacao[] = [
   { to: '/importar-ofx', rotulo: 'Importar OFX' },
   { to: '/ajuda', rotulo: 'Ajuda' },
 ];
+
+export interface GrupoNavegacao {
+  titulo: string;
+  itens: string[]; // rotas
+}
+
+/** Agrupamento da sidebar; rotas fora dos grupos caem em "Mais". */
+export const gruposNavegacao: GrupoNavegacao[] = [
+  { titulo: 'Visão geral', itens: ['/', '/calendario', '/relatorios', '/fluxo', '/patrimonio'] },
+  { titulo: 'Movimentação', itens: ['/transacoes', '/contas', '/cartoes', '/transferencias', '/assinaturas', '/conciliacao'] },
+  { titulo: 'Planejamento', itens: ['/orcamento', '/orcamento-anual', '/metas', '/dividas', '/investimentos', '/independencia', '/divisao'] },
+  { titulo: 'Automação', itens: ['/regras', '/importar', '/importar-ofx'] },
+];
+
+export const itensRodape: ItemNavegacao[] = [
+  { to: '/ajuda', rotulo: 'Ajuda' },
+  { to: '/configuracoes', rotulo: 'Configurações' },
+];
+
+export const rotuloDe = (to: string) => itensNavegacao.find((i) => i.to === to)?.rotulo ?? to;
