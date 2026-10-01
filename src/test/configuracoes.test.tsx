@@ -96,12 +96,13 @@ describe('configurações: tema (critérios 3, 4, 5)', () => {
     expect(html).not.toHaveClass('dark');
   });
 
-  it('o CSS redefine as variáveis do Tailwind sob html.dark e oculta valores por classe', async () => {
-    const css = await lerFonte('src/index.css');
-    const dark = css.slice(css.indexOf('html.dark'));
-    for (const v of ['--color-white', '--color-slate-50', '--color-slate-600', '--color-slate-900', '--color-slate-200', '--color-emerald-700', '--color-red-700', '--color-amber-900']) {
+  it('os tokens de cor são redefinidos sob html.dark e valores ocultos são desfocados por classe', async () => {
+    const tokens = await lerFonte('src/styles/tokens.css');
+    const dark = tokens.slice(tokens.indexOf('html.dark'));
+    for (const v of ['--cor-fundo', '--cor-superficie', '--cor-texto', '--cor-primaria', '--cor-perigo', '--cor-aviso']) {
       expect(dark).toContain(`${v}:`);
     }
+    const css = await lerFonte('src/index.css');
     expect(css).toMatch(/html\.ocultar-valores \.tabular-nums\s*\{[^}]*blur/);
   });
 });
