@@ -10,3 +10,5 @@
 .orcamento-lista > li + li { border-top: 1px solid var(--cor-borda); }
 @media (min-width: 640px) { .orcamento-totais { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 480px) { .orcamento-mes-nome { margin-left: 0; width: 100%; } }
+
+.orcamento-totais { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: var(--esp-3); }
