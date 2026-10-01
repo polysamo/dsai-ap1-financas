@@ -1,6 +1,6 @@
 import { SCHEMA_ATUAL } from '../storage/storage';
 import { dataValida, diasNoMes, mesDe, somarMeses } from '../domain/date';
-import type { Aporte, AppState, Conta, Meta, Mes, Orcamento, Recorrencia, Transacao } from '../domain/types';
+import type { Aporte, Ativo, AppState, Conta, Meta, Mes, Orcamento, Recorrencia, Transacao } from '../domain/types';
 import { categoriasPadrao } from './categoriasPadrao';
 
 const ID_CORRENTE = 'ex-conta-corrente';
@@ -119,6 +119,20 @@ export function gerarExemplo(hoje: string): AppState {
     { id: 'ex-rec-aluguel', descricao: 'Aluguel', tipo: 'despesa', valor: 150000, categoriaId: 'cat-moradia', ativa: true },
   ];
 
+  const investimentos: Ativo[] = [
+    {
+      id: 'ex-ativo-cdb',
+      nome: 'CDB 110% CDI',
+      classe: 'renda-fixa',
+      movimentos: [
+        { id: 'ex-mov-cdb-1', tipo: 'aporte', data: dataNoMes(somarMeses(mesAtual, -4), 5), valor: 500000 },
+        { id: 'ex-mov-cdb-2', tipo: 'aporte', data: dataNoMes(somarMeses(mesAtual, -2), 5), valor: 200000 },
+      ],
+      marcacoes: [{ id: 'ex-marc-cdb-1', data: dataNoMes(somarMeses(mesAtual, -1), 1), valor: 722000 }],
+      criadoEm: 1,
+    },
+  ];
+
   return {
     schemaVersion: SCHEMA_ATUAL,
     contas,
@@ -130,5 +144,6 @@ export function gerarExemplo(hoje: string): AppState {
     mapeamentosCsv: {},
     importacoes: [],
     pagamentosFatura: [],
+    investimentos,
   };
 }

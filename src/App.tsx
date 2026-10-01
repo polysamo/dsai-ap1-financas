@@ -6,6 +6,7 @@ import { CartoesPage } from './pages/CartoesPage';
 import { ContasPage } from './pages/ContasPage';
 import { DadosPage } from './pages/DadosPage';
 import { ImportarCsvPage } from './pages/ImportarCsvPage';
+import { InvestimentosPage } from './pages/InvestimentosPage';
 import { MetasPage } from './pages/MetasPage';
 import { OrcamentoPage } from './pages/OrcamentoPage';
 import { RelatoriosPage } from './pages/RelatoriosPage';
@@ -25,6 +26,7 @@ export function AppRoutes() {
         <Route path="/cartoes" element={<CartoesPage />} />
         <Route path="/orcamento" element={<OrcamentoPage />} />
         <Route path="/metas" element={<MetasPage />} />
+        <Route path="/investimentos" element={<InvestimentosPage />} />
         <Route path="/importar" element={<ImportarCsvPage />} />
         <Route path="/relatorios" element={<RelatoriosPage />} />
         <Route path="/dados" element={<DadosPage />} />

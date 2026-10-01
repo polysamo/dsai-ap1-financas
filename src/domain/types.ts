@@ -114,6 +114,33 @@ export interface PagamentoFatura {
   contaOrigemId: string;
 }
 
+export type ClasseAtivo = 'renda-fixa' | 'acoes' | 'fundos' | 'cripto' | 'outros';
+
+export interface MovimentoAtivo {
+  id: string;
+  tipo: 'aporte' | 'resgate';
+  data: DataISO;
+  /** Sempre positivo; o sinal vem do tipo. */
+  valor: Centavos;
+}
+
+/** Valor de mercado anotado para um ativo numa data. */
+export interface MarcacaoAtivo {
+  id: string;
+  data: DataISO;
+  valor: Centavos;
+}
+
+/** Ativo da carteira manual de investimentos; não gera transações nem mexe em saldos. */
+export interface Ativo {
+  id: string;
+  nome: string;
+  classe: ClasseAtivo;
+  movimentos: MovimentoAtivo[];
+  marcacoes: MarcacaoAtivo[];
+  criadoEm: number;
+}
+
 export interface AppState {
   schemaVersion: number;
   contas: Conta[];
@@ -125,6 +152,7 @@ export interface AppState {
   mapeamentosCsv: Record<string, MapeamentoCsv>;
   importacoes: Importacao[];
   pagamentosFatura: PagamentoFatura[];
+  investimentos: Ativo[];
 }
 
 export type Resultado<T> = { ok: true; valor: T } | { ok: false; erro: string; campo?: string };
