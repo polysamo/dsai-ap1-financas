@@ -28,11 +28,11 @@ export function RegraItem({ regra, posicao, total, categoriaNome, atingidas, onS
         <div className="regras-item-texto">
           <p className="regras-item-titulo">
             <span className="regras-item-posicao">{posicao}.</span>
-            Descrição {modo.toLocaleLowerCase('pt-BR')} &ldquo;{regra.padrao}&rdquo;
+            Se a descrição {modo.toLocaleLowerCase('pt-BR')} &ldquo;{regra.padrao}&rdquo; → {categoriaNome}
           </p>
           <p className="regras-item-detalhe">
-            {regra.tipo === 'receita' ? 'Receita' : 'Despesa'} → {categoriaNome}
-            {regra.tags.length > 0 ? ` · Tags: ${formatarTags(regra.tags)}` : ''}
+            {regra.tipo === 'receita' ? 'Receita' : 'Despesa'}
+            {regra.tags.length > 0 ? ` · tags: ${formatarTags(regra.tags)}` : ''}
             {regra.ativa ? '' : ' · Inativa'}
           </p>
           <p className="regras-item-previa" data-testid={`previa-regra-${posicao}`}>

@@ -4,7 +4,9 @@ import { AtivoCard } from '../components/investimentos/AtivoCard';
 import { AtivoForm } from '../components/investimentos/AtivoForm';
 import { GraficoPatrimonio } from '../components/investimentos/GraficoPatrimonio';
 import { ResumoCarteira } from '../components/investimentos/ResumoCarteira';
-import { Botao, Cartao, EstadoVazio, TituloPagina } from '../components/ui';
+import { Drawer } from '../components/Drawer';
+import { EmptyState } from '../components/EmptyState';
+import { Botao, Cartao, TituloPagina } from '../components/ui';
 import { hojeISO } from '../domain/date';
 import { alocacaoPorClasse, criarAtivo, desempenhoCarteira, evolucaoPatrimonio } from '../domain/investimentos';
 import { useEstado, useStore } from '../state/store';
@@ -19,10 +21,9 @@ export function InvestimentosPage() {
 
   return (
     <div>
-      <TituloPagina acoes={!criando ? <Botao onClick={() => setCriando(true)}>Novo ativo</Botao> : undefined}>Investimentos</TituloPagina>
+      <TituloPagina acoes={<Botao onClick={() => setCriando(true)}>Novo ativo</Botao>}>Investimentos</TituloPagina>
       <div className="invest-pagina">
-        {criando ? (
-          <Cartao titulo="Novo ativo">
+        <Drawer aberto={criando} titulo="Novo ativo" onFechar={() => setCriando(false)}>
             <AtivoForm
               onCancelar={() => setCriando(false)}
               onSalvar={(dados) => {
@@ -31,15 +32,10 @@ export function InvestimentosPage() {
                 return r;
               }}
             />
-          </Cartao>
-        ) : null}
+        </Drawer>
 
         {ativos.length === 0 ? (
-          !criando && (
-            <EstadoVazio titulo="Nenhum ativo ainda" acao={<Botao onClick={() => setCriando(true)}>Cadastre seu primeiro ativo</Botao>}>
-              Registre seus investimentos manualmente, com aportes, resgates e o valor atual, para acompanhar rentabilidade e alocação.
-            </EstadoVazio>
-          )
+          <EmptyState titulo="Nenhum ativo ainda" descricao="Registre seus investimentos para acompanhar rentabilidade e alocação." acaoRotulo="Cadastre seu primeiro ativo" onAcao={() => setCriando(true)} />
         ) : (
           <>
             <ResumoCarteira desempenho={desempenhoCarteira(ativos)} />

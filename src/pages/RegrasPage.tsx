@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { RegraForm } from '../components/regras/RegraForm';
 import { RegraItem } from '../components/regras/RegraItem';
-import { Alerta, Botao, Cartao, CampoSelect, EstadoVazio, TituloPagina } from '../components/ui';
+import { Drawer } from '../components/Drawer';
+import { EmptyState } from '../components/EmptyState';
+import { Alerta, Botao, Cartao, CampoSelect, TituloPagina } from '../components/ui';
 import {
   aplicarRegra,
   alternarRegra,
@@ -52,15 +54,14 @@ export function RegrasPage() {
 
   return (
     <div>
-      <TituloPagina acoes={!criando ? <Botao onClick={() => { setCriando(true); setEditandoId(null); }}>Nova regra</Botao> : undefined}>Regras</TituloPagina>
+      <TituloPagina acoes={<Botao onClick={() => { setCriando(true); setEditandoId(null); }}>Nova regra</Botao>}>Regras</TituloPagina>
       <div className="regras-pagina">
         <p className="regras-intro">
-          Regras sugerem a categoria (e tags) de transações importadas. A primeira regra ativa da lista que casar com a descrição vence.
+          A primeira regra ativa que casar com a descrição vence.
         </p>
         {mensagem ? <Alerta tipo={mensagem.tipo}>{mensagem.texto}</Alerta> : null}
 
-        {criando ? (
-          <Cartao titulo="Nova regra">
+        <Drawer aberto={criando} titulo="Nova regra" onFechar={() => setCriando(false)}>
             <RegraForm
               estado={estado}
               onCancelar={() => setCriando(false)}
@@ -73,15 +74,10 @@ export function RegrasPage() {
                 return r;
               }}
             />
-          </Cartao>
-        ) : null}
+        </Drawer>
 
         {estado.regras.length === 0 ? (
-          !criando && (
-            <EstadoVazio titulo="Nenhuma regra criada" acao={<Botao onClick={() => setCriando(true)}>Criar a primeira regra</Botao>}>
-              Crie regras como &ldquo;descrição contém mercado → Alimentação&rdquo; para categorizar importações automaticamente.
-            </EstadoVazio>
-          )
+          <EmptyState titulo="Nenhuma regra criada" descricao="Ex.: se a descrição contém mercado, categorizar como Alimentação." acaoRotulo="Criar a primeira regra" onAcao={() => setCriando(true)} />
         ) : (
           <Cartao
             titulo="Regras em ordem de prioridade"
