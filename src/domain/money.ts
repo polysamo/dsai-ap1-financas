@@ -77,3 +77,9 @@ export function valorParaCampo(valor: Centavos): string {
   const texto = `${Math.floor(abs / 100)},${String(abs % 100).padStart(2, '0')}`;
   return valor < 0 ? `-${texto}` : texto;
 }
+
+/** Percentual com uma casa decimal e vírgula (`12,3%`); `—` quando não se aplica. */
+export function formatarPercentual(valor: number | null): string {
+  if (valor === null) return '—';
+  return `${valor.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%`;
+}

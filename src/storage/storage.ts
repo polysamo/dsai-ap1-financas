@@ -75,6 +75,9 @@ export function migrar(bruto: unknown): { tipo: 'ok'; estado: AppState } | { tip
     if (!migracao) return { tipo: 'corrompido' };
     dados = migracao(dados);
   }
+  // Chaves aditivas (novos módulos) ausentes em dados antigos recebem o valor inicial, sem migração.
+  const padrao = estadoInicial() as unknown as Dados;
+  for (const chave of Object.keys(padrao)) if (dados[chave] === undefined) dados = { ...dados, [chave]: padrao[chave] };
   if (!estruturaValida(dados)) return { tipo: 'corrompido' };
   return { tipo: 'ok', estado: dados as unknown as AppState };
 }

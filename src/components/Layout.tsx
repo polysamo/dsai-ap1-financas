@@ -9,7 +9,7 @@ const classeLink = ({ isActive }: { isActive: boolean }) =>
 export function Layout() {
   return (
     <div className="min-h-screen overflow-x-hidden">
-      <header className="border-b border-slate-200 bg-white">
+      <header className="border-b border-slate-200 bg-white print:hidden">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
           <span className="text-lg font-bold text-emerald-800">Finanças Pessoais</span>
           <nav aria-label="Principal" className="flex flex-1 flex-wrap gap-1">

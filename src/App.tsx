@@ -8,6 +8,7 @@ import { DadosPage } from './pages/DadosPage';
 import { ImportarCsvPage } from './pages/ImportarCsvPage';
 import { MetasPage } from './pages/MetasPage';
 import { OrcamentoPage } from './pages/OrcamentoPage';
+import { RelatoriosPage } from './pages/RelatoriosPage';
 import { TransacoesPage } from './pages/TransacoesPage';
 import { useSnapshot } from './state/store';
 
@@ -25,6 +26,7 @@ export function AppRoutes() {
         <Route path="/orcamento" element={<OrcamentoPage />} />
         <Route path="/metas" element={<MetasPage />} />
         <Route path="/importar" element={<ImportarCsvPage />} />
+        <Route path="/relatorios" element={<RelatoriosPage />} />
         <Route path="/dados" element={<DadosPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
