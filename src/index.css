@@ -1,11 +1,20 @@
-@import "tailwindcss";
 @import "./styles/tokens.css";
 
-/* Base em CSS puro, via tokens (o tema escuro troca os tokens sob html.dark). */
+/* Reset mínimo (substitui o preflight do Tailwind) e base em CSS puro, via tokens. */
 *, *::before, *::after { box-sizing: border-box; }
 
+html { -webkit-text-size-adjust: 100%; }
+
+body, h1, h2, h3, h4, p, ul, ol, dl, dd, figure, blockquote, fieldset { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+fieldset { padding: 0; border: 0; min-width: 0; }
+table { border-collapse: collapse; }
+img, svg { display: block; max-width: 100%; }
+button, input, select, textarea { font: inherit; color: inherit; margin: 0; }
+button { cursor: pointer; background: none; border: 0; padding: 0; }
+a { color: inherit; }
+
 body {
-  margin: 0;
   background: var(--cor-fundo);
   color: var(--cor-texto);
   font-family: var(--fonte);
@@ -14,56 +23,6 @@ body {
 }
 
 .tabular-nums { font-variant-numeric: tabular-nums; }
-
-/*
- * Tema escuro: redefine as variáveis de cor do Tailwind v4 sob a classe `dark` do <html>,
- * então todo utilitário (bg-white, text-slate-600, ...) muda sem editar componentes.
- * A escala slate é invertida; verde, vermelho, âmbar e azul trocam para tons claros em texto
- * e escuros em fundos. Botões com `text-white` sobre `bg-*-700` ficam escuro sobre tom claro.
- */
-html.dark {
-  color-scheme: dark;
-  --color-white: #111b2e;
-  --color-slate-50: #0a1020;
-  --color-slate-100: #1e293b;
-  --color-slate-200: #334155;
-  --color-slate-300: #475569;
-  --color-slate-400: #64748b;
-  --color-slate-500: #94a3b8;
-  --color-slate-600: #cbd5e1;
-  --color-slate-700: #e2e8f0;
-  --color-slate-800: #f1f5f9;
-  --color-slate-900: #f8fafc;
-  --color-slate-950: #ffffff;
-
-  --color-emerald-50: #052e22;
-  --color-emerald-100: #064e3b;
-  --color-emerald-300: #047857;
-  --color-emerald-600: #34d399;
-  --color-emerald-700: #34d399;
-  --color-emerald-800: #6ee7b7;
-  --color-emerald-900: #a7f3d0;
-  --color-emerald-950: #d1fae5;
-
-  --color-red-50: #450a0a;
-  --color-red-100: #7f1d1d;
-  --color-red-300: #b91c1c;
-  --color-red-600: #f87171;
-  --color-red-700: #f87171;
-  --color-red-800: #fca5a5;
-  --color-red-900: #fecaca;
-
-  --color-amber-50: #451a03;
-  --color-amber-100: #78350f;
-  --color-amber-300: #b45309;
-  --color-amber-500: #fbbf24;
-  --color-amber-800: #fcd34d;
-  --color-amber-900: #fde68a;
-
-  --color-sky-100: #0c4a6e;
-  --color-sky-600: #38bdf8;
-  --color-sky-900: #bae6fd;
-}
 
 /* Privacidade: desfoca valores monetários (o componente Valor e qualquer .tabular-nums). */
 html.ocultar-valores .tabular-nums {
