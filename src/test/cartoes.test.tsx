@@ -248,7 +248,7 @@ describe('cartões: tela', () => {
   it('critério 2: sem cartão, mostra estado vazio com link para Contas', () => {
     renderizarApp('/cartoes');
     expect(screen.getByText('Nenhum cartão de crédito')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Criar um cartão em Contas/ })).toHaveAttribute('href', '/contas');
+    expect(screen.getByRole('button', { name: 'Criar cartão de crédito' })).toBeInTheDocument();
   });
 
   it('critério 2: cartão sem ciclo pede configuração', () => {
@@ -286,6 +286,7 @@ describe('cartões: tela', () => {
     const compras = screen.getByRole('list', { name: 'Compras da fatura' });
     expect(within(compras).getByText('Mercado')).toBeInTheDocument();
 
+    await usuario.click(screen.getByRole('button', { name: 'Pagar fatura' }));
     const campo = screen.getByLabelText('Valor do pagamento');
     await usuario.clear(campo);
     await usuario.type(campo, '100,00');
@@ -293,6 +294,7 @@ describe('cartões: tela', () => {
     expect(store.getSnapshot().estado.pagamentosFatura[0]).toMatchObject({ valor: 10000, contaOrigemId: 'cc' });
     expect(screen.getByTestId('fatura-pago')).toHaveTextContent('R$ 100,00');
     expect(screen.getByTestId('fatura-restante')).toHaveTextContent('R$ 200,00');
+    await usuario.click(screen.getByRole('button', { name: 'Pagar fatura' }));
 
     const campo2 = screen.getByLabelText('Valor do pagamento');
     await usuario.clear(campo2);
@@ -306,6 +308,7 @@ describe('cartões: tela', () => {
   it('critério 6: lança uma compra parcelada pela tela e mostra a prévia da divisão', async () => {
     const usuario = userEvent.setup();
     const { store } = renderizarApp('/cartoes', base());
+    await usuario.click(screen.getByRole('button', { name: 'Compra parcelada' }));
     await usuario.type(screen.getByLabelText('Descrição da compra'), 'Geladeira');
     await usuario.type(screen.getByLabelText('Valor total'), '1.000,00');
     await usuario.type(screen.getByLabelText('Número de parcelas'), '3');
@@ -314,7 +317,7 @@ describe('cartões: tela', () => {
     await usuario.click(screen.getByRole('button', { name: 'Lançar compra parcelada' }));
     const parcelas = store.getSnapshot().estado.transacoes;
     expect(parcelas.map((t) => t.valor)).toEqual([33334, 33333, 33333]);
-    expect(screen.getByLabelText('Descrição da compra')).toHaveValue('');
+    expect(screen.queryByLabelText('Descrição da compra')).not.toBeInTheDocument();
   });
 
   it('critério 9: excluir uma parcela pergunta se vale para só uma ou todas', async () => {

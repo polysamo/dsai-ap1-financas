@@ -13,3 +13,9 @@
 .importar-acoes { display: flex; flex-wrap: wrap; gap: var(--esp-2); margin-top: var(--esp-4); }
 .importar-ultima { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--esp-2); font-size: var(--texto-sm); color: var(--cor-texto); }
 @media (min-width: 640px) { .importar-escolha { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.importar-etapas { list-style: none; margin: 0; padding: 0; display: flex; gap: var(--esp-2); overflow-x: auto; max-width: 100%; }
+.importar-etapa { display: flex; align-items: center; gap: var(--esp-1, 0.25rem); flex: 0 0 auto; font-size: var(--texto-xs); color: var(--cor-texto-mudo); }
+.importar-etapa__num { display: inline-grid; place-items: center; width: 1.5rem; height: 1.5rem; border-radius: 999px; border: 1px solid var(--cor-borda); }
+.importar-etapa--atual { color: var(--cor-texto); font-weight: 600; }
+.importar-etapa--atual .importar-etapa__num { background: var(--cor-primaria, #2563eb); color: #fff; border-color: transparent; }
+.importar-etapa--feita .importar-etapa__num { border-color: currentColor; }

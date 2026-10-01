@@ -11,3 +11,8 @@
 .contas__resumo { margin: var(--esp-2) 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--esp-2); font-size: var(--texto-sm); }
 .contas__resumo dt { color: var(--cor-texto-mudo); }
 .contas__resumo dd { margin: 0; }
+.contas__grade { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr)); gap: var(--esp-3); }
+.contas__card { display: flex; flex-direction: column; gap: var(--esp-2); padding: var(--esp-4); border: 1px solid var(--cor-borda); border-radius: var(--raio-md, 0.75rem); background: var(--cor-superficie, transparent); min-width: 0; }
+.contas__saldo { margin: 0; font-size: var(--texto-xl); font-weight: 700; }
+.contas__sub { margin: 0 0 var(--esp-2); font-size: var(--texto-sm); color: var(--cor-texto-mudo); font-weight: 500; }
+.contas__total { font-size: var(--texto-3xl, 2rem); }

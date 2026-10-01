@@ -191,7 +191,7 @@ describe('csv: tela', () => {
 
   it('sem conta, avisa e leva para criar uma', () => {
     renderizarApp('/importar');
-    expect(screen.getByRole('link', { name: 'Criar uma conta' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Criar uma conta' })).toBeInTheDocument();
   });
 
   it('critério 1: recusa arquivo que não é .csv', async () => {

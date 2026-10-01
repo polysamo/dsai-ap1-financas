@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { CompraParceladaForm } from '../components/CompraParceladaForm';
 import { LimiteCartaoBarra } from '../components/LimiteCartaoBarra';
 import { PagamentoFaturaForm } from '../components/PagamentoFaturaForm';
 import { Alerta, Botao, CampoSelect, CampoTexto, Cartao, EstadoVazio, TituloPagina, Valor } from '../components/ui';
+import { Drawer } from '../components/Drawer';
+import { EmptyState } from '../components/EmptyState';
 import {
   cartoesAtivos,
   cicloFatura,
@@ -31,6 +33,8 @@ export function CartoesPage() {
   const store = useStore();
   const estado = useEstado();
   const [params, setParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [gaveta, setGaveta] = useState<'pagamento' | 'compra' | null>(null);
   const [erro, setErro] = useState<string | null>(null);
   const hoje = hojeISO();
 
@@ -52,16 +56,30 @@ export function CartoesPage() {
     return (
       <div>
         <TituloPagina>Cartões</TituloPagina>
-        <EstadoVazio titulo="Nenhum cartão de crédito" acao={<Link to="/contas" className="cartoes__link">Criar um cartão em Contas</Link>}>
-          Cadastre uma conta do tipo cartão de crédito para acompanhar faturas, limite e parcelas.
-        </EstadoVazio>
+        <EmptyState
+          titulo="Nenhum cartão de crédito"
+          descricao="Cartão é um tipo de conta: crie uma conta do tipo cartão de crédito para acompanhar faturas, limite e parcelas."
+          acaoRotulo="Criar cartão de crédito"
+          onAcao={() => navigate('/contas?novo=cartao')}
+        />
       </div>
     );
   }
 
   return (
     <div>
-      <TituloPagina>Cartões</TituloPagina>
+      <TituloPagina
+        acoes={
+          escolhido.cartao ? (
+            <>
+              <Botao variante="secundario" onClick={() => setGaveta('compra')}>Compra parcelada</Botao>
+              {resumo && resumo.restante > 0 ? <Botao onClick={() => setGaveta('pagamento')}>Pagar fatura</Botao> : null}
+            </>
+          ) : undefined
+        }
+      >
+        Cartões
+      </TituloPagina>
       <div className="cartoes">
         {erro ? <Alerta>{erro}</Alerta> : null}
         <Cartao>
@@ -82,6 +100,14 @@ export function CartoesPage() {
           </EstadoVazio>
         ) : (
           <>
+            <section className="cartoes__cartao-visual" aria-label={`Cartão ${escolhido.nome}`}>
+              <p className="cartoes__cartao-nome">{escolhido.nome}</p>
+              <p className="cartoes__cartao-rotulo">Fatura atual</p>
+              <p className="cartoes__cartao-valor">{formatarMoeda(resumo.total)}</p>
+              <p className="cartoes__cartao-datas">
+                Fecha dia {escolhido.cartao.diaFechamento} · vence dia {escolhido.cartao.diaVencimento}
+              </p>
+            </section>
             <Cartao titulo="Limite">
               <LimiteCartaoBarra limite={limite} total={escolhido.cartao.limite} />
             </Cartao>
@@ -146,6 +172,7 @@ export function CartoesPage() {
             </Cartao>
 
             <Cartao titulo="Pagamentos desta fatura">
+              {pagamentos.length === 0 ? <p className="cartoes__texto-mudo">Nenhum pagamento registrado.</p> : null}
               {pagamentos.length > 0 ? (
                 <ul className="cartoes__lista cartoes__lista--espaco" aria-label="Pagamentos registrados">
                   {pagamentos.map((p) => (
@@ -164,23 +191,34 @@ export function CartoesPage() {
                   ))}
                 </ul>
               ) : null}
-              {resumo.restante > 0 ? (
-                <PagamentoFaturaForm
-                  key={`${escolhido.id}-${mes}-${resumo.restante}`}
-                  contaCartaoId={escolhido.id}
-                  mesFatura={mes}
-                  restante={resumo.restante}
-                  contasOrigem={contasOrigem}
-                  onSalvar={(dados) => store.aplicar((s) => registrarPagamento(s, dados, hoje))}
-                />
-              ) : (
-                <p className="cartoes__texto-mudo">Não há valor a pagar nesta fatura.</p>
-              )}
+              {resumo.restante > 0 ? null : <p className="cartoes__texto-mudo">Não há valor a pagar nesta fatura.</p>}
             </Cartao>
 
-            <Cartao titulo="Compra parcelada">
-              <CompraParceladaForm contaId={escolhido.id} categorias={estado.categorias} onSalvar={(dados) => store.aplicar((s) => criarCompraParcelada(s, dados))} />
-            </Cartao>
+            <Drawer aberto={gaveta === 'pagamento' && resumo.restante > 0} titulo="Pagar fatura" onFechar={() => setGaveta(null)}>
+              <PagamentoFaturaForm
+                key={`${escolhido.id}-${mes}-${resumo.restante}`}
+                contaCartaoId={escolhido.id}
+                mesFatura={mes}
+                restante={resumo.restante}
+                contasOrigem={contasOrigem}
+                onSalvar={(dados) => {
+                  const r = store.aplicar((s) => registrarPagamento(s, dados, hoje));
+                  if (r.ok) setGaveta(null);
+                  return r;
+                }}
+              />
+            </Drawer>
+            <Drawer aberto={gaveta === 'compra'} titulo="Compra parcelada" onFechar={() => setGaveta(null)}>
+              <CompraParceladaForm
+                contaId={escolhido.id}
+                categorias={estado.categorias}
+                onSalvar={(dados) => {
+                  const r = store.aplicar((s) => criarCompraParcelada(s, dados));
+                  if (r.ok) setGaveta(null);
+                  return r;
+                }}
+              />
+            </Drawer>
           </>
         )}
       </div>
