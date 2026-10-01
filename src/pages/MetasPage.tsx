@@ -5,6 +5,7 @@ import { Botao, Cartao, EstadoVazio, TituloPagina } from '../components/ui';
 import { hojeISO } from '../domain/date';
 import { criarMeta, ordenarMetas } from '../domain/metas';
 import { useEstado, useStore } from '../state/store';
+import './MetasPage.css';
 
 export function MetasPage() {
   const store = useStore();
@@ -19,7 +20,7 @@ export function MetasPage() {
   return (
     <div>
       <TituloPagina acoes={!criando ? <Botao onClick={() => setCriando(true)}>Nova meta</Botao> : undefined}>Metas</TituloPagina>
-      <div className="space-y-4">
+      <div className="metas-pagina">
         {criando ? (
           <Cartao titulo="Nova meta">
             <MetaForm
@@ -34,8 +35,8 @@ export function MetasPage() {
         ) : null}
 
         {arquivadas.length > 0 ? (
-          <label className="flex items-center gap-2 text-sm text-slate-700">
-            <input type="checkbox" checked={mostrarArquivadas} onChange={(e) => setMostrarArquivadas(e.target.checked)} className="h-4 w-4 accent-emerald-700" />
+          <label className="metas-filtro-arquivadas">
+            <input type="checkbox" checked={mostrarArquivadas} onChange={(e) => setMostrarArquivadas(e.target.checked)} />
             Mostrar metas arquivadas ({arquivadas.length})
           </label>
         ) : null}

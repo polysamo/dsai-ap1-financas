@@ -3,6 +3,7 @@ import { valorParaCampo, parseValor } from '../domain/money';
 import { META_NOME_MAX, type DadosMeta } from '../domain/metas';
 import type { Meta, Resultado } from '../domain/types';
 import { Alerta, Botao, CampoTexto } from './ui';
+import './MetaForm.css';
 
 interface Props {
   inicial?: Meta;
@@ -27,16 +28,16 @@ export function MetaForm({ inicial, onSalvar, onCancelar }: Props) {
   };
 
   return (
-    <form onSubmit={enviar} noValidate aria-label={inicial ? 'Editar meta' : 'Nova meta'} className="grid gap-3 sm:grid-cols-3">
+    <form onSubmit={enviar} noValidate aria-label={inicial ? 'Editar meta' : 'Nova meta'} className="metas-form">
       <CampoTexto label="Nome da meta" value={nome} onChange={(e) => setNome(e.target.value)} erro={erros.nome} maxLength={META_NOME_MAX + 20} autoComplete="off" />
       <CampoTexto label="Valor alvo" value={alvo} onChange={(e) => setAlvo(e.target.value)} erro={erros.valorAlvo} inputMode="decimal" placeholder="0,00" />
       <CampoTexto label="Prazo (opcional)" type="date" value={prazo} onChange={(e) => setPrazo(e.target.value)} erro={erros.prazo} />
       {erros.geral ? (
-        <div className="sm:col-span-3">
+        <div className="metas-form-linha">
           <Alerta>{erros.geral}</Alerta>
         </div>
       ) : null}
-      <div className="flex gap-2 sm:col-span-3">
+      <div className="metas-form-acoes">
         <Botao type="submit">{inicial ? 'Salvar meta' : 'Criar meta'}</Botao>
         <Botao variante="secundario" onClick={onCancelar}>
           Cancelar

@@ -1,0 +1,18 @@
+.csv-previa { margin: 0; padding: 0; list-style: none; }
+.csv-previa > li + li { border-top: 1px solid var(--cor-borda); }
+.csv-previa-linha { display: grid; grid-template-columns: 1fr; gap: var(--esp-2); padding: var(--esp-3) 0; }
+.csv-previa-linha--erro { background: var(--cor-perigo-suave); }
+.csv-previa-linha--duplicata { background: var(--cor-aviso-suave); }
+.csv-previa-marca { width: 1rem; height: 1rem; accent-color: var(--cor-primaria); }
+.csv-previa-marca:focus-visible { outline: 2px solid var(--cor-foco); outline-offset: 2px; }
+.csv-previa-info { min-width: 0; }
+.csv-previa-info p { margin: 0; }
+.csv-previa-descricao { font-weight: 500; color: var(--cor-texto); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.csv-previa-detalhe { font-size: var(--texto-xs); color: var(--cor-texto-mudo); }
+.csv-previa-estado { font-size: var(--texto-xs); font-weight: 500; }
+.csv-previa-estado--erro { color: var(--cor-perigo); }
+.csv-previa-estado--duplicata { color: var(--cor-aviso); }
+.csv-previa-estado--pronta { color: var(--cor-sucesso); }
+.csv-previa-categoria { min-width: 0; max-width: 100%; padding: 0.375rem var(--esp-2); border: 1px solid var(--cor-borda-forte); border-radius: var(--raio-pequeno); background: var(--cor-superficie); color: var(--cor-texto); font: inherit; font-size: var(--texto-sm); }
+.csv-previa-categoria:focus-visible { outline: 2px solid var(--cor-foco); outline-offset: 1px; }
+@media (min-width: 640px) { .csv-previa-linha { grid-template-columns: auto 1fr auto; align-items: center; } }

@@ -3,6 +3,7 @@ import { formatarMoeda } from '../domain/money';
 import type { LinhaInterpretada } from '../domain/csv';
 import { formatarTags } from '../domain/tags';
 import type { Categoria } from '../domain/types';
+import './CsvPrevia.css';
 
 export interface LinhaPrevia extends LinhaInterpretada {
   duplicata: boolean;
@@ -21,32 +22,32 @@ interface Props {
 
 export function CsvPrevia({ linhas, categorias, onSelecionar, onCategoria }: Props) {
   return (
-    <ul className="divide-y divide-slate-200" aria-label="Prévia da importação">
+    <ul className="csv-previa" aria-label="Prévia da importação">
       {linhas.map((l) => {
         const opcoes = categorias.filter((c) => c.tipo === l.tipo && !c.arquivada);
         const estado = l.erro ? `Erro: ${l.erro}` : l.duplicata ? 'Possível duplicata' : 'Pronta';
-        const cor = l.erro ? 'text-red-800' : l.duplicata ? 'text-amber-800' : 'text-emerald-800';
+        const cor = l.erro ? 'csv-previa-estado--erro' : l.duplicata ? 'csv-previa-estado--duplicata' : 'csv-previa-estado--pronta';
         const rotulo = `linha ${l.indice}`;
         return (
-          <li key={l.indice} className={`grid gap-2 py-3 sm:grid-cols-[auto_1fr_auto] sm:items-center ${l.erro ? 'bg-red-50' : l.duplicata ? 'bg-amber-50' : ''}`}>
+          <li key={l.indice} className={`csv-previa-linha${l.erro ? ' csv-previa-linha--erro' : l.duplicata ? ' csv-previa-linha--duplicata' : ''}`}>
             <input
               type="checkbox"
               aria-label={`Importar ${rotulo}`}
               checked={l.selecionada}
               disabled={Boolean(l.erro)}
               onChange={(e) => onSelecionar(l.indice, e.target.checked)}
-              className="h-4 w-4 accent-emerald-700"
+              className="csv-previa-marca"
             />
-            <div className="min-w-0">
-              <p className="truncate font-medium text-slate-900">{l.descricao || '(sem descrição)'}</p>
-              <p className="text-xs text-slate-600">
+            <div className="csv-previa-info">
+              <p className="csv-previa-descricao">{l.descricao || '(sem descrição)'}</p>
+              <p className="csv-previa-detalhe">
                 {l.data ? formatarData(l.data) : 'sem data'} · {l.erro ? '—' : `${l.tipo === 'receita' ? 'Receita' : 'Despesa'} ${formatarMoeda(l.valor)}`}
               </p>
-              <p className={`text-xs font-medium ${cor}`} data-testid={`estado-linha-${l.indice}`}>
+              <p className={`csv-previa-estado ${cor}`} data-testid={`estado-linha-${l.indice}`}>
                 {estado}
               </p>
               {l.tags.length > 0 ? (
-                <p className="text-xs text-slate-600" data-testid={`tags-linha-${l.indice}`}>
+                <p className="csv-previa-detalhe" data-testid={`tags-linha-${l.indice}`}>
                   Tags: {formatarTags(l.tags)}
                 </p>
               ) : null}
@@ -56,7 +57,7 @@ export function CsvPrevia({ linhas, categorias, onSelecionar, onCategoria }: Pro
                 aria-label={`Categoria da ${rotulo}`}
                 value={l.categoriaId ?? ''}
                 onChange={(e) => onCategoria(l.indice, e.target.value)}
-                className="min-w-0 rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                className="csv-previa-categoria"
               >
                 {opcoes.map((c) => (
                   <option key={c.id} value={c.id}>

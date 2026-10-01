@@ -6,6 +6,7 @@ import { hojeISO, mesDe, mesValido, nomeMes, somarMeses } from '../domain/date';
 import { formatarMoeda } from '../domain/money';
 import { copiarMesAnterior, definirLimite, linhasOrcamento, mesTemLimites, removerLimite, totaisOrcamento } from '../domain/orcamento';
 import { useEstado, useStore } from '../state/store';
+import './OrcamentoPage.css';
 
 export function OrcamentoPage() {
   const store = useStore();
@@ -26,19 +27,19 @@ export function OrcamentoPage() {
   return (
     <div>
       <TituloPagina>Orçamento</TituloPagina>
-      <div className="space-y-4">
+      <div className="orcamento-pagina">
         <Cartao>
-          <div className="flex flex-wrap items-end gap-3">
+          <div className="orcamento-navegacao">
             <Botao variante="secundario" onClick={() => irPara(somarMeses(mes, -1))}>
               Mês anterior
             </Botao>
-            <div className="w-44">
+            <div className="orcamento-campo-mes">
               <CampoTexto label="Mês" type="month" value={mes} onChange={(e) => mesValido(e.target.value) && irPara(e.target.value)} />
             </div>
             <Botao variante="secundario" onClick={() => irPara(somarMeses(mes, 1))}>
               Próximo mês
             </Botao>
-            <p className="ml-auto text-lg font-semibold capitalize text-slate-800" aria-live="polite">
+            <p className="orcamento-mes-nome" aria-live="polite">
               {nomeMes(mes)}
             </p>
           </div>
@@ -48,7 +49,7 @@ export function OrcamentoPage() {
 
         {podeCopiar ? (
           <Alerta tipo="aviso">
-            <span className="flex flex-wrap items-center justify-between gap-2">
+            <span className="orcamento-aviso">
               Este mês ainda não tem limites. Quer copiar os do mês anterior?
               <Botao
                 variante="secundario"
@@ -67,18 +68,18 @@ export function OrcamentoPage() {
           <EstadoVazio titulo="Nenhuma categoria de despesa">Crie categorias de despesa na tela Transações para definir limites.</EstadoVazio>
         ) : (
           <>
-            <div className="grid gap-3 sm:grid-cols-3" role="group" aria-label="Totais do mês">
+            <div className="orcamento-totais" role="group" aria-label="Totais do mês">
               <Cartao>
-                <p className="text-sm text-slate-600">Soma dos limites</p>
-                <p className="text-xl font-bold" data-testid="total-limites">{formatarMoeda(totais.limites)}</p>
+                <p className="orcamento-total-rotulo">Soma dos limites</p>
+                <p className="orcamento-total-valor" data-testid="total-limites">{formatarMoeda(totais.limites)}</p>
               </Cartao>
               <Cartao>
-                <p className="text-sm text-slate-600">Gasto nas categorias com limite</p>
-                <p className="text-xl font-bold" data-testid="total-gasto-com-limite">{formatarMoeda(totais.gastoComLimite)}</p>
+                <p className="orcamento-total-rotulo">Gasto nas categorias com limite</p>
+                <p className="orcamento-total-valor" data-testid="total-gasto-com-limite">{formatarMoeda(totais.gastoComLimite)}</p>
               </Cartao>
               <Cartao>
-                <p className="text-sm text-slate-600">Gasto sem orçamento</p>
-                <p className="text-xl font-bold" data-testid="total-gasto-sem-orcamento">{formatarMoeda(totais.gastoSemOrcamento)}</p>
+                <p className="orcamento-total-rotulo">Gasto sem orçamento</p>
+                <p className="orcamento-total-valor" data-testid="total-gasto-sem-orcamento">{formatarMoeda(totais.gastoSemOrcamento)}</p>
               </Cartao>
             </div>
             {estouradas > 0 ? (
@@ -87,7 +88,7 @@ export function OrcamentoPage() {
               </Alerta>
             ) : null}
             <Cartao titulo="Limites por categoria">
-              <ul className="divide-y divide-slate-200">
+              <ul className="orcamento-lista">
                 {linhas.map((l) => (
                   <LinhaOrcamentoItem
                     key={l.categoria.id}

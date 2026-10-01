@@ -1,0 +1,4 @@
+.metas-pagina { display: flex; flex-direction: column; gap: var(--esp-4); }
+.metas-filtro-arquivadas { display: flex; align-items: center; gap: var(--esp-2); font-size: var(--texto-sm); color: var(--cor-texto-suave); }
+.metas-filtro-arquivadas input { width: 1rem; height: 1rem; accent-color: var(--cor-primaria); }
+.metas-filtro-arquivadas input:focus-visible { outline: 2px solid var(--cor-foco); outline-offset: 2px; }

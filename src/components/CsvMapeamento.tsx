@@ -1,6 +1,7 @@
 import { FORMATOS_DATA } from '../domain/csv';
 import type { FormatoData, MapeamentoCsv } from '../domain/types';
 import { CampoSelect } from './ui';
+import './CsvMapeamento.css';
 
 interface Props {
   colunas: string[];
@@ -21,7 +22,7 @@ export function CsvMapeamento({ colunas, mapeamento, onChange }: Props) {
   const atualizar = (parcial: Partial<MapeamentoCsv>) => onChange({ ...mapeamento, ...parcial });
 
   return (
-    <form aria-label="Mapeamento de colunas" onSubmit={(e) => e.preventDefault()} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <form aria-label="Mapeamento de colunas" onSubmit={(e) => e.preventDefault()} className="csv-mapeamento">
       <CampoSelect label="Coluna da data" value={mapeamento.colData} onChange={(e) => atualizar({ colData: Number(e.target.value) })}>
         {opcoes}
       </CampoSelect>
@@ -61,12 +62,11 @@ export function CsvMapeamento({ colunas, mapeamento, onChange }: Props) {
           {opcoes}
         </CampoSelect>
       )}
-      <label className="flex items-center gap-2 self-end pb-2 text-sm text-slate-800">
+      <label className="csv-mapeamento-cabecalho">
         <input
           type="checkbox"
           checked={mapeamento.temCabecalho}
           onChange={(e) => atualizar({ temCabecalho: e.target.checked })}
-          className="h-4 w-4 accent-emerald-700"
         />
         A primeira linha é cabeçalho
       </label>
