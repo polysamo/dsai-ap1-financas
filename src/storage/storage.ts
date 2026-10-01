@@ -4,7 +4,7 @@ import { falha, ok, type AppState, type Resultado } from '../domain/types';
 /** Toda chave escrita pelo app começa com este prefixo. */
 export const PREFIXO = 'financas:';
 export const CHAVE_ESTADO = `${PREFIXO}estado`;
-export const SCHEMA_ATUAL = 1;
+export const SCHEMA_ATUAL = 2;
 
 export function estadoInicial(): AppState {
   return {
@@ -17,6 +17,7 @@ export function estadoInicial(): AppState {
     recorrencias: [],
     mapeamentosCsv: {},
     importacoes: [],
+    pagamentosFatura: [],
   };
 }
 
@@ -41,9 +42,11 @@ const migracoes: Record<number, (dados: Dados) => Dados> = {
     mapeamentosCsv: dados.mapeamentosCsv ?? {},
     importacoes: dados.importacoes ?? [],
   }),
+  // v2: pagamentos de fatura de cartão.
+  1: (dados) => ({ ...dados, schemaVersion: 2, pagamentosFatura: dados.pagamentosFatura ?? [] }),
 };
 
-const CHAVES_LISTA = ['contas', 'categorias', 'transacoes', 'orcamentos', 'metas', 'recorrencias', 'importacoes'] as const;
+const CHAVES_LISTA = ['contas', 'categorias', 'transacoes', 'orcamentos', 'metas', 'recorrencias', 'importacoes', 'pagamentosFatura'] as const;
 
 function ehObjeto(x: unknown): x is Dados {
   return typeof x === 'object' && x !== null && !Array.isArray(x);

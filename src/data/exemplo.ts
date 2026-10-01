@@ -1,3 +1,4 @@
+import { SCHEMA_ATUAL } from '../storage/storage';
 import { dataValida, diasNoMes, mesDe, somarMeses } from '../domain/date';
 import type { Aporte, AppState, Conta, Meta, Mes, Orcamento, Recorrencia, Transacao } from '../domain/types';
 import { categoriasPadrao } from './categoriasPadrao';
@@ -43,7 +44,7 @@ export function gerarExemplo(hoje: string): AppState {
   const contas: Conta[] = [
     { id: ID_CORRENTE, nome: 'Conta corrente', tipo: 'corrente', saldoInicial: 250000, arquivada: false, criadaEm },
     { id: ID_POUPANCA, nome: 'Poupança', tipo: 'poupanca', saldoInicial: 1200000, arquivada: false, criadaEm: criadaEm + 1 },
-    { id: ID_CARTAO, nome: 'Cartão de crédito', tipo: 'cartao', saldoInicial: 0, arquivada: false, criadaEm: criadaEm + 2 },
+    { id: ID_CARTAO, nome: 'Cartão de crédito', tipo: 'cartao', saldoInicial: 0, arquivada: false, criadaEm: criadaEm + 2, cartao: { diaFechamento: 20, diaVencimento: 27, limite: 500000 } },
     { id: ID_CARTEIRA, nome: 'Carteira', tipo: 'dinheiro', saldoInicial: 15000, arquivada: false, criadaEm: criadaEm + 3 },
   ];
 
@@ -119,7 +120,7 @@ export function gerarExemplo(hoje: string): AppState {
   ];
 
   return {
-    schemaVersion: 1,
+    schemaVersion: SCHEMA_ATUAL,
     contas,
     categorias: categoriasPadrao(),
     transacoes,
@@ -128,5 +129,6 @@ export function gerarExemplo(hoje: string): AppState {
     recorrencias,
     mapeamentosCsv: {},
     importacoes: [],
+    pagamentosFatura: [],
   };
 }

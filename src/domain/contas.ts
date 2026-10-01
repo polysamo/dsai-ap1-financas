@@ -1,5 +1,5 @@
 import { novoId, proximoTempo } from './id';
-import { falha, ok, type AppState, type Centavos, type Conta, type Resultado, type TipoConta, type Transacao } from './types';
+import { falha, ok, type AppState, type CartaoConfig, type Centavos, type Conta, type Resultado, type TipoConta, type Transacao } from './types';
 
 export const TIPOS_CONTA: TipoConta[] = ['corrente', 'poupanca', 'dinheiro', 'investimento', 'cartao'];
 
@@ -17,6 +17,8 @@ export interface DadosConta {
   nome: string;
   tipo: TipoConta;
   saldoInicial: Centavos;
+  /** Ciclo e limite; só vale para o tipo cartão e é opcional até o usuário configurar. */
+  cartao?: CartaoConfig;
 }
 
 const normalizar = (nome: string) => nome.trim().toLocaleLowerCase('pt-BR');
@@ -30,9 +32,26 @@ export function validarNomeConta(contas: Conta[], nome: string, ignorarId?: stri
   return ok(limpo);
 }
 
+/** Dias de 1 a 28 e limite maior que zero. O campo do erro indica qual valor corrigir. */
+export function validarCartao(c: CartaoConfig): Resultado<CartaoConfig> {
+  const diaOk = (d: number) => Number.isInteger(d) && d >= 1 && d <= 28;
+  if (!diaOk(c.diaFechamento)) return falha('O dia de fechamento deve ser um inteiro de 1 a 28.', 'diaFechamento');
+  if (!diaOk(c.diaVencimento)) return falha('O dia de vencimento deve ser um inteiro de 1 a 28.', 'diaVencimento');
+  if (!Number.isInteger(c.limite) || c.limite <= 0) return falha('O limite deve ser maior que zero.', 'limite');
+  return ok(c);
+}
+
+/** Só contas do tipo cartão guardam configuração de ciclo. */
+function cartaoDaConta(dados: DadosConta): Resultado<CartaoConfig | undefined> {
+  if (dados.tipo !== 'cartao' || !dados.cartao) return ok(undefined);
+  return validarCartao(dados.cartao);
+}
+
 export function criarConta(estado: AppState, dados: DadosConta): Resultado<AppState> {
   const nome = validarNomeConta(estado.contas, dados.nome);
   if (!nome.ok) return nome;
+  const cartao = cartaoDaConta(dados);
+  if (!cartao.ok) return cartao;
   const conta: Conta = {
     id: novoId(),
     nome: nome.valor,
@@ -40,6 +59,7 @@ export function criarConta(estado: AppState, dados: DadosConta): Resultado<AppSt
     saldoInicial: dados.saldoInicial,
     arquivada: false,
     criadaEm: proximoTempo(),
+    ...(cartao.valor ? { cartao: cartao.valor } : {}),
   };
   return ok({ ...estado, contas: [...estado.contas, conta] });
 }
@@ -50,14 +70,24 @@ export function editarConta(estado: AppState, id: string, dados: DadosConta): Re
   const nome = atual.arquivada ? ok(dados.nome.trim()) : validarNomeConta(estado.contas, dados.nome, id);
   if (!nome.ok) return nome;
   if (!nome.valor || nome.valor.length > NOME_MAX) return falha('Nome inválido.', 'nome');
+  const cartao = cartaoDaConta(dados);
+  if (!cartao.ok) return cartao;
   return ok({
     ...estado,
-    contas: estado.contas.map((c) => (c.id === id ? { ...c, nome: nome.valor, tipo: dados.tipo, saldoInicial: dados.saldoInicial } : c)),
+    contas: estado.contas.map((c) => {
+      if (c.id !== id) return c;
+      const { cartao: _antigo, ...resto } = c;
+      void _antigo;
+      return { ...resto, nome: nome.valor, tipo: dados.tipo, saldoInicial: dados.saldoInicial, ...(cartao.valor ? { cartao: cartao.valor } : {}) };
+    }),
   });
 }
 
 export function contaTemTransacoes(estado: AppState, id: string): boolean {
-  return estado.transacoes.some((t) => t.contaId === id);
+  return (
+    estado.transacoes.some((t) => t.contaId === id) ||
+    estado.pagamentosFatura.some((p) => p.contaCartaoId === id || p.contaOrigemId === id)
+  );
 }
 
 /** Só contas sem transações podem ser excluídas; as demais devem ser arquivadas. */
@@ -85,16 +115,22 @@ export function efeitoTransacao(t: Pick<Transacao, 'tipo' | 'valor'>): Centavos 
 }
 
 /** Saldo atual: saldo inicial mais receitas menos despesas da conta. Nunca é armazenado. */
-export function saldoConta(estado: Pick<AppState, 'contas' | 'transacoes'>, contaId: string): Centavos {
-  const conta = estado.contas.find((c) => c.id === contaId);
-  if (!conta) return 0;
-  return estado.transacoes.reduce((soma, t) => (t.contaId === contaId ? soma + efeitoTransacao(t) : soma), conta.saldoInicial);
+export function saldoConta(estado: DadosDeSaldo, contaId: string): Centavos {
+  return saldosPorConta(estado).get(contaId) ?? 0;
 }
 
-export function saldosPorConta(estado: Pick<AppState, 'contas' | 'transacoes'>): Map<string, Centavos> {
+type DadosDeSaldo = Pick<AppState, 'contas' | 'transacoes'> & Partial<Pick<AppState, 'pagamentosFatura'>>;
+
+export function saldosPorConta(estado: DadosDeSaldo): Map<string, Centavos> {
   const saldos = new Map<string, Centavos>(estado.contas.map((c) => [c.id, c.saldoInicial]));
-  for (const t of estado.transacoes) {
-    if (saldos.has(t.contaId)) saldos.set(t.contaId, (saldos.get(t.contaId) ?? 0) + efeitoTransacao(t));
+  const somar = (contaId: string, valor: Centavos) => {
+    if (saldos.has(contaId)) saldos.set(contaId, (saldos.get(contaId) ?? 0) + valor);
+  };
+  for (const t of estado.transacoes) somar(t.contaId, efeitoTransacao(t));
+  // Pagar a fatura tira dinheiro da conta de origem e reduz a dívida do cartão.
+  for (const p of estado.pagamentosFatura ?? []) {
+    somar(p.contaOrigemId, -p.valor);
+    somar(p.contaCartaoId, p.valor);
   }
   return saldos;
 }
@@ -108,7 +144,7 @@ export interface SaldoTotal {
   total: Centavos;
 }
 
-export function saldoTotal(estado: Pick<AppState, 'contas' | 'transacoes'>): SaldoTotal {
+export function saldoTotal(estado: DadosDeSaldo): SaldoTotal {
   const saldos = saldosPorConta(estado);
   let contas = 0;
   let cartoes = 0;

@@ -14,17 +14,32 @@ export function ContaForm({ inicial, onSalvar, onCancelar }: Props) {
   const [nome, setNome] = useState(inicial?.nome ?? '');
   const [tipo, setTipo] = useState<TipoConta>(inicial?.tipo ?? 'corrente');
   const [saldo, setSaldo] = useState(inicial ? valorParaCampo(inicial.saldoInicial) : '');
-  const [erros, setErros] = useState<{ nome?: string; saldo?: string; geral?: string }>({});
+  const [fechamento, setFechamento] = useState(inicial?.cartao ? String(inicial.cartao.diaFechamento) : '');
+  const [vencimento, setVencimento] = useState(inicial?.cartao ? String(inicial.cartao.diaVencimento) : '');
+  const [limite, setLimite] = useState(inicial?.cartao ? valorParaCampo(inicial.cartao.limite) : '');
+  const [erros, setErros] = useState<Record<'nome' | 'saldo' | 'geral' | 'diaFechamento' | 'diaVencimento' | 'limite', string | undefined>>({
+    nome: undefined, saldo: undefined, geral: undefined, diaFechamento: undefined, diaVencimento: undefined, limite: undefined,
+  });
+  const semErros = { nome: undefined, saldo: undefined, geral: undefined, diaFechamento: undefined, diaVencimento: undefined, limite: undefined };
 
   const enviar = (e: FormEvent) => {
     e.preventDefault();
     const saldoInicial = saldo.trim() === '' ? 0 : parseValor(saldo);
     if (saldoInicial === null) {
-      setErros({ saldo: 'Informe um valor válido, como 1.234,56 ou -50,00.' });
+      setErros({ ...semErros, saldo: 'Informe um valor válido, como 1.234,56 ou -50,00.' });
       return;
     }
-    const r = onSalvar({ nome, tipo, saldoInicial });
-    if (!r.ok) setErros(r.campo === 'nome' ? { nome: r.erro } : { geral: r.erro });
+    // Ciclo do cartão é tudo ou nada: se qualquer campo foi preenchido, todos são validados.
+    const preencheuCartao = tipo === 'cartao' && [fechamento, vencimento, limite].some((v) => v.trim() !== '');
+    const limiteCentavos = parseValor(limite);
+    const cartao = preencheuCartao
+      ? { diaFechamento: Number(fechamento), diaVencimento: Number(vencimento), limite: limiteCentavos ?? Number.NaN }
+      : undefined;
+    const r = onSalvar({ nome, tipo, saldoInicial, cartao });
+    if (!r.ok) {
+      const campo = r.campo as keyof typeof semErros | undefined;
+      setErros(campo && campo in semErros ? { ...semErros, [campo]: r.erro } : { ...semErros, geral: r.erro });
+    }
   };
 
   return (
@@ -46,6 +61,14 @@ export function ContaForm({ inicial, onSalvar, onCancelar }: Props) {
         placeholder="0,00"
         dica="Aceita valores negativos, como -50,00."
       />
+      {tipo === 'cartao' ? (
+        <fieldset className="grid gap-3 sm:col-span-3 sm:grid-cols-3">
+          <legend className="mb-1 text-sm font-medium text-slate-700">Ciclo do cartão (opcional, preencha tudo ou nada)</legend>
+          <CampoTexto label="Dia de fechamento" value={fechamento} onChange={(e) => setFechamento(e.target.value)} erro={erros.diaFechamento} inputMode="numeric" placeholder="1 a 28" />
+          <CampoTexto label="Dia de vencimento" value={vencimento} onChange={(e) => setVencimento(e.target.value)} erro={erros.diaVencimento} inputMode="numeric" placeholder="1 a 28" />
+          <CampoTexto label="Limite do cartão" value={limite} onChange={(e) => setLimite(e.target.value)} erro={erros.limite} inputMode="decimal" placeholder="0,00" />
+        </fieldset>
+      ) : null}
       {erros.geral ? (
         <div className="sm:col-span-3">
           <Alerta>{erros.geral}</Alerta>

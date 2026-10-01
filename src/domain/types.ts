@@ -7,6 +7,13 @@ export type Mes = string;
 export type TipoConta = 'corrente' | 'poupanca' | 'dinheiro' | 'cartao' | 'investimento';
 export type TipoMovimento = 'receita' | 'despesa';
 
+/** Ciclo e limite de um cartão de crédito. Dias de 1 a 28 para valerem em todos os meses. */
+export interface CartaoConfig {
+  diaFechamento: number;
+  diaVencimento: number;
+  limite: Centavos;
+}
+
 export interface Conta {
   id: string;
   nome: string;
@@ -14,6 +21,8 @@ export interface Conta {
   saldoInicial: Centavos;
   arquivada: boolean;
   criadaEm: number;
+  /** Só para contas do tipo cartão. */
+  cartao?: CartaoConfig;
 }
 
 export interface Categoria {
@@ -34,6 +43,8 @@ export interface Transacao {
   descricao: string;
   criadaEm: number;
   importacaoId?: string;
+  /** Presente em compras parceladas; as parcelas de uma compra compartilham o grupoId. */
+  parcela?: { grupoId: string; numero: number; total: number };
 }
 
 export interface Orcamento {
@@ -92,6 +103,17 @@ export interface Importacao {
   transacaoIds: string[];
 }
 
+/** Pagamento de fatura: movimenta dinheiro entre contas e não é receita nem despesa. */
+export interface PagamentoFatura {
+  id: string;
+  contaCartaoId: string;
+  /** Mês de fechamento da fatura (AAAA-MM). */
+  mesFatura: Mes;
+  valor: Centavos;
+  data: DataISO;
+  contaOrigemId: string;
+}
+
 export interface AppState {
   schemaVersion: number;
   contas: Conta[];
@@ -102,6 +124,7 @@ export interface AppState {
   recorrencias: Recorrencia[];
   mapeamentosCsv: Record<string, MapeamentoCsv>;
   importacoes: Importacao[];
+  pagamentosFatura: PagamentoFatura[];
 }
 
 export type Resultado<T> = { ok: true; valor: T } | { ok: false; erro: string; campo?: string };

@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { CategoriasPanel } from '../components/CategoriasPanel';
 import { ConfirmDialog } from '../components/ConfirmDialog';
+import { ExclusaoParcelaDialog } from '../components/ExclusaoParcelaDialog';
 import { FiltrosTransacoesForm } from '../components/FiltrosTransacoes';
 import { TransacaoForm } from '../components/TransacaoForm';
 import { Alerta, Botao, Cartao, EstadoVazio, TituloPagina, Valor } from '../components/ui';
+import { excluirParcela } from '../domain/cartoes';
 import { formatarData, hojeISO, mesDe, primeiroDia, ultimoDia } from '../domain/date';
 import { formatarMoeda } from '../domain/money';
 import {
@@ -210,7 +212,22 @@ export function TransacoesPage() {
         </div>
       )}
 
-      {excluindo ? (
+      {excluindo?.parcela ? (
+        <ExclusaoParcelaDialog
+          transacao={excluindo}
+          onCancelar={() => setExcluindo(null)}
+          onEscolher={(escopo) => {
+            const alvo = excluindo;
+            const r = store.aplicar((s) => excluirParcela(s, alvo.id, escopo));
+            if (r.ok) {
+              setRemovida(escopo === 'uma' ? alvo : null);
+              setErro(null);
+            } else setErro(r.erro);
+            setExcluindo(null);
+          }}
+        />
+      ) : null}
+      {excluindo && !excluindo.parcela ? (
         <ConfirmDialog
           titulo="Excluir transação?"
           mensagem={`Excluir "${excluindo.descricao || 'transação'}" de ${formatarData(excluindo.data)}? Você poderá desfazer por alguns segundos.`}
