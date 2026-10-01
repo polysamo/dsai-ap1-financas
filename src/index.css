@@ -1,9 +1,19 @@
 @import "tailwindcss";
 @import "./styles/tokens.css";
 
+/* Base em CSS puro, via tokens (o tema escuro troca os tokens sob html.dark). */
+*, *::before, *::after { box-sizing: border-box; }
+
 body {
-  @apply bg-slate-50 text-slate-900;
+  margin: 0;
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-family: var(--fonte);
+  font-size: var(--texto-base);
+  line-height: 1.5;
 }
+
+.tabular-nums { font-variant-numeric: tabular-nums; }
 
 /*
  * Tema escuro: redefine as variáveis de cor do Tailwind v4 sob a classe `dark` do <html>,

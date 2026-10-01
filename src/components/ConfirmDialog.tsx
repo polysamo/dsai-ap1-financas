@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Botao, CampoTexto } from './ui';
+import './ConfirmDialog.css';
 
 interface Props {
   titulo: string;
@@ -34,18 +35,18 @@ export function ConfirmDialog({ titulo, mensagem, rotuloConfirmar, perigo, texto
   const liberado = textoDigitado === undefined || digitado === textoDigitado;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4">
-      <div ref={raiz} role="dialog" aria-modal="true" aria-labelledby={idTitulo} className="w-full max-w-md rounded-lg bg-white p-5 shadow-xl">
-        <h2 id={idTitulo} className="text-lg font-semibold text-slate-900">
+    <div className="ui-modal-fundo">
+      <div ref={raiz} role="dialog" aria-modal="true" aria-labelledby={idTitulo} className="ui-modal">
+        <h2 id={idTitulo} className="ui-modal__titulo">
           {titulo}
         </h2>
-        <p className="mt-2 text-sm text-slate-700">{mensagem}</p>
+        <p className="confirm-mensagem">{mensagem}</p>
         {textoDigitado !== undefined ? (
-          <div className="mt-3">
+          <div className="confirm-campo">
             <CampoTexto label={`Digite ${textoDigitado} para confirmar`} value={digitado} onChange={(e) => setDigitado(e.target.value)} autoComplete="off" />
           </div>
         ) : null}
-        <div className="mt-4 flex justify-end gap-2">
+        <div className="confirm-acoes">
           <Botao variante="secundario" onClick={onCancelar}>
             Cancelar
           </Botao>

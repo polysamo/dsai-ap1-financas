@@ -1,0 +1,2 @@
+.falha-raiz { box-sizing: border-box; max-width: 36rem; margin: 0 auto; padding: 2.5rem var(--esp-4); }
+.falha-texto { margin: 0; font-size: var(--texto-sm); color: var(--cor-texto-suave); }
