@@ -9,6 +9,7 @@ import { ConfiguracoesPage } from './pages/ConfiguracoesPage';
 import { DividasPage } from './pages/DividasPage';
 import { ImportarCsvPage } from './pages/ImportarCsvPage';
 import { InvestimentosPage } from './pages/InvestimentosPage';
+import { IndependenciaPage } from './pages/IndependenciaPage';
 import { MetasPage } from './pages/MetasPage';
 import { AjudaPage } from './pages/AjudaPage';
 import { OrcamentoPage } from './pages/OrcamentoPage';
@@ -33,6 +34,7 @@ export function AppRoutes() {
         <Route path="/metas" element={<MetasPage />} />
         <Route path="/regras" element={<RegrasPage />} />
         <Route path="/investimentos" element={<InvestimentosPage />} />
+        <Route path="/independencia" element={<IndependenciaPage />} />
         <Route path="/dividas" element={<DividasPage />} />
         <Route path="/importar" element={<ImportarCsvPage />} />
         <Route path="/relatorios" element={<RelatoriosPage />} />

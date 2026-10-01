@@ -1,0 +1,35 @@
+.indep-resultado__grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: var(--esp-4);
+  margin: 0;
+}
+
+.indep-resultado__item dt {
+  font-size: var(--texto-sm);
+  color: var(--cor-texto-suave);
+}
+
+.indep-resultado__item dd {
+  margin: var(--esp-1) 0 0;
+  font-size: var(--texto-xl);
+  font-weight: 700;
+  color: var(--cor-texto);
+  font-variant-numeric: tabular-nums;
+}
+
+.indep-resultado__texto {
+  margin: var(--esp-3) 0 0;
+  font-size: var(--texto-sm);
+  color: var(--cor-texto);
+}
+
+.indep-resultado__aviso {
+  margin: var(--esp-4) 0 0;
+  padding: var(--esp-3);
+  border: 1px solid var(--cor-aviso);
+  border-radius: var(--raio);
+  background: var(--cor-aviso-suave);
+  color: var(--cor-aviso);
+  font-weight: 600;
+}

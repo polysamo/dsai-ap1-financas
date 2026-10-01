@@ -1,0 +1,38 @@
+.indep-salvos__form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--esp-3);
+  margin-bottom: var(--esp-4);
+}
+
+.indep-salvos__campo {
+  flex: 1 1 14rem;
+  max-width: 24rem;
+}
+
+.indep-salvos__botao {
+  margin-top: 1.5rem;
+}
+
+.indep-salvos__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+  justify-content: flex-end;
+}
+
+.indep-salvos__oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.indep-salvos__contagem {
+  margin: var(--esp-2) 0 0;
+  font-size: var(--texto-xs);
+  color: var(--cor-texto-suave);
+}
