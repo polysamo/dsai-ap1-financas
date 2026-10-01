@@ -3,6 +3,7 @@ import { FalhaCarregamento } from './components/FalhaCarregamento';
 import { Layout } from './components/Layout';
 import { ContasPage } from './pages/ContasPage';
 import { DadosPage } from './pages/DadosPage';
+import { OrcamentoPage } from './pages/OrcamentoPage';
 import { TransacoesPage } from './pages/TransacoesPage';
 import { useSnapshot } from './state/store';
 
@@ -16,6 +17,7 @@ export function AppRoutes() {
         <Route path="/" element={<Navigate to="/transacoes" replace />} />
         <Route path="/transacoes" element={<TransacoesPage />} />
         <Route path="/contas" element={<ContasPage />} />
+        <Route path="/orcamento" element={<OrcamentoPage />} />
         <Route path="/dados" element={<DadosPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

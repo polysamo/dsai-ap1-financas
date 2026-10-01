@@ -7,4 +7,5 @@ export interface ItemNavegacao {
 export const itensNavegacao: ItemNavegacao[] = [
   { to: '/transacoes', rotulo: 'Transações' },
   { to: '/contas', rotulo: 'Contas' },
+  { to: '/orcamento', rotulo: 'Orçamento' },
 ];
