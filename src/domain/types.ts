@@ -44,6 +44,8 @@ export interface Transacao {
   descricao: string;
   criadaEm: number;
   importacaoId?: string;
+  /** Identificador único do lançamento no extrato OFX; usado para não importar duas vezes. */
+  fitid?: string;
   /** Etiquetas livres, normalizadas (minúsculas); ausente quando não há nenhuma. */
   tags?: string[];
   /** Presente em compras parceladas; as parcelas de uma compra compartilham o grupoId. */
