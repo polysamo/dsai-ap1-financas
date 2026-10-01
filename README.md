@@ -39,7 +39,7 @@ Se o `npm test` estourar o tempo de inicialização dos workers (acontece em pas
 
 ## Tamanho do código (cloc)
 
-A meta de 100.000 linhas **não foi atingida**. O número real, medido com o comando abaixo, é de **23.722 linhas**: 17.117 de aplicação e 6.605 de testes. O total não foi inflado com código gerado em loop, dados ou duplicação.
+A meta de 100.000 linhas **não foi atingida**. O número real, medido com o comando abaixo, é de **24.270 linhas**: 17.658 de aplicação e 6.612 de testes. O total não foi inflado com código gerado em loop, dados ou duplicação.
 
 ```bash
 cloc . --vcs=git --exclude-dir=node_modules,vendor,dist,build,prompts --exclude-lang=Markdown,JSON,YAML,CSV,Text,SVG --not-match-f='(lock|\.min\.)'
@@ -51,11 +51,11 @@ Total (aplicação e testes):
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-TypeScript                     172           2040            414          20857
-CSS                             81            340             15           2853
+TypeScript                     176           2072            422          21272
+CSS                             85            352             24           2986
 HTML                             1              0              0             12
 -------------------------------------------------------------------------------
-SUM:                           254           2380            429          23722
+SUM:                           262           2424            446          24270
 -------------------------------------------------------------------------------
 ```
 
@@ -65,29 +65,29 @@ Só a aplicação (sem `src/test`):
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-TypeScript                     145           1308            377          14252
-CSS                             81            340             15           2853
+TypeScript                     149           1340            385          14660
+CSS                             85            352             24           2986
 HTML                             1              0              0             12
 -------------------------------------------------------------------------------
-SUM:                           227           1648            392          17117
+SUM:                           235           1692            409          17658
 -------------------------------------------------------------------------------
 ```
 
 Só os testes (`src/test`):
 
 ```
-github.com/AlDanial/cloc v 2.06  T=2.09 s (12.9 files/s, 3524.9 lines/s)
+github.com/AlDanial/cloc v 2.06  T=3.07 s (8.8 files/s, 2406.0 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-TypeScript                      27            732             37           6605
+TypeScript                      27            732             37           6612
 -------------------------------------------------------------------------------
-SUM:                            27            732             37           6605
+SUM:                            27            732             37           6612
 -------------------------------------------------------------------------------
 ```
 
 ## Estado dos testes e do repositório
 
 - 516 testes passando na última execução completa (`npm test`) e build de produção compilando (`npm run build`).
-- 81 commits, com os trailers `Agent:` e, nas partes, `Spec:`.
+- 94 commits, com os trailers `Agent:` e, nas partes, `Spec:`.
 - Limitações conhecidas: a amortização extra de dívidas abate só o saldo devedor e não recalcula a tabela; o PDF dos relatórios usa a impressão do navegador; subcategorias, edição em lote e busca global ficaram de fora.

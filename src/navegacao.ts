@@ -37,7 +37,7 @@ export interface GrupoNavegacao {
 
 /** Agrupamento da sidebar; rotas fora dos grupos caem em "Mais". */
 export const gruposNavegacao: GrupoNavegacao[] = [
-  { titulo: 'Visão geral', itens: ['/', '/calendario', '/relatorios', '/fluxo', '/patrimonio'] },
+  { titulo: 'Visão geral', itens: ['/', '/calendario', '/relatorios', '/fluxo', '/alertas', '/patrimonio'] },
   { titulo: 'Movimentação', itens: ['/transacoes', '/contas', '/cartoes', '/transferencias', '/assinaturas', '/conciliacao'] },
   { titulo: 'Planejamento', itens: ['/orcamento', '/orcamento-anual', '/metas', '/dividas', '/investimentos', '/independencia', '/divisao'] },
   { titulo: 'Automação', itens: ['/regras', '/importar', '/importar-ofx'] },
