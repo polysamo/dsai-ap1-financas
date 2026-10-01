@@ -1,8 +1,9 @@
 import { useMemo, useRef, useState, type DragEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { CsvMapeamento } from '../components/CsvMapeamento';
 import { CsvPrevia, type LinhaPrevia } from '../components/CsvPrevia';
-import { Alerta, Botao, Cartao, CampoSelect, EstadoVazio, TituloPagina } from '../components/ui';
+import { Alerta, Botao, Cartao, CampoSelect, TituloPagina } from '../components/ui';
+import { EmptyState } from '../components/EmptyState';
 import {
   adivinharMapeamento,
   decodificar,
@@ -29,7 +30,10 @@ interface Resumo {
   comErro: number;
 }
 
+const ETAPAS = ['Conta', 'Arquivo', 'Mapear colunas', 'Revisar', 'Confirmar'];
+
 export function ImportarCsvPage() {
+  const navigate = useNavigate();
   const store = useStore();
   const estado = useEstado();
   const contasAtivas = estado.contas.filter((c) => !c.arquivada);
@@ -144,6 +148,17 @@ export function ImportarCsvPage() {
     <div>
       <TituloPagina>Importar CSV</TituloPagina>
       <div className="importar-pagina">
+        <ol className="importar-etapas" aria-label="Etapas da importação">
+          {ETAPAS.map((nome, i) => {
+            const atual = resumo ? 4 : linhasCsv ? 3 : contasAtivas.length === 0 ? 0 : 1;
+            return (
+              <li key={nome} className={`importar-etapa${i < atual ? ' importar-etapa--feita' : ''}${i === atual ? ' importar-etapa--atual' : ''}`} aria-current={i === atual ? 'step' : undefined}>
+                <span className="importar-etapa__num">{i < atual ? '✓' : i + 1}</span>
+                <span className="importar-etapa__nome">{nome}</span>
+              </li>
+            );
+          })}
+        </ol>
         {erro ? <Alerta>{erro}</Alerta> : null}
 
         {resumo ? (
@@ -160,9 +175,7 @@ export function ImportarCsvPage() {
         ) : null}
 
         {contasAtivas.length === 0 ? (
-          <EstadoVazio titulo="Nenhuma conta para receber a importação" acao={<Link to="/contas" className="importar-link">Criar uma conta</Link>}>
-            As transações importadas precisam de uma conta de destino.
-          </EstadoVazio>
+          <EmptyState titulo="Nenhuma conta para receber a importação" descricao="As transações importadas precisam de uma conta de destino." acaoRotulo="Criar uma conta" onAcao={() => navigate('/contas?novo=1')} />
         ) : (
           <Cartao titulo="1. Escolha o arquivo e a conta">
             <div className="importar-escolha">

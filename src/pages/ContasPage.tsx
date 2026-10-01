@@ -1,5 +1,8 @@
 import { useMemo, useState } from 'react';
-import { Alerta, Botao, Cartao, EstadoVazio, TituloPagina, Valor } from '../components/ui';
+import { useSearchParams } from 'react-router-dom';
+import { Alerta, Botao, Cartao, TituloPagina, Valor } from '../components/ui';
+import { Drawer } from '../components/Drawer';
+import { EmptyState } from '../components/EmptyState';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { ContaForm } from '../components/ContaForm';
 import {
@@ -23,13 +26,21 @@ import './ContasPage.css';
 export function ContasPage() {
   const store = useStore();
   const estado = useEstado();
-  const [criando, setCriando] = useState(false);
+  const [params, setParams] = useSearchParams();
+  const [criandoLocal, setCriando] = useState(false);
+  const tipoNovo = params.get('novo') === 'cartao' ? 'cartao' : undefined;
+  const criando = criandoLocal || params.get('novo') !== null;
+  const fecharCriacao = () => {
+    setCriando(false);
+    if (params.has('novo')) setParams({}, { replace: true });
+  };
   const [editandoId, setEditandoId] = useState<string | null>(null);
   const [excluindo, setExcluindo] = useState<Conta | null>(null);
   const [erro, setErro] = useState<string | null>(null);
 
   const saldos = useMemo(() => saldosPorConta(estado), [estado]);
   const total = useMemo(() => saldoTotal(estado), [estado]);
+  const editando = estado.contas.find((c) => c.id === editandoId);
   const ativas = ordenarContas(estado.contas.filter((c) => !c.arquivada));
   const arquivadas = ordenarContas(estado.contas.filter((c) => c.arquivada));
 
@@ -42,29 +53,16 @@ export function ContasPage() {
   const linha = (conta: Conta) => {
     const saldo = saldos.get(conta.id) ?? 0;
     const temTransacoes = contaTemTransacoes(estado, conta.id);
-    if (editandoId === conta.id) {
-      return (
-        <li key={conta.id} className="contas__linha contas__linha--edicao">
-          <ContaForm
-            inicial={conta}
-            onCancelar={() => setEditandoId(null)}
-            onSalvar={(dados: DadosConta) => {
-              const r = store.aplicar((s) => editarConta(s, conta.id, dados));
-              if (r.ok) setEditandoId(null);
-              return r;
-            }}
-          />
-        </li>
-      );
-    }
     return (
-      <li key={conta.id} className="contas__linha">
+      <li key={conta.id} className="contas__card" data-testid="conta-card">
         <div className="contas__info">
           <p className="contas__nome">{conta.nome}</p>
           <p className="contas__tipo">{ROTULO_TIPO_CONTA[conta.tipo]}</p>
         </div>
-        <div className="contas__acoes">
+        <p className="contas__saldo">
           <Valor centavos={saldo} texto={formatarMoeda(saldo)} />
+        </p>
+        <div className="contas__acoes">
           <Botao variante="secundario" aria-label={`Editar ${conta.nome}`} onClick={() => setEditandoId(conta.id)}>
             Editar
           </Botao>
@@ -89,26 +87,36 @@ export function ContasPage() {
 
   return (
     <div>
-      <TituloPagina acoes={!criando ? <Botao onClick={() => setCriando(true)}>Nova conta</Botao> : undefined}>Contas</TituloPagina>
+      <TituloPagina acoes={<Botao onClick={() => setCriando(true)}>Nova conta</Botao>}>Contas</TituloPagina>
       <div className="contas__pilha">
         {erro ? <Alerta>{erro}</Alerta> : null}
-        {criando ? (
-          <Cartao titulo="Nova conta">
+        <Drawer aberto={criando} titulo="Nova conta" onFechar={fecharCriacao}>
+          <ContaForm
+            tipoInicial={tipoNovo}
+            onCancelar={fecharCriacao}
+            onSalvar={(dados) => {
+              const r = store.aplicar((s) => criarConta(s, dados));
+              if (r.ok) fecharCriacao();
+              return r;
+            }}
+          />
+        </Drawer>
+        <Drawer aberto={editando !== undefined} titulo="Editar conta" onFechar={() => setEditandoId(null)}>
+          {editando ? (
             <ContaForm
-              onCancelar={() => setCriando(false)}
-              onSalvar={(dados) => {
-                const r = store.aplicar((s) => criarConta(s, dados));
-                if (r.ok) setCriando(false);
+              inicial={editando}
+              onCancelar={() => setEditandoId(null)}
+              onSalvar={(dados: DadosConta) => {
+                const r = store.aplicar((s) => editarConta(s, editando.id, dados));
+                if (r.ok) setEditandoId(null);
                 return r;
               }}
             />
-          </Cartao>
-        ) : null}
+          ) : null}
+        </Drawer>
 
-        {ativas.length === 0 && !criando ? (
-          <EstadoVazio titulo="Nenhuma conta ainda" acao={<Botao onClick={() => setCriando(true)}>Crie sua primeira conta</Botao>}>
-            Contas são os lugares onde seu dinheiro está: banco, carteira, cartão. Toda transação pertence a uma conta.
-          </EstadoVazio>
+        {ativas.length === 0 ? (
+          <EmptyState titulo="Nenhuma conta ainda" descricao="Contas são onde seu dinheiro está: banco, carteira, cartão. Toda transação pertence a uma conta." acaoRotulo="Crie sua primeira conta" onAcao={() => setCriando(true)} />
         ) : null}
 
         {ativas.length > 0 ? (
@@ -128,16 +136,15 @@ export function ContasPage() {
                 </div>
               </dl>
             </Cartao>
-            <Cartao titulo="Contas ativas">
-              <ul className="contas__lista">{ativas.map(linha)}</ul>
-            </Cartao>
+            <ul className="contas__grade" aria-label="Contas ativas">{ativas.map(linha)}</ul>
           </>
         ) : null}
 
         {arquivadas.length > 0 ? (
-          <Cartao titulo="Contas arquivadas">
-            <ul className="contas__lista">{arquivadas.map(linha)}</ul>
-          </Cartao>
+          <section aria-labelledby="contas-arq">
+            <h2 id="contas-arq" className="contas__sub">Contas arquivadas</h2>
+            <ul className="contas__grade">{arquivadas.map(linha)}</ul>
+          </section>
         ) : null}
       </div>
 

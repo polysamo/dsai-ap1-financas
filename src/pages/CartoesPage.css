@@ -144,4 +144,9 @@
   .cartoes__fatura-resumo {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-}
+}.cartoes__cartao-visual { padding: var(--esp-5, 1.25rem); border-radius: var(--raio-lg, 1rem); background: linear-gradient(135deg, var(--cor-primaria, #2563eb), var(--cor-primaria-escura, #1e3a8a)); color: #fff; min-width: 0; }
+.cartoes__cartao-visual p { margin: 0; }
+.cartoes__cartao-nome { font-weight: 600; }
+.cartoes__cartao-rotulo { margin-top: var(--esp-3) !important; font-size: var(--texto-xs); opacity: 0.85; }
+.cartoes__cartao-valor { font-size: var(--texto-3xl, 2rem); font-weight: 700; overflow-wrap: anywhere; }
+.cartoes__cartao-datas { margin-top: var(--esp-2) !important; font-size: var(--texto-sm); opacity: 0.9; }

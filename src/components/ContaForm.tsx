@@ -7,13 +7,14 @@ import './ContaForm.css';
 
 interface Props {
   inicial?: Conta;
+  tipoInicial?: TipoConta;
   onSalvar: (dados: DadosConta) => Resultado<void>;
   onCancelar: () => void;
 }
 
-export function ContaForm({ inicial, onSalvar, onCancelar }: Props) {
+export function ContaForm({ inicial, tipoInicial, onSalvar, onCancelar }: Props) {
   const [nome, setNome] = useState(inicial?.nome ?? '');
-  const [tipo, setTipo] = useState<TipoConta>(inicial?.tipo ?? 'corrente');
+  const [tipo, setTipo] = useState<TipoConta>(inicial?.tipo ?? tipoInicial ?? 'corrente');
   const [saldo, setSaldo] = useState(inicial ? valorParaCampo(inicial.saldoInicial) : '');
   const [fechamento, setFechamento] = useState(inicial?.cartao ? String(inicial.cartao.diaFechamento) : '');
   const [vencimento, setVencimento] = useState(inicial?.cartao ? String(inicial.cartao.diaVencimento) : '');
