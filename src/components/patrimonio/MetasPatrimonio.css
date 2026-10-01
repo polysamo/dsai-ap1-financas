@@ -1,0 +1,56 @@
+.patrim-metas__lista {
+  display: grid;
+  gap: var(--esp-3);
+  margin: 0 0 var(--esp-4);
+  padding: 0;
+  list-style: none;
+}
+.patrim-metas__item {
+  padding: var(--esp-3);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+}
+.patrim-metas__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--esp-2);
+}
+.patrim-metas__valor {
+  font-variant-numeric: tabular-nums;
+  color: var(--cor-texto-suave);
+}
+.patrim-metas__trilho {
+  height: 0.6rem;
+  margin: var(--esp-2) 0;
+  border-radius: var(--raio-total);
+  background: var(--cor-superficie-alt);
+  overflow: hidden;
+}
+.patrim-metas__preenchimento {
+  height: 100%;
+  background: var(--cor-primaria);
+}
+.patrim-metas__texto {
+  margin: 0 0 var(--esp-2);
+  font-size: var(--texto-sm);
+  color: var(--cor-texto-suave);
+}
+.patrim-metas__ok {
+  color: var(--cor-sucesso);
+}
+.patrim-metas__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+}
+.patrim-metas__titulo {
+  margin: 0 0 var(--esp-2);
+  font-size: var(--texto-base);
+  font-weight: 600;
+}
+.patrim-metas__form {
+  display: grid;
+  gap: var(--esp-3);
+  max-width: 28rem;
+}

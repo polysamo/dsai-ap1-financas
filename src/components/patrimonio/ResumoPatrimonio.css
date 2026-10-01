@@ -1,0 +1,44 @@
+.patrim-resumo {
+  display: grid;
+  gap: var(--esp-3);
+  margin: 0;
+}
+@media (min-width: 40rem) {
+  .patrim-resumo {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+}
+.patrim-resumo__item {
+  min-width: 0;
+  padding: var(--esp-3) var(--esp-4);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+}
+.patrim-resumo__item dt {
+  font-size: var(--texto-sm);
+  color: var(--cor-texto-suave);
+}
+.patrim-resumo__item dd {
+  margin: var(--esp-1) 0 0;
+}
+.patrim-resumo__total {
+  font-size: var(--texto-2xl);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.patrim-resumo__variacao {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.patrim-resumo__variacao--positivo {
+  color: var(--cor-sucesso);
+}
+.patrim-resumo__variacao--negativo {
+  color: var(--cor-perigo);
+}
+.patrim-resumo__palavra {
+  font-size: var(--texto-xs);
+  font-weight: 400;
+  color: var(--cor-texto-suave);
+}

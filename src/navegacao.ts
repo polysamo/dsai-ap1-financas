@@ -17,6 +17,7 @@ export const itensNavegacao: ItemNavegacao[] = [
   { to: '/independencia', rotulo: 'Independência' },
   { to: '/dividas', rotulo: 'Dívidas' },
   { to: '/divisao', rotulo: 'Divisão' },
+  { to: '/patrimonio', rotulo: 'Patrimônio' },
   { to: '/relatorios', rotulo: 'Relatórios' },
   { to: '/regras', rotulo: 'Regras' },
   { to: '/importar', rotulo: 'Importar CSV' },

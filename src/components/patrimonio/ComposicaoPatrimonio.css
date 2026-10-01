@@ -1,0 +1,66 @@
+.patrim-composicao {
+  display: grid;
+  gap: var(--esp-4);
+}
+@media (min-width: 40rem) {
+  .patrim-composicao {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.patrim-composicao__titulo {
+  margin: 0 0 var(--esp-2);
+  font-size: var(--texto-base);
+  font-weight: 600;
+  color: var(--cor-texto);
+}
+.patrim-composicao__vazio {
+  margin: 0;
+  font-size: var(--texto-sm);
+  color: var(--cor-texto-suave);
+}
+.patrim-composicao__tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--texto-sm);
+  text-align: left;
+}
+.patrim-composicao__tabela th,
+.patrim-composicao__tabela td {
+  padding: var(--esp-1) var(--esp-2);
+  border-top: 1px solid var(--cor-borda);
+  font-weight: 400;
+}
+.patrim-composicao__tabela thead th {
+  border-top: 0;
+  color: var(--cor-texto-suave);
+  font-weight: 500;
+}
+.patrim-composicao__tabela .patrim-composicao__num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.patrim-composicao__barra {
+  display: inline-block;
+  width: 3rem;
+  height: 0.4rem;
+  margin-right: var(--esp-2);
+  border-radius: var(--raio-total);
+  background: var(--cor-superficie-alt);
+  vertical-align: middle;
+  overflow: hidden;
+}
+.patrim-composicao__barra-cheia {
+  display: block;
+  height: 100%;
+  background: var(--cor-primaria);
+}
+.patrim-composicao__total {
+  margin: var(--esp-2) 0 0;
+  font-size: var(--texto-sm);
+  color: var(--cor-texto-suave);
+}
+.patrim-composicao__total strong {
+  color: var(--cor-texto);
+  font-variant-numeric: tabular-nums;
+}

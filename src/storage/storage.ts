@@ -25,6 +25,7 @@ export function estadoInicial(): AppState {
     gruposDivisao: [],
     transferencias: [],
     cenariosIndependencia: [],
+    metasPatrimonio: [],
   };
 }
 

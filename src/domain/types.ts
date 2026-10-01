@@ -2,6 +2,7 @@ import type { GrupoDivisao } from './divisao';
 import type { Transferencia } from './transferencias';
 
 import type { CenarioIndependencia } from './independencia';
+import type { MetaPatrimonio } from './patrimonio';
 export type Centavos = number;
 /** Data no formato AAAA-MM-DD. */
 export type DataISO = string;
@@ -222,6 +223,7 @@ export interface AppState {
   /** Ausente em estados montados à mão (ex.: dados de exemplo); o carregamento sempre a preenche. */
   transferencias?: Transferencia[];
   cenariosIndependencia?: CenarioIndependencia[];
+  metasPatrimonio?: MetaPatrimonio[];
 }
 
 export type Resultado<T> = { ok: true; valor: T } | { ok: false; erro: string; campo?: string };

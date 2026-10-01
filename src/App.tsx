@@ -19,6 +19,7 @@ import { RelatoriosPage } from './pages/RelatoriosPage';
 import { RegrasPage } from './pages/RegrasPage';
 import { TransacoesPage } from './pages/TransacoesPage';
 import { TransferenciasPage } from './pages/TransferenciasPage';
+import { PatrimonioPage } from './pages/PatrimonioPage';
 import { useSnapshot } from './state/store';
 
 /** Rotas do app; separadas do roteador para poderem ser testadas com MemoryRouter. */
@@ -41,6 +42,7 @@ export function AppRoutes() {
         <Route path="/independencia" element={<IndependenciaPage />} />
         <Route path="/dividas" element={<DividasPage />} />
         <Route path="/divisao" element={<DivisaoPage />} />
+        <Route path="/patrimonio" element={<PatrimonioPage />} />
         <Route path="/importar" element={<ImportarCsvPage />} />
         <Route path="/importar-ofx" element={<ImportarOfxPage />} />
         <Route path="/relatorios" element={<RelatoriosPage />} />
