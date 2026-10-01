@@ -6,6 +6,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { AssinaturasPage } from './pages/AssinaturasPage';
 import { CalendarioPage } from './pages/CalendarioPage';
 import { CartoesPage } from './pages/CartoesPage';
+import { ConciliacaoPage } from './pages/ConciliacaoPage';
 import { ContasPage } from './pages/ContasPage';
 import { ConfiguracoesPage } from './pages/ConfiguracoesPage';
 import { DividasPage } from './pages/DividasPage';
@@ -34,6 +35,7 @@ export function AppRoutes() {
         <Route index element={<DashboardPage />} />
         <Route path="/transacoes" element={<TransacoesPage />} />
         <Route path="/contas" element={<ContasPage />} />
+        <Route path="/conciliacao" element={<ConciliacaoPage />} />
         <Route path="/cartoes" element={<CartoesPage />} />
         <Route path="/transferencias" element={<TransferenciasPage />} />
         <Route path="/assinaturas" element={<AssinaturasPage />} />

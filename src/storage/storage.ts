@@ -27,6 +27,7 @@ export function estadoInicial(): AppState {
     cenariosIndependencia: [],
     metasPatrimonio: [],
     assinaturasDecisoes: [],
+    conciliacoes: { fechadas: [], rascunhos: {} },
   };
 }
 
