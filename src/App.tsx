@@ -18,6 +18,7 @@ import { IndependenciaPage } from './pages/IndependenciaPage';
 import { MetasPage } from './pages/MetasPage';
 import { AjudaPage } from './pages/AjudaPage';
 import { OrcamentoPage } from './pages/OrcamentoPage';
+import { OrcamentoAnualPage } from './pages/OrcamentoAnualPage';
 import { RelatoriosPage } from './pages/RelatoriosPage';
 import { RegrasPage } from './pages/RegrasPage';
 import { TransacoesPage } from './pages/TransacoesPage';
@@ -42,6 +43,7 @@ export function AppRoutes() {
         <Route path="/calendario" element={<CalendarioPage />} />
         <Route path="/fluxo" element={<FluxoPage />} />
         <Route path="/orcamento" element={<OrcamentoPage />} />
+        <Route path="/orcamento-anual" element={<OrcamentoAnualPage />} />
         <Route path="/metas" element={<MetasPage />} />
         <Route path="/regras" element={<RegrasPage />} />
         <Route path="/investimentos" element={<InvestimentosPage />} />

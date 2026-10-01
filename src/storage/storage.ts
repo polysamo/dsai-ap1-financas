@@ -28,6 +28,7 @@ export function estadoInicial(): AppState {
     metasPatrimonio: [],
     assinaturasDecisoes: [],
     conciliacoes: { fechadas: [], rascunhos: {} },
+    rolloverCategorias: [],
   };
 }
 

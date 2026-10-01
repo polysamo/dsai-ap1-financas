@@ -1,0 +1,39 @@
+.orcanual-resumo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: var(--esp-3);
+}
+
+.orcanual-resumo-item {
+  padding: var(--esp-4);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+  box-shadow: var(--sombra);
+}
+
+.orcanual-resumo-rotulo {
+  margin: 0;
+  color: var(--cor-texto-suave);
+  font-size: var(--texto-sm);
+}
+
+.orcanual-resumo-valor {
+  margin: var(--esp-1) 0 0;
+  color: var(--cor-texto);
+  font-size: var(--texto-xl);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.orcanual-resumo-item--normal .orcanual-resumo-valor {
+  color: var(--cor-sucesso);
+}
+
+.orcanual-resumo-item--atencao .orcanual-resumo-valor {
+  color: var(--cor-aviso);
+}
+
+.orcanual-resumo-item--estourado .orcanual-resumo-valor {
+  color: var(--cor-perigo);
+}

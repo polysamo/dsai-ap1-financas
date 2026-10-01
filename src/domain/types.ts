@@ -6,6 +6,7 @@ import type { MetaPatrimonio } from './patrimonio';
 import type { DecisaoAssinatura } from './assinaturas';
 import type { EstadoConciliacoes } from './conciliacao';
 
+import type { RolloverCategorias } from './orcamentoAnual';
 export type Centavos = number;
 /** Data no formato AAAA-MM-DD. */
 export type DataISO = string;
@@ -229,6 +230,8 @@ export interface AppState {
   metasPatrimonio?: MetaPatrimonio[];
   assinaturasDecisoes?: DecisaoAssinatura[];
   conciliacoes?: EstadoConciliacoes;
+  /** Ausente em estados antigos e no exemplo; tratado como lista vazia. */
+  rolloverCategorias?: RolloverCategorias;
 }
 
 export type Resultado<T> = { ok: true; valor: T } | { ok: false; erro: string; campo?: string };

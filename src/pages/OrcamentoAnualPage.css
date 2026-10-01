@@ -1,0 +1,33 @@
+.orcanual-pagina {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+}
+
+.orcanual-navegacao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--esp-3);
+  padding: var(--esp-4);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+}
+
+.orcanual-ano-campo {
+  width: 8rem;
+}
+
+.orcanual-ano-titulo {
+  margin: 0 0 0 auto;
+  color: var(--cor-texto);
+  font-size: var(--texto-lg);
+  font-weight: 600;
+}
+
+.orcanual-dica {
+  margin: 0;
+  color: var(--cor-texto-suave);
+  font-size: var(--texto-sm);
+}
