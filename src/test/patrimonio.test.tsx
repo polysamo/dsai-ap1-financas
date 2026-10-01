@@ -1,5 +1,3 @@
-import { readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -306,20 +304,20 @@ describe('patrimônio líquido: tela', () => {
   });
 
   it('critério 14: sem Tailwind, só classes patrim-* e arquivos CSS próprios', () => {
-    const raiz = process.cwd();
-    const pasta = join(raiz, 'src/components/patrimonio');
-    const fontes = readdirSync(pasta).filter((f) => f.endsWith('.tsx')).map((f) => join(pasta, f));
-    fontes.push(join(raiz, 'src/pages/PatrimonioPage.tsx'));
-    for (const f of fontes) {
-      const codigo = readFileSync(f, 'utf8');
+    const brutos = (padrao: Record<string, unknown>) => Object.entries(padrao).map(([nome, texto]) => [nome, String(texto)] as const);
+    const fontes = [
+      ...brutos(import.meta.glob('../components/patrimonio/*.tsx', { query: '?raw', import: 'default', eager: true })),
+      ...brutos(import.meta.glob('../pages/PatrimonioPage.tsx', { query: '?raw', import: 'default', eager: true })),
+    ];
+    expect(fontes.length).toBeGreaterThanOrEqual(5);
+    for (const [nome, codigo] of fontes) {
       for (const m of codigo.matchAll(/className=(?:"([^"]*)"|\{`([^`]*)`\})/g)) {
-        for (const classe of (m[1] ?? m[2]).split(/\s+/).filter(Boolean)) expect(classe, f).toMatch(/^patrim-|^\$\{/);
+        for (const classe of (m[1] ?? m[2]).split(/\s+/).filter(Boolean)) expect(classe, nome).toMatch(/^patrim-|^\$\{/);
       }
     }
-    const css = readdirSync(pasta).filter((f) => f.endsWith('.css'));
+    const css = brutos(import.meta.glob('../components/patrimonio/*.css', { query: '?raw', import: 'default', eager: true }));
     expect(css.length).toBeGreaterThanOrEqual(4);
-    for (const f of css) {
-      const texto = readFileSync(join(pasta, f), 'utf8');
+    for (const [, texto] of css) {
       expect(texto).not.toMatch(/@apply|@import "tailwindcss"/);
       expect(texto).toMatch(/var\(--/);
     }

@@ -87,7 +87,7 @@ function percentuais(valores: Centavos[]): number[] {
   return decimos.map((d) => d / 10);
 }
 
-function montarGrupos<G extends string>(ordem: G[], totais: Map<G, Centavos>): Grupo<G>[] {
+function montarGrupos<G extends GrupoAtivo | GrupoPassivo>(ordem: G[], totais: Map<G, Centavos>): Grupo<G>[] {
   const presentes = ordem.filter((g) => (totais.get(g) ?? 0) > 0);
   const pcts = percentuais(presentes.map((g) => totais.get(g) ?? 0));
   return presentes.map((grupo, i) => ({ grupo, rotulo: ROTULO_GRUPO[grupo], valor: totais.get(grupo) ?? 0, pct: pcts[i] }));
