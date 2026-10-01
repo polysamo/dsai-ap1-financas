@@ -13,6 +13,7 @@ import {
   marcarDuplicatas,
   parseCsv,
   sugerirCategoria,
+  sugerirTags,
   validarArquivo,
 } from '../domain/csv';
 import { hojeISO } from '../domain/date';
@@ -97,6 +98,7 @@ export function ImportarCsvPage() {
         duplicata,
         selecionada: l.erro ? false : (selecao[l.indice] ?? !duplicata),
         categoriaId: l.erro ? undefined : (categoriasEscolhidas[l.indice] ?? sugerirCategoria(estado, l.descricao, l.tipo)),
+        tags: l.erro ? [] : sugerirTags(estado, l.descricao, l.tipo),
       };
     });
   }, [linhasCsv, mapeamento, estado, contaEfetiva, selecao, categoriasEscolhidas]);
@@ -107,7 +109,7 @@ export function ImportarCsvPage() {
 
   const confirmar = () => {
     if (!mapeamento) return;
-    const itens = aImportar.map((l) => ({ data: l.data!, descricao: l.descricao, valor: l.valor, tipo: l.tipo, categoriaId: l.categoriaId ?? '' }));
+    const itens = aImportar.map((l) => ({ data: l.data!, descricao: l.descricao, valor: l.valor, tipo: l.tipo, categoriaId: l.categoriaId ?? '', tags: l.tags }));
     let criada = '';
     const r = store.aplicar((s) => {
       const imp = importarTransacoes(s, contaEfetiva, itens, mapeamento, hojeISO());

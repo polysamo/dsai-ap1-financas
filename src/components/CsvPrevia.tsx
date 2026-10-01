@@ -1,12 +1,15 @@
 import { formatarData } from '../domain/date';
 import { formatarMoeda } from '../domain/money';
 import type { LinhaInterpretada } from '../domain/csv';
+import { formatarTags } from '../domain/tags';
 import type { Categoria } from '../domain/types';
 
 export interface LinhaPrevia extends LinhaInterpretada {
   duplicata: boolean;
   selecionada: boolean;
   categoriaId?: string;
+  /** Tags da regra que casou com a linha. */
+  tags: string[];
 }
 
 interface Props {
@@ -42,6 +45,11 @@ export function CsvPrevia({ linhas, categorias, onSelecionar, onCategoria }: Pro
               <p className={`text-xs font-medium ${cor}`} data-testid={`estado-linha-${l.indice}`}>
                 {estado}
               </p>
+              {l.tags.length > 0 ? (
+                <p className="text-xs text-slate-600" data-testid={`tags-linha-${l.indice}`}>
+                  Tags: {formatarTags(l.tags)}
+                </p>
+              ) : null}
             </div>
             {!l.erro ? (
               <select

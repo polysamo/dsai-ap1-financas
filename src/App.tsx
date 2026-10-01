@@ -9,6 +9,7 @@ import { ImportarCsvPage } from './pages/ImportarCsvPage';
 import { MetasPage } from './pages/MetasPage';
 import { OrcamentoPage } from './pages/OrcamentoPage';
 import { RelatoriosPage } from './pages/RelatoriosPage';
+import { RegrasPage } from './pages/RegrasPage';
 import { TransacoesPage } from './pages/TransacoesPage';
 import { useSnapshot } from './state/store';
 
@@ -25,6 +26,7 @@ export function AppRoutes() {
         <Route path="/cartoes" element={<CartoesPage />} />
         <Route path="/orcamento" element={<OrcamentoPage />} />
         <Route path="/metas" element={<MetasPage />} />
+        <Route path="/regras" element={<RegrasPage />} />
         <Route path="/importar" element={<ImportarCsvPage />} />
         <Route path="/relatorios" element={<RelatoriosPage />} />
         <Route path="/dados" element={<DadosPage />} />

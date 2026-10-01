@@ -1,6 +1,7 @@
 import { efeitoTransacao } from './contas';
 import { dataValida } from './date';
 import { novoId, proximoTempo } from './id';
+import { normalizarTag, validarTags } from './tags';
 import {
   falha,
   ok,
@@ -23,6 +24,15 @@ export interface DadosTransacao {
   valor: Centavos;
   data: DataISO;
   descricao: string;
+  tags?: string[];
+}
+
+/** Guarda `tags` só quando há alguma, para que a ausência signifique "sem tags". */
+export function comTags<T extends { tags?: string[] }>(t: T): T {
+  if (t.tags && t.tags.length > 0) return t;
+  const { tags: _tags, ...resto } = t;
+  void _tags;
+  return resto as T;
 }
 
 export function validarTransacao(estado: AppState, dados: DadosTransacao, existente?: Transacao): Resultado<DadosTransacao> {
@@ -37,13 +47,15 @@ export function validarTransacao(estado: AppState, dados: DadosTransacao, existe
   if (categoria.arquivada && existente?.categoriaId !== categoria.id) return falha('Esta categoria está arquivada.', 'categoriaId');
   const descricao = dados.descricao.trim();
   if (descricao.length > DESCRICAO_MAX) return falha(`A descrição deve ter no máximo ${DESCRICAO_MAX} caracteres.`, 'descricao');
-  return ok({ ...dados, descricao });
+  const tags = validarTags(dados.tags);
+  if (!tags.ok) return tags;
+  return ok({ ...dados, descricao, tags: tags.valor });
 }
 
 export function criarTransacao(estado: AppState, dados: DadosTransacao): Resultado<AppState> {
   const v = validarTransacao(estado, dados);
   if (!v.ok) return v;
-  const transacao: Transacao = { ...v.valor, id: novoId(), criadaEm: proximoTempo() };
+  const transacao: Transacao = comTags({ ...v.valor, id: novoId(), criadaEm: proximoTempo() });
   return ok({ ...estado, transacoes: [...estado.transacoes, transacao] });
 }
 
@@ -52,7 +64,7 @@ export function editarTransacao(estado: AppState, id: string, dados: DadosTransa
   if (!atual) return falha('Transação não encontrada.');
   const v = validarTransacao(estado, dados, atual);
   if (!v.ok) return v;
-  return ok({ ...estado, transacoes: estado.transacoes.map((t) => (t.id === id ? { ...t, ...v.valor } : t)) });
+  return ok({ ...estado, transacoes: estado.transacoes.map((t) => (t.id === id ? comTags({ ...t, ...v.valor }) : t)) });
 }
 
 export function excluirTransacao(estado: AppState, id: string): Resultado<AppState> {
@@ -76,6 +88,7 @@ export interface FiltrosTransacoes {
   categoriaId?: string;
   tipo?: TipoMovimento;
   texto?: string;
+  tag?: string;
 }
 
 export function normalizarTexto(texto: string): string {
@@ -90,6 +103,7 @@ export function normalizarTexto(texto: string): string {
 /** Aplica todos os filtros presentes (E lógico). */
 export function filtrarTransacoes(transacoes: Transacao[], f: FiltrosTransacoes): Transacao[] {
   const texto = f.texto ? normalizarTexto(f.texto) : '';
+  const tag = f.tag ? normalizarTag(f.tag) : '';
   return transacoes.filter(
     (t) =>
       (!f.de || t.data >= f.de) &&
@@ -97,7 +111,8 @@ export function filtrarTransacoes(transacoes: Transacao[], f: FiltrosTransacoes)
       (!f.contaId || t.contaId === f.contaId) &&
       (!f.categoriaId || t.categoriaId === f.categoriaId) &&
       (!f.tipo || t.tipo === f.tipo) &&
-      (!texto || normalizarTexto(t.descricao).includes(texto)),
+      (!texto || normalizarTexto(t.descricao).includes(texto)) &&
+      (!tag || (t.tags ?? []).includes(tag)),
   );
 }
 

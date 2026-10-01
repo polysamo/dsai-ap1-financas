@@ -130,5 +130,9 @@ export function gerarExemplo(hoje: string): AppState {
     mapeamentosCsv: {},
     importacoes: [],
     pagamentosFatura: [],
+    regras: [
+      { id: 'ex-regra-mercado', padrao: 'supermercado', modo: 'contem', tipo: 'despesa', categoriaId: 'cat-alimentacao', tags: ['mercado'], ativa: true },
+      { id: 'ex-regra-streaming', padrao: 'streaming', modo: 'igual', tipo: 'despesa', categoriaId: 'cat-lazer', tags: [], ativa: true },
+    ],
   };
 }

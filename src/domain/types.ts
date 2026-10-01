@@ -43,6 +43,8 @@ export interface Transacao {
   descricao: string;
   criadaEm: number;
   importacaoId?: string;
+  /** Etiquetas livres, normalizadas (minúsculas); ausente quando não há nenhuma. */
+  tags?: string[];
   /** Presente em compras parceladas; as parcelas de uma compra compartilham o grupoId. */
   parcela?: { grupoId: string; numero: number; total: number };
 }
@@ -114,6 +116,19 @@ export interface PagamentoFatura {
   contaOrigemId: string;
 }
 
+export type ModoPadrao = 'contem' | 'comeca' | 'igual';
+
+/** Regra de categorização; a prioridade é a posição na lista `regras`. */
+export interface RegraCategoria {
+  id: string;
+  padrao: string;
+  modo: ModoPadrao;
+  tipo: TipoMovimento;
+  categoriaId: string;
+  tags: string[];
+  ativa: boolean;
+}
+
 export interface AppState {
   schemaVersion: number;
   contas: Conta[];
@@ -125,6 +140,7 @@ export interface AppState {
   mapeamentosCsv: Record<string, MapeamentoCsv>;
   importacoes: Importacao[];
   pagamentosFatura: PagamentoFatura[];
+  regras: RegraCategoria[];
 }
 
 export type Resultado<T> = { ok: true; valor: T } | { ok: false; erro: string; campo?: string };

@@ -2,8 +2,9 @@ import { ID_OUTROS_DESPESA, ID_OUTROS_RECEITA } from '../data/categoriasPadrao';
 import { efeitoTransacao } from './contas';
 import { dataValida } from './date';
 import { novoId, proximoTempo } from './id';
+import { primeiraRegra } from './regras';
 import { parseValor } from './money';
-import { DESCRICAO_MAX, normalizarTexto, validarTransacao } from './transacoes';
+import { comTags, DESCRICAO_MAX, normalizarTexto, validarTransacao } from './transacoes';
 import {
   falha,
   ok,
@@ -226,11 +227,18 @@ export function marcarDuplicatas(linhas: LinhaInterpretada[], estado: AppState, 
   return duplicadas;
 }
 
+/** Tags da primeira regra ativa que casa com a linha (vazio se nenhuma casar). */
+export function sugerirTags(estado: AppState, descricao: string, tipo: TipoMovimento): string[] {
+  return primeiraRegra(estado, descricao, tipo)?.tags ?? [];
+}
+
 /**
- * Reutiliza a categoria de uma transação anterior com a mesma descrição normalizada;
+ * Sugere a categoria da primeira regra ativa que casar; senão reutiliza a categoria de uma transação anterior com a mesma descrição normalizada;
  * sem histórico, usa "Outros" do tipo correspondente.
  */
 export function sugerirCategoria(estado: AppState, descricao: string, tipo: TipoMovimento): string | undefined {
+  const regra = primeiraRegra(estado, descricao, tipo);
+  if (regra) return regra.categoriaId;
   const ativas = new Map(estado.categorias.filter((c) => !c.arquivada && c.tipo === tipo).map((c) => [c.id, c]));
   const alvo = normalizarTexto(descricao);
   if (alvo) {
@@ -252,6 +260,7 @@ export interface ItemImportacao {
   valor: Centavos;
   tipo: TipoMovimento;
   categoriaId: string;
+  tags?: string[];
 }
 
 /** Grava todos os itens de uma vez ou nenhum: qualquer item inválido cancela a importação inteira. */
@@ -268,7 +277,7 @@ export function importarTransacoes(
   for (const item of itens) {
     const v = validarTransacao(estado, { contaId, ...item });
     if (!v.ok) return falha(`Linha de ${item.data} ("${item.descricao}"): ${v.erro}`);
-    novas.push({ ...v.valor, id: novoId(), criadaEm: proximoTempo(), importacaoId });
+    novas.push(comTags({ ...v.valor, id: novoId(), criadaEm: proximoTempo(), importacaoId }));
   }
   const importacao: Importacao = { id: importacaoId, data: hoje, contaId, transacaoIds: novas.map((t) => t.id) };
   return ok({

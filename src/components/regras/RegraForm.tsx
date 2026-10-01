@@ -1,0 +1,81 @@
+import { useState, type FormEvent } from 'react';
+import { MODOS_PADRAO, PADRAO_MAX, type DadosRegra } from '../../domain/regras';
+import { formatarTags, parseTags, TAG_TAMANHO_MAX, TAGS_MAX } from '../../domain/tags';
+import type { AppState, ModoPadrao, RegraCategoria, Resultado, TipoMovimento } from '../../domain/types';
+import { Alerta, Botao, CampoSelect, CampoTexto } from '../ui';
+
+interface Props {
+  estado: AppState;
+  inicial?: RegraCategoria;
+  onSalvar: (dados: DadosRegra) => Resultado<void>;
+  onCancelar: () => void;
+}
+
+type Erros = Partial<Record<'padrao' | 'categoriaId' | 'tags' | 'geral', string>>;
+
+export function RegraForm({ estado, inicial, onSalvar, onCancelar }: Props) {
+  const [padrao, setPadrao] = useState(inicial?.padrao ?? '');
+  const [modo, setModo] = useState<ModoPadrao>(inicial?.modo ?? 'contem');
+  const [tipo, setTipo] = useState<TipoMovimento>(inicial?.tipo ?? 'despesa');
+  const [categoriaId, setCategoriaId] = useState(inicial?.categoriaId ?? '');
+  const [tags, setTags] = useState(formatarTags(inicial?.tags));
+  const [erros, setErros] = useState<Erros>({});
+
+  const categorias = estado.categorias.filter((c) => c.tipo === tipo && (!c.arquivada || c.id === inicial?.categoriaId));
+
+  const trocarTipo = (novo: TipoMovimento) => {
+    setTipo(novo);
+    setCategoriaId('');
+  };
+
+  const enviar = (e: FormEvent) => {
+    e.preventDefault();
+    const r = onSalvar({ padrao, modo, tipo, categoriaId, tags: parseTags(tags) });
+    if (!r.ok) setErros(r.campo ? { [r.campo]: r.erro } : { geral: r.erro });
+  };
+
+  return (
+    <form onSubmit={enviar} noValidate aria-label={inicial ? 'Editar regra' : 'Nova regra'} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <CampoSelect label="Condição" value={modo} onChange={(e) => setModo(e.target.value as ModoPadrao)}>
+        {MODOS_PADRAO.map((m) => (
+          <option key={m.valor} value={m.valor}>
+            {m.rotulo}
+          </option>
+        ))}
+      </CampoSelect>
+      <CampoTexto label="Texto da descrição" value={padrao} onChange={(e) => setPadrao(e.target.value)} erro={erros.padrao} maxLength={PADRAO_MAX} autoComplete="off" dica="Sem diferenciar maiúsculas nem acentos." />
+      <CampoSelect label="Tipo" value={tipo} onChange={(e) => trocarTipo(e.target.value as TipoMovimento)}>
+        <option value="despesa">Despesa</option>
+        <option value="receita">Receita</option>
+      </CampoSelect>
+      <CampoSelect label="Categoria de destino" value={categoriaId} onChange={(e) => setCategoriaId(e.target.value)} erro={erros.categoriaId}>
+        <option value="">Selecione…</option>
+        {categorias.map((c) => (
+          <option key={c.id} value={c.id}>
+            {c.nome}
+            {c.arquivada ? ' (arquivada)' : ''}
+          </option>
+        ))}
+      </CampoSelect>
+      <CampoTexto
+        label="Tags da regra"
+        value={tags}
+        onChange={(e) => setTags(e.target.value)}
+        erro={erros.tags}
+        dica={`Opcional, separadas por vírgula (até ${TAGS_MAX}, ${TAG_TAMANHO_MAX} caracteres cada).`}
+        autoComplete="off"
+      />
+      {erros.geral ? (
+        <div className="sm:col-span-2 lg:col-span-3">
+          <Alerta>{erros.geral}</Alerta>
+        </div>
+      ) : null}
+      <div className="flex gap-2 sm:col-span-2 lg:col-span-3">
+        <Botao type="submit">{inicial ? 'Salvar regra' : 'Adicionar regra'}</Botao>
+        <Botao variante="secundario" onClick={onCancelar}>
+          Cancelar
+        </Botao>
+      </div>
+    </form>
+  );
+}

@@ -8,6 +8,7 @@ import { Alerta, Botao, Cartao, EstadoVazio, TituloPagina, Valor } from '../comp
 import { excluirParcela } from '../domain/cartoes';
 import { formatarData, hojeISO, mesDe, primeiroDia, ultimoDia } from '../domain/date';
 import { formatarMoeda } from '../domain/money';
+import { formatarTags } from '../domain/tags';
 import {
   criarTransacao,
   editarTransacao,
@@ -186,6 +187,7 @@ export function TransacoesPage() {
                           {formatarData(t.data)} · {cat?.nome ?? 'Sem categoria'}
                           {cat?.arquivada ? ' (arquivada)' : ''} · {nomeConta.get(t.contaId) ?? 'Conta removida'}
                         </p>
+                        {t.tags?.length ? <p className="text-xs text-slate-600">Tags: {formatarTags(t.tags)}</p> : null}
                       </div>
                       <div className="flex flex-wrap items-center gap-2">
                         <Valor centavos={efeito} texto={`${efeito > 0 ? '+' : ''}${formatarMoeda(efeito)}`} />
