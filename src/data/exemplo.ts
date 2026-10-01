@@ -153,5 +153,19 @@ export function gerarExemplo(hoje: string): AppState {
       { id: 'ex-regra-streaming', padrao: 'streaming', modo: 'igual', tipo: 'despesa', categoriaId: 'cat-lazer', tags: [], ativa: true },
     ],
     investimentos,
+    dividas: [
+      {
+        id: 'ex-divida-notebook',
+        nome: 'Financiamento do notebook',
+        tipo: 'devo',
+        principal: 360000,
+        taxaBp: 199,
+        parcelas: 12,
+        primeiraParcela: dataNoMes(somarMeses(mesAtual, -2), 10),
+        sistema: 'price',
+        pagamentos: [],
+        criadaEm: 1,
+      },
+    ],
   };
 }

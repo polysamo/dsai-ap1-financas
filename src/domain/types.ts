@@ -172,6 +172,31 @@ export interface Ativo {
   criadoEm: number;
 }
 
+export type TipoDivida = 'devo' | 'emprestei';
+export type SistemaAmortizacao = 'price' | 'sac';
+
+/** Pagamento de dívida; sem `parcela` é uma amortização extra. */
+export interface PagamentoDivida {
+  id: string;
+  data: DataISO;
+  valor: Centavos;
+  parcela?: number;
+}
+
+/** Dívida ou empréstimo concedido; `taxaBp` é a taxa mensal em centésimos de ponto percentual (199 = 1,99%). */
+export interface Divida {
+  id: string;
+  nome: string;
+  tipo: TipoDivida;
+  principal: Centavos;
+  taxaBp: number;
+  parcelas: number;
+  primeiraParcela: DataISO;
+  sistema: SistemaAmortizacao;
+  pagamentos: PagamentoDivida[];
+  criadaEm: number;
+}
+
 export interface AppState {
   schemaVersion: number;
   contas: Conta[];
@@ -186,6 +211,7 @@ export interface AppState {
   agenda: Agendamento[];
   regras: RegraCategoria[];
   investimentos: Ativo[];
+  dividas: Divida[];
 }
 
 export type Resultado<T> = { ok: true; valor: T } | { ok: false; erro: string; campo?: string };

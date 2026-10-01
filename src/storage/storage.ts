@@ -21,6 +21,7 @@ export function estadoInicial(): AppState {
     agenda: [],
     regras: [],
     investimentos: [],
+    dividas: [],
   };
 }
 
