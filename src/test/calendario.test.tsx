@@ -233,6 +233,8 @@ describe('calendário: tela', () => {
   it('critério 1 e 2: o formulário mostra o erro junto ao campo e cria a série pela tela', async () => {
     const usuario = userEvent.setup();
     const { store } = renderizarApp('/calendario', base());
+    expect(screen.queryByLabelText('Valor do lançamento')).not.toBeInTheDocument();
+    await usuario.click(screen.getByRole('button', { name: 'Novo lançamento' }));
     await usuario.click(screen.getByRole('button', { name: 'Adicionar lançamento' }));
     expect(screen.getByRole('alert')).toHaveTextContent('valor válido');
     await usuario.type(screen.getByLabelText('Valor do lançamento'), '350,00');
@@ -249,7 +251,7 @@ describe('calendário: tela', () => {
     const agenda = store.getSnapshot().estado.agenda;
     expect(agenda.map((a) => a.valor)).toEqual([35000, 35000, 35000]);
     expect(agenda[2].descricao).toBe('Plano de saúde (3/3)');
-    expect(screen.getByLabelText('Descrição do lançamento')).toHaveValue('');
+    expect(screen.queryByLabelText('Descrição do lançamento')).not.toBeInTheDocument();
   });
 
   it('critérios 7, 8 e 10: marca como pago pela tela, mostra Pago e reabre', async () => {

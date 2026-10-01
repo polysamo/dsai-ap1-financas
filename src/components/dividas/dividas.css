@@ -49,3 +49,18 @@
 .dividas-badge-atrasada { background: var(--cor-perigo-suave); color: var(--cor-perigo); }
 .dividas-badge-pendente { background: var(--cor-superficie-alt); color: var(--cor-texto-suave); }
 .dividas-restam { margin-left: var(--esp-1); font-size: var(--texto-xs); color: var(--cor-texto-suave); }
+
+/* Redesenho: lista agrupada, ações no cabeçalho, simulador comparativo. */
+.dividas-acoes { display: flex; flex-wrap: wrap; gap: var(--esp-2); }
+.dividas-grupos { display: grid; gap: var(--esp-3); width: 100%; min-width: 0; }
+.dividas-grupo-titulo { margin: 0 0 var(--esp-2); font-size: var(--texto-xs); font-weight: 600; text-transform: uppercase; color: var(--cor-texto-suave); }
+.dividas-lista { display: grid; gap: var(--esp-2); margin: 0; padding: 0; list-style: none; }
+.dividas-linha { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0 var(--esp-3); width: 100%; text-align: left; padding: var(--esp-2) var(--esp-3); border: 1px solid var(--cor-borda); border-radius: var(--raio-pequeno); background: var(--cor-superficie); color: var(--cor-texto); cursor: pointer; font: inherit; }
+.dividas-linha-ativa { border-color: var(--cor-primaria); background: var(--cor-primaria-suave); }
+.dividas-linha-nome { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dividas-linha-saldo { font-size: var(--texto-lg); font-weight: 700; }
+.dividas-linha-meta { grid-column: 1 / -1; font-size: var(--texto-xs); color: var(--cor-texto-suave); }
+.dividas-simulacao { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.dividas-simulacao-dados { grid-template-columns: minmax(0, 1fr); }
+.dividas-simulacao-dados dd { font-weight: 600; text-align: left; margin-bottom: var(--esp-1); }
+.dividas-form-3 { grid-template-columns: minmax(0, 1fr); }

@@ -200,7 +200,8 @@ describe('dívidas: tela (critérios 1, 6, 8, 10 a 14)', () => {
     const user = userEvent.setup();
     renderizarApp('/dividas');
     expect(screen.getByText('Nenhuma dívida cadastrada')).toBeInTheDocument();
-    expect(screen.getByRole('form', { name: 'Simulador' })).toBeInTheDocument();
+    expect(screen.queryByRole('form', { name: 'Nova dívida' })).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Nova dívida' }));
 
     const form = within(screen.getByRole('form', { name: 'Nova dívida' }));
     await user.click(form.getByRole('button', { name: 'Cadastrar dívida' }));
@@ -273,6 +274,7 @@ describe('dívidas: tela (critérios 1, 6, 8, 10 a 14)', () => {
   it('critério 11: o simulador mostra Price e SAC lado a lado, recusa erros e não grava', async () => {
     const user = userEvent.setup();
     renderizarApp('/dividas');
+    await user.click(screen.getByRole('button', { name: 'Simulador Price x SAC' }));
     const form = within(screen.getByRole('form', { name: 'Simulador' }));
     await user.click(form.getByRole('button', { name: 'Simular' }));
     expect(await form.findByRole('alert')).toHaveTextContent('Informe um valor maior que zero.');
