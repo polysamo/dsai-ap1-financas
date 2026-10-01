@@ -3,6 +3,7 @@ import { FalhaCarregamento } from './components/FalhaCarregamento';
 import { Layout } from './components/Layout';
 import { ContasPage } from './pages/ContasPage';
 import { DadosPage } from './pages/DadosPage';
+import { ImportarCsvPage } from './pages/ImportarCsvPage';
 import { MetasPage } from './pages/MetasPage';
 import { OrcamentoPage } from './pages/OrcamentoPage';
 import { TransacoesPage } from './pages/TransacoesPage';
@@ -20,6 +21,7 @@ export function AppRoutes() {
         <Route path="/contas" element={<ContasPage />} />
         <Route path="/orcamento" element={<OrcamentoPage />} />
         <Route path="/metas" element={<MetasPage />} />
+        <Route path="/importar" element={<ImportarCsvPage />} />
         <Route path="/dados" element={<DadosPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
