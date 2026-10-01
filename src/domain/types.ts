@@ -114,6 +114,22 @@ export interface PagamentoFatura {
   contaOrigemId: string;
 }
 
+/** Lançamento agendado (conta a pagar ou a receber); só vira transação quando é pago. */
+export interface Agendamento {
+  id: string;
+  descricao: string;
+  tipo: TipoMovimento;
+  valor: Centavos;
+  vencimento: DataISO;
+  categoriaId: string;
+  contaId?: string;
+  /** Presente nos lançamentos gerados por recorrência mensal. */
+  serie?: { grupoId: string; numero: number; total: number };
+  pagoEm?: DataISO;
+  transacaoId?: string;
+  criadoEm: number;
+}
+
 export interface AppState {
   schemaVersion: number;
   contas: Conta[];
@@ -125,6 +141,7 @@ export interface AppState {
   mapeamentosCsv: Record<string, MapeamentoCsv>;
   importacoes: Importacao[];
   pagamentosFatura: PagamentoFatura[];
+  agenda: Agendamento[];
 }
 
 export type Resultado<T> = { ok: true; valor: T } | { ok: false; erro: string; campo?: string };

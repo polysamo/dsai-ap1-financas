@@ -130,5 +130,9 @@ export function gerarExemplo(hoje: string): AppState {
     mapeamentosCsv: {},
     importacoes: [],
     pagamentosFatura: [],
+    agenda: [
+      { id: 'ex-ag-luz', descricao: 'Conta de luz', tipo: 'despesa', valor: 18990, vencimento: dataNoMes(somarMeses(mesAtual, 1), 12), categoriaId: 'cat-moradia', contaId: ID_CORRENTE, criadoEm: 1 },
+      { id: 'ex-ag-salario', descricao: 'Salário', tipo: 'receita', valor: 550000, vencimento: dataNoMes(somarMeses(mesAtual, 1), 5), categoriaId: 'cat-salario', contaId: ID_CORRENTE, criadoEm: 2 },
+    ],
   };
 }
