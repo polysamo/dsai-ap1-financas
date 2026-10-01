@@ -4,6 +4,7 @@ import { hojeISO } from '../../domain/date';
 import { parseValor } from '../../domain/money';
 import type { Categoria, Conta, Resultado, TipoMovimento } from '../../domain/types';
 import { Alerta, Botao, CampoSelect, CampoTexto } from '../ui';
+import './agenda.css';
 
 interface Props {
   categorias: Categoria[];
@@ -47,7 +48,7 @@ export function AgendamentoForm({ categorias, contas, onSalvar }: Props) {
   };
 
   return (
-    <form onSubmit={enviar} noValidate aria-label="Novo lançamento" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <form onSubmit={enviar} noValidate aria-label="Novo lançamento" className="agenda-form agenda-form-4">
       <CampoSelect
         label="Tipo do lançamento"
         value={tipo}
@@ -89,11 +90,11 @@ export function AgendamentoForm({ categorias, contas, onSalvar }: Props) {
         dica="1 cria só este lançamento."
       />
       {erros.geral ? (
-        <div className="sm:col-span-2 lg:col-span-4">
+        <div className="agenda-form-linha">
           <Alerta>{erros.geral}</Alerta>
         </div>
       ) : null}
-      <div className="sm:col-span-2 lg:col-span-4">
+      <div className="agenda-form-linha">
         <Botao type="submit">Adicionar lançamento</Botao>
       </div>
     </form>

@@ -1,0 +1,51 @@
+/* Dívidas e simulador: CSS puro com tokens de design. */
+.dividas-pagina { display: grid; gap: var(--esp-4); }
+.dividas-texto-suave { margin: 0; font-size: var(--texto-sm); color: var(--cor-texto-suave); }
+.dividas-espaco-baixo { margin-bottom: var(--esp-4); }
+.dividas-rotulo { color: var(--cor-texto-suave); }
+.dividas-num { font-variant-numeric: tabular-nums; }
+.dividas-destaque { font-size: var(--texto-lg); font-weight: 700; }
+.dividas-direita { text-align: right; }
+
+.dividas-form { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--esp-3); }
+.dividas-form-linha { grid-column: 1 / -1; }
+@media (min-width: 640px) {
+  .dividas-form-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dividas-form-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+.dividas-seletor { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--esp-3); }
+.dividas-seletor-campo { width: 100%; }
+@media (min-width: 640px) { .dividas-seletor-campo { width: 20rem; } }
+.dividas-termos { margin: var(--esp-3) 0 0; font-size: var(--texto-sm); color: var(--cor-texto-suave); }
+
+.dividas-pagamentos { margin: 0 0 var(--esp-4); padding: 0; list-style: none; }
+.dividas-pagamento { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--esp-2); padding: var(--esp-2) 0; font-size: var(--texto-sm); }
+.dividas-pagamento + .dividas-pagamento { border-top: 1px solid var(--cor-borda); }
+
+.dividas-resumo { display: grid; gap: var(--esp-3); }
+.dividas-resumo-grade { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--esp-3); margin: 0; font-size: var(--texto-sm); }
+.dividas-resumo-grade dd { margin: 0; overflow-wrap: anywhere; }
+@media (min-width: 640px) { .dividas-resumo-grade { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .dividas-resumo-grade { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+.dividas-simulacao { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--esp-3); margin-top: var(--esp-4); }
+@media (min-width: 640px) { .dividas-simulacao { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.dividas-simulacao-cartao { border: 1px solid var(--cor-borda); border-radius: var(--raio-pequeno); padding: var(--esp-3); }
+.dividas-simulacao-titulo { margin: 0 0 var(--esp-2); font-weight: 600; color: var(--cor-texto); }
+.dividas-simulacao-dados { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--esp-1); margin: 0; font-size: var(--texto-sm); }
+.dividas-simulacao-dados dd { margin: 0; }
+
+/* A tabela rola dentro do contêiner em telas estreitas. */
+.dividas-tabela-rolagem { overflow-x: auto; max-width: 100%; }
+.dividas-tabela { width: 100%; min-width: 40rem; border-collapse: collapse; font-size: var(--texto-sm); }
+.dividas-tabela th, .dividas-tabela td { padding: var(--esp-2) var(--esp-2) var(--esp-2) 0; text-align: left; }
+.dividas-tabela thead tr { border-bottom: 1px solid var(--cor-borda-forte); color: var(--cor-texto-suave); }
+.dividas-tabela tbody tr { border-bottom: 1px solid var(--cor-borda); font-variant-numeric: tabular-nums; }
+.dividas-tabela .dividas-direita { text-align: right; }
+.dividas-badge { display: inline-block; border-radius: var(--raio-total); padding: 0.125rem var(--esp-2); font-size: var(--texto-xs); font-weight: 600; }
+.dividas-badge-paga { background: var(--cor-sucesso-suave); color: var(--cor-sucesso); }
+.dividas-badge-parcial { background: var(--cor-info-suave); color: var(--cor-info); }
+.dividas-badge-atrasada { background: var(--cor-perigo-suave); color: var(--cor-perigo); }
+.dividas-badge-pendente { background: var(--cor-superficie-alt); color: var(--cor-texto-suave); }
+.dividas-restam { margin-left: var(--esp-1); font-size: var(--texto-xs); color: var(--cor-texto-suave); }

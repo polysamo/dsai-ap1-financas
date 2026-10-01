@@ -1,0 +1,60 @@
+/* Agenda / Calendário: CSS puro com tokens de design. */
+.agenda-pagina { display: grid; gap: var(--esp-4); }
+
+.agenda-alertas { display: grid; gap: var(--esp-2); }
+.agenda-texto-suave { margin: 0; font-size: var(--texto-sm); color: var(--cor-texto-suave); }
+.agenda-num { font-variant-numeric: tabular-nums; }
+
+.agenda-lista { margin: 0; padding: 0; list-style: none; }
+.agenda-item {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--esp-2); padding: var(--esp-2) 0; font-size: var(--texto-sm);
+}
+.agenda-item + .agenda-item { border-top: 1px solid var(--cor-borda); }
+.agenda-item-texto { min-width: 0; }
+.agenda-item-titulo { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; color: var(--cor-texto); }
+.agenda-item-detalhe { font-size: var(--texto-xs); color: var(--cor-texto-suave); }
+.agenda-item-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: var(--esp-2); }
+
+.agenda-proximos { margin: 0; padding: 0; list-style: none; font-size: var(--texto-sm); }
+.agenda-proximo { display: flex; justify-content: space-between; gap: var(--esp-2); padding: var(--esp-1) 0; }
+.agenda-proximo + .agenda-proximo { border-top: 1px solid var(--cor-borda); }
+
+.agenda-form { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--esp-3); }
+.agenda-form-linha { grid-column: 1 / -1; }
+.agenda-form-botoes { display: flex; flex-wrap: wrap; gap: var(--esp-2); }
+@media (min-width: 640px) {
+  .agenda-form-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .agenda-form-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .agenda-form-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.agenda-navegacao { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--esp-3); }
+.agenda-navegacao-mes { width: 11rem; max-width: 100%; }
+
+.agenda-resumo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--esp-3); margin: 0; font-size: var(--texto-sm); }
+.agenda-resumo > div { min-width: 0; }
+.agenda-resumo-rotulo { color: var(--cor-texto-suave); }
+.agenda-resumo-valor { margin: 0; font-size: var(--texto-lg); font-weight: 700; overflow-wrap: anywhere; }
+@media (min-width: 1024px) { .agenda-resumo { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+.agenda-badge { display: inline-block; border-radius: var(--raio-total); padding: 0.125rem var(--esp-2); font-size: var(--texto-xs); font-weight: 600; }
+.agenda-badge-pago { background: var(--cor-sucesso-suave); color: var(--cor-sucesso); }
+.agenda-badge-atrasado { background: var(--cor-perigo-suave); color: var(--cor-perigo); }
+.agenda-badge-pendente { background: var(--cor-aviso-suave); color: var(--cor-aviso); }
+
+/* Grade mensal: rola dentro do próprio contêiner em telas estreitas (sem rolagem da página). */
+.agenda-cal-rolagem { overflow-x: auto; max-width: 100%; }
+.agenda-cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--esp-1); min-width: 42rem; font-size: var(--texto-xs); }
+.agenda-cal-semana { padding: 0 var(--esp-1); text-align: center; font-weight: 600; text-transform: uppercase; color: var(--cor-texto-suave); }
+.agenda-cal-dia { min-height: 5rem; min-width: 0; border: 1px solid var(--cor-borda); border-radius: var(--raio-pequeno); padding: var(--esp-1); background: var(--cor-superficie); }
+.agenda-cal-dia-hoje { border-color: var(--cor-primaria); background: var(--cor-primaria-suave); }
+.agenda-cal-numero { display: block; font-weight: 600; color: var(--cor-texto); }
+.agenda-cal-lista { display: grid; gap: 0.125rem; margin: 0; padding: 0; list-style: none; }
+.agenda-cal-item { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-left: 4px solid; border-radius: 0.25rem; padding: 0 var(--esp-1); background: var(--cor-superficie-alt); color: var(--cor-texto); }
+.agenda-cal-item-pago { border-left-color: var(--cor-sucesso); }
+.agenda-cal-item-atrasado { border-left-color: var(--cor-perigo); }
+.agenda-cal-item-pendente { border-left-color: var(--cor-aviso); }
+.agenda-cal-situacao { color: var(--cor-texto-suave); }

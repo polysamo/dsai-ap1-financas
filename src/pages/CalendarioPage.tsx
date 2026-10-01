@@ -20,6 +20,7 @@ import {
 import { hojeISO, mesValido, nomeMes, somarMeses } from '../domain/date';
 import type { Agendamento } from '../domain/types';
 import { useEstado, useStore } from '../state/store';
+import '../components/agenda/agenda.css';
 
 export function CalendarioPage() {
   const store = useStore();
@@ -45,7 +46,7 @@ export function CalendarioPage() {
   return (
     <div>
       <TituloPagina>Calendário</TituloPagina>
-      <div className="space-y-4">
+      <div className="agenda-pagina">
         {erro ? <Alerta>{erro}</Alerta> : null}
 
         <Cartao titulo="Vencimentos próximos">
@@ -57,11 +58,11 @@ export function CalendarioPage() {
         </Cartao>
 
         <Cartao>
-          <div className="flex flex-wrap items-end gap-3">
+          <div className="agenda-navegacao">
             <Botao variante="secundario" onClick={() => irPara(somarMeses(mes, -1))}>
               Mês anterior
             </Botao>
-            <div className="w-44">
+            <div className="agenda-navegacao-mes">
               <CampoTexto label="Mês" type="month" value={mes} onChange={(e) => irPara(e.target.value)} />
             </div>
             <Botao variante="secundario" onClick={() => irPara(somarMeses(mes, 1))}>
@@ -102,7 +103,7 @@ export function CalendarioPage() {
           {estado.agenda.length === 0 ? (
             <EstadoVazio titulo="Nenhum lançamento agendado">Cadastre contas a pagar e a receber acima para acompanhar os vencimentos.</EstadoVazio>
           ) : itens.length === 0 ? (
-            <p className="text-sm text-slate-600">Nenhum lançamento com vencimento neste mês.</p>
+            <p className="agenda-texto-suave">Nenhum lançamento com vencimento neste mês.</p>
           ) : (
             <AgendaLista
               itens={itens}

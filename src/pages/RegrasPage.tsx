@@ -15,6 +15,7 @@ import {
 } from '../domain/regras';
 import type { RegraCategoria, Resultado } from '../domain/types';
 import { useEstado, useStore } from '../state/store';
+import '../components/regras/regras.css';
 
 type Mensagem = { tipo: 'erro' | 'sucesso'; texto: string };
 
@@ -52,8 +53,8 @@ export function RegrasPage() {
   return (
     <div>
       <TituloPagina acoes={!criando ? <Botao onClick={() => { setCriando(true); setEditandoId(null); }}>Nova regra</Botao> : undefined}>Regras</TituloPagina>
-      <div className="space-y-4">
-        <p className="text-sm text-slate-700">
+      <div className="regras-pagina">
+        <p className="regras-intro">
           Regras sugerem a categoria (e tags) de transações importadas. A primeira regra ativa da lista que casar com a descrição vence.
         </p>
         {mensagem ? <Alerta tipo={mensagem.tipo}>{mensagem.texto}</Alerta> : null}
@@ -85,7 +86,7 @@ export function RegrasPage() {
           <Cartao
             titulo="Regras em ordem de prioridade"
             acoes={
-              <div className="w-64">
+              <div className="regras-escopo">
                 <CampoSelect label="Escopo da pré-visualização e da aplicação" value={escopo} onChange={(e) => setEscopo(e.target.value as EscopoAplicacao)}>
                   <option value="outros">Somente em Outros</option>
                   <option value="todas">Todas as categorias</option>
@@ -93,10 +94,10 @@ export function RegrasPage() {
               </div>
             }
           >
-            <ul className="divide-y divide-slate-200" aria-label="Lista de regras">
+            <ul className="regras-lista" aria-label="Lista de regras">
               {estado.regras.map((r, i) =>
                 editandoId === r.id ? (
-                  <li key={r.id} className="py-3">
+                  <li key={r.id} className="regras-item-edicao">
                     <RegraForm
                       estado={estado}
                       inicial={r}

@@ -16,6 +16,7 @@ import { ConfirmDialog } from '../ConfirmDialog';
 import { Alerta, Botao, Cartao } from '../ui';
 import { LancamentoForm } from './LancamentoForm';
 import { Rentabilidade } from './Rentabilidade';
+import './investimentos.css';
 
 type Painel = 'movimento' | 'marcacao' | null;
 type Operacao = (estado: AppState) => ReturnType<typeof excluirAtivo>;
@@ -48,32 +49,32 @@ export function AtivoCard({ ativo, hoje }: { ativo: Ativo; hoje: string }) {
     <Cartao
       titulo={`${ativo.nome} · ${rotuloClasse(ativo.classe)}`}
       acoes={
-        <div className="flex flex-wrap gap-2">
+        <div className="invest-acoes">
           <Botao variante="secundario" onClick={() => setPainel('movimento')} aria-label={`Registrar movimento de ${ativo.nome}`}>Registrar movimento</Botao>
           <Botao variante="secundario" onClick={() => setPainel('marcacao')} aria-label={`Marcar valor atual de ${ativo.nome}`}>Marcar valor atual</Botao>
           <Botao variante="perigo" onClick={() => setConfirmando(true)} aria-label={`Excluir ativo ${ativo.nome}`}>Excluir</Botao>
         </div>
       }
     >
-      <dl className="grid gap-3 sm:grid-cols-3" aria-label={`Desempenho de ${ativo.nome}`}>
+      <dl className="invest-metricas" aria-label={`Desempenho de ${ativo.nome}`}>
         <div>
-          <dt className="text-sm text-slate-600">Investido líquido</dt>
-          <dd className="font-semibold tabular-nums" data-testid="ativo-investido">{formatarMoeda(d.investido)}</dd>
+          <dt className="invest-rotulo">Investido líquido</dt>
+          <dd className="invest-num invest-forte" data-testid="ativo-investido">{formatarMoeda(d.investido)}</dd>
         </div>
         <div>
-          <dt className="text-sm text-slate-600">Valor atual</dt>
-          <dd className="font-semibold tabular-nums" data-testid="ativo-atual">{formatarMoeda(d.valorAtual)}</dd>
+          <dt className="invest-rotulo">Valor atual</dt>
+          <dd className="invest-num invest-forte" data-testid="ativo-atual">{formatarMoeda(d.valorAtual)}</dd>
         </div>
         <div>
-          <dt className="text-sm text-slate-600">Rentabilidade</dt>
+          <dt className="invest-rotulo">Rentabilidade</dt>
           <dd><Rentabilidade desempenho={d} data-testid="ativo-rentabilidade" /></dd>
         </div>
       </dl>
 
-      {erro ? <div className="mt-3"><Alerta>{erro}</Alerta></div> : null}
+      {erro ? <div className="invest-espaco-cima"><Alerta>{erro}</Alerta></div> : null}
 
       {painel ? (
-        <div className="mt-4 border-t border-slate-200 pt-4">
+        <div className="invest-painel">
           {painel === 'movimento' ? (
             <LancamentoForm modo="movimento" onCancelar={() => setPainel(null)} onSalvar={(dados) => salvar((s) => registrarMovimento(s, ativo.id, dados, hoje))} />
           ) : (
@@ -83,25 +84,25 @@ export function AtivoCard({ ativo, hoje }: { ativo: Ativo; hoje: string }) {
       ) : null}
 
       {movimentos.length + marcacoes.length > 0 ? (
-        <details className="mt-3 text-sm">
-          <summary className="cursor-pointer text-emerald-800">Histórico de {ativo.nome}</summary>
-          <ul className="mt-2 divide-y divide-slate-200">
+        <details className="invest-historico">
+          <summary className="invest-resumo-toggle">Histórico de {ativo.nome}</summary>
+          <ul className="invest-historico-lista">
             {movimentos.map((m) => (
-              <li key={m.id} className="flex items-center justify-between gap-2 py-1">
-                <span>{formatarData(m.data)} · {m.tipo === 'aporte' ? 'Aporte' : 'Resgate'} · <span className="tabular-nums">{formatarMoeda(m.valor)}</span></span>
+              <li key={m.id} className="invest-historico-item">
+                <span>{formatarData(m.data)} · {m.tipo === 'aporte' ? 'Aporte' : 'Resgate'} · <span className="invest-num">{formatarMoeda(m.valor)}</span></span>
                 <Botao variante="link" onClick={() => aplicar((s) => excluirMovimento(s, ativo.id, m.id))} aria-label={`Excluir ${m.tipo} de ${formatarData(m.data)} de ${ativo.nome}`}>Excluir</Botao>
               </li>
             ))}
             {marcacoes.map((m) => (
-              <li key={m.id} className="flex items-center justify-between gap-2 py-1">
-                <span>{formatarData(m.data)} · Valor de mercado · <span className="tabular-nums">{formatarMoeda(m.valor)}</span></span>
+              <li key={m.id} className="invest-historico-item">
+                <span>{formatarData(m.data)} · Valor de mercado · <span className="invest-num">{formatarMoeda(m.valor)}</span></span>
                 <Botao variante="link" onClick={() => aplicar((s) => excluirMarcacao(s, ativo.id, m.id))} aria-label={`Excluir marcação de ${formatarData(m.data)} de ${ativo.nome}`}>Excluir</Botao>
               </li>
             ))}
           </ul>
         </details>
       ) : (
-        <p className="mt-3 text-sm text-slate-600">Nenhum movimento ainda. Registre o primeiro aporte.</p>
+        <p className="invest-texto-suave invest-espaco-cima">Nenhum movimento ainda. Registre o primeiro aporte.</p>
       )}
 
       {confirmando ? (

@@ -4,6 +4,7 @@ import { parseValor } from '../../domain/money';
 import type { DadosMarcacao, DadosMovimento } from '../../domain/investimentos';
 import type { Resultado } from '../../domain/types';
 import { Alerta, Botao, CampoSelect, CampoTexto } from '../ui';
+import './investimentos.css';
 
 type Props =
   | { modo: 'movimento'; onSalvar: (d: DadosMovimento) => Resultado<void>; onCancelar: () => void }
@@ -28,7 +29,7 @@ export function LancamentoForm(props: Props) {
   };
 
   return (
-    <form onSubmit={enviar} noValidate aria-label={marcacao ? 'Marcar valor atual' : 'Registrar movimento'} className="grid gap-3 sm:grid-cols-3">
+    <form onSubmit={enviar} noValidate aria-label={marcacao ? 'Marcar valor atual' : 'Registrar movimento'} className="invest-form invest-form-3">
       {marcacao ? null : (
         <CampoSelect label="Tipo" value={tipo} onChange={(e) => setTipo(e.target.value as 'aporte' | 'resgate')} erro={erros.tipo}>
           <option value="aporte">Aporte</option>
@@ -37,8 +38,8 @@ export function LancamentoForm(props: Props) {
       )}
       <CampoTexto label={marcacao ? 'Valor de mercado' : 'Valor'} value={valor} onChange={(e) => setValor(e.target.value)} erro={erros.valor} inputMode="decimal" placeholder="0,00" />
       <CampoTexto label="Data" type="date" value={data} onChange={(e) => setData(e.target.value)} erro={erros.data} />
-      {erros.geral ? <div className="sm:col-span-3"><Alerta>{erros.geral}</Alerta></div> : null}
-      <div className="flex gap-2 sm:col-span-3">
+      {erros.geral ? <div className="invest-form-linha"><Alerta>{erros.geral}</Alerta></div> : null}
+      <div className="invest-form-linha invest-form-botoes">
         <Botao type="submit">{marcacao ? 'Salvar marcação' : 'Salvar movimento'}</Botao>
         <Botao variante="secundario" onClick={props.onCancelar}>Cancelar</Botao>
       </div>

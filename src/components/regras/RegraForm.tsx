@@ -3,6 +3,7 @@ import { MODOS_PADRAO, PADRAO_MAX, type DadosRegra } from '../../domain/regras';
 import { formatarTags, parseTags, TAG_TAMANHO_MAX, TAGS_MAX } from '../../domain/tags';
 import type { AppState, ModoPadrao, RegraCategoria, Resultado, TipoMovimento } from '../../domain/types';
 import { Alerta, Botao, CampoSelect, CampoTexto } from '../ui';
+import './regras.css';
 
 interface Props {
   estado: AppState;
@@ -35,7 +36,7 @@ export function RegraForm({ estado, inicial, onSalvar, onCancelar }: Props) {
   };
 
   return (
-    <form onSubmit={enviar} noValidate aria-label={inicial ? 'Editar regra' : 'Nova regra'} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <form onSubmit={enviar} noValidate aria-label={inicial ? 'Editar regra' : 'Nova regra'} className="regras-form">
       <CampoSelect label="Condição" value={modo} onChange={(e) => setModo(e.target.value as ModoPadrao)}>
         {MODOS_PADRAO.map((m) => (
           <option key={m.valor} value={m.valor}>
@@ -66,11 +67,11 @@ export function RegraForm({ estado, inicial, onSalvar, onCancelar }: Props) {
         autoComplete="off"
       />
       {erros.geral ? (
-        <div className="sm:col-span-2 lg:col-span-3">
+        <div className="regras-form-linha">
           <Alerta>{erros.geral}</Alerta>
         </div>
       ) : null}
-      <div className="flex gap-2 sm:col-span-2 lg:col-span-3">
+      <div className="regras-form-linha regras-form-botoes">
         <Botao type="submit">{inicial ? 'Salvar regra' : 'Adicionar regra'}</Botao>
         <Botao variante="secundario" onClick={onCancelar}>
           Cancelar
