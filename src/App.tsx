@@ -15,6 +15,7 @@ import { OrcamentoPage } from './pages/OrcamentoPage';
 import { RelatoriosPage } from './pages/RelatoriosPage';
 import { RegrasPage } from './pages/RegrasPage';
 import { TransacoesPage } from './pages/TransacoesPage';
+import { PatrimonioPage } from './pages/PatrimonioPage';
 import { useSnapshot } from './state/store';
 
 /** Rotas do app; separadas do roteador para poderem ser testadas com MemoryRouter. */
@@ -34,6 +35,7 @@ export function AppRoutes() {
         <Route path="/regras" element={<RegrasPage />} />
         <Route path="/investimentos" element={<InvestimentosPage />} />
         <Route path="/dividas" element={<DividasPage />} />
+        <Route path="/patrimonio" element={<PatrimonioPage />} />
         <Route path="/importar" element={<ImportarCsvPage />} />
         <Route path="/relatorios" element={<RelatoriosPage />} />
         <Route path="/configuracoes" element={<ConfiguracoesPage />} />

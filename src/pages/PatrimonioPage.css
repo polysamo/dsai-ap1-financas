@@ -1,0 +1,4 @@
+.patrim-pagina {
+  display: grid;
+  gap: var(--esp-4);
+}
