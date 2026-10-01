@@ -20,6 +20,7 @@ import { hojeISO } from '../domain/date';
 import type { MapeamentoCsv } from '../domain/types';
 import { lerArquivoBuffer } from '../lib/download';
 import { useEstado, useStore } from '../state/store';
+import './ImportarCsvPage.css';
 
 interface Resumo {
   importacaoId: string;
@@ -142,12 +143,12 @@ export function ImportarCsvPage() {
   return (
     <div>
       <TituloPagina>Importar CSV</TituloPagina>
-      <div className="space-y-4">
+      <div className="importar-pagina">
         {erro ? <Alerta>{erro}</Alerta> : null}
 
         {resumo ? (
           <Alerta tipo="sucesso">
-            <span className="flex flex-wrap items-center justify-between gap-2">
+            <span className="importar-resumo">
               <span data-testid="resumo">
                 Importação concluída: {resumo.importadas} importadas, {resumo.ignoradas} ignoradas, {resumo.comErro} com erro.
               </span>
@@ -159,12 +160,12 @@ export function ImportarCsvPage() {
         ) : null}
 
         {contasAtivas.length === 0 ? (
-          <EstadoVazio titulo="Nenhuma conta para receber a importação" acao={<Link to="/contas" className="font-medium text-emerald-800 underline">Criar uma conta</Link>}>
+          <EstadoVazio titulo="Nenhuma conta para receber a importação" acao={<Link to="/contas" className="importar-link">Criar uma conta</Link>}>
             As transações importadas precisam de uma conta de destino.
           </EstadoVazio>
         ) : (
           <Cartao titulo="1. Escolha o arquivo e a conta">
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="importar-escolha">
               <CampoSelect label="Conta de destino" value={contaEfetiva} onChange={(e) => setContaId(e.target.value)}>
                 {contasAtivas.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -179,9 +180,9 @@ export function ImportarCsvPage() {
                 }}
                 onDragLeave={() => setArrastando(false)}
                 onDrop={soltar}
-                className={`flex flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed p-4 text-center text-sm ${arrastando ? 'border-emerald-600 bg-emerald-50' : 'border-slate-300'}`}
+                className={`importar-soltar${arrastando ? ' importar-soltar--ativo' : ''}`}
               >
-                <p className="text-slate-700">Arraste um arquivo .csv aqui ou</p>
+                <p className="importar-soltar-texto">Arraste um arquivo .csv aqui ou</p>
                 <Botao variante="secundario" onClick={() => entrada.current?.click()}>
                   Selecionar arquivo
                 </Botao>
@@ -190,13 +191,13 @@ export function ImportarCsvPage() {
                   type="file"
                   accept=".csv,text/csv"
                   aria-label="Arquivo CSV"
-                  className="sr-only"
+                  className="importar-oculto"
                   onChange={(e) => {
                     void carregarArquivo(e.target.files?.[0]);
                     e.target.value = '';
                   }}
                 />
-                {nomeArquivo ? <p className="text-xs text-slate-600">Arquivo: {nomeArquivo}</p> : null}
+                {nomeArquivo ? <p className="importar-arquivo-nome">Arquivo: {nomeArquivo}</p> : null}
               </div>
             </div>
           </Cartao>
@@ -210,13 +211,13 @@ export function ImportarCsvPage() {
             <Cartao
               titulo="3. Revise e confirme"
               acoes={
-                <span className="text-sm text-slate-700" aria-live="polite" data-testid="contadores">
+                <span className="importar-contadores" aria-live="polite" data-testid="contadores">
                   {aImportar.length} a importar · {ignoradas} ignoradas · {comErro} com erro
                 </span>
               }
             >
               {linhas.length === 0 ? (
-                <p className="text-sm text-slate-600">Nenhuma linha de dados no arquivo.</p>
+                <p className="importar-vazio">Nenhuma linha de dados no arquivo.</p>
               ) : (
                 <CsvPrevia
                   linhas={linhas}
@@ -225,7 +226,7 @@ export function ImportarCsvPage() {
                   onCategoria={(i, c) => setCategoriasEscolhidas((s) => ({ ...s, [i]: c }))}
                 />
               )}
-              <div className="mt-4 flex flex-wrap gap-2">
+              <div className="importar-acoes">
                 <Botao disabled={aImportar.length === 0} onClick={confirmar}>
                   {aImportar.length === 1 ? 'Importar 1 transação' : `Importar ${aImportar.length} transações`}
                 </Botao>
@@ -239,7 +240,7 @@ export function ImportarCsvPage() {
 
         {!resumo && !linhasCsv && ultimaImportacao ? (
           <Cartao titulo="Última importação">
-            <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-slate-800">
+            <div className="importar-ultima">
               <span>
                 {ultimaImportacao.transacaoIds.length} transações em {ultimaImportacao.data.split('-').reverse().join('/')}.
               </span>

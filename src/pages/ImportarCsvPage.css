@@ -1,0 +1,15 @@
+.importar-pagina { display: flex; flex-direction: column; gap: var(--esp-4); }
+.importar-resumo { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--esp-2); }
+.importar-link { font-weight: 500; color: var(--cor-primaria); text-decoration: underline; }
+.importar-link:focus-visible { outline: 2px solid var(--cor-foco); outline-offset: 2px; }
+.importar-escolha { display: grid; grid-template-columns: 1fr; gap: var(--esp-3); }
+.importar-soltar { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--esp-2); padding: var(--esp-4); border: 2px dashed var(--cor-borda-forte); border-radius: var(--raio-pequeno); text-align: center; font-size: var(--texto-sm); }
+.importar-soltar--ativo { border-color: var(--cor-foco); background: var(--cor-primaria-suave); }
+.importar-soltar-texto { margin: 0; color: var(--cor-texto-suave); }
+.importar-arquivo-nome { margin: 0; font-size: var(--texto-xs); color: var(--cor-texto-mudo); overflow-wrap: anywhere; }
+.importar-oculto { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.importar-contadores { font-size: var(--texto-sm); color: var(--cor-texto-suave); }
+.importar-vazio { margin: 0; font-size: var(--texto-sm); color: var(--cor-texto-mudo); }
+.importar-acoes { display: flex; flex-wrap: wrap; gap: var(--esp-2); margin-top: var(--esp-4); }
+.importar-ultima { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--esp-2); font-size: var(--texto-sm); color: var(--cor-texto); }
+@media (min-width: 640px) { .importar-escolha { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

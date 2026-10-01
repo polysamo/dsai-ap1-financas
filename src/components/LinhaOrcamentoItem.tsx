@@ -3,6 +3,7 @@ import type { EstadoOrcamento, LinhaOrcamento } from '../domain/orcamento';
 import { formatarMoeda, parseValor, valorParaCampo } from '../domain/money';
 import type { Resultado } from '../domain/types';
 import { Botao, CampoTexto, Valor } from './ui';
+import './LinhaOrcamentoItem.css';
 
 const ROTULO_ESTADO: Record<EstadoOrcamento, string> = {
   normal: 'Dentro do limite',
@@ -13,15 +14,15 @@ const ROTULO_ESTADO: Record<EstadoOrcamento, string> = {
 const ICONE_ESTADO: Record<EstadoOrcamento, string> = { normal: '✓', atencao: '!', estourado: '✕' };
 
 const COR_BARRA: Record<EstadoOrcamento, string> = {
-  normal: 'bg-emerald-600',
-  atencao: 'bg-amber-500',
-  estourado: 'bg-red-600',
+  normal: 'orcamento-barra--normal',
+  atencao: 'orcamento-barra--atencao',
+  estourado: 'orcamento-barra--estourado',
 };
 
 const COR_TEXTO: Record<EstadoOrcamento, string> = {
-  normal: 'text-emerald-800',
-  atencao: 'text-amber-800',
-  estourado: 'text-red-800',
+  normal: 'orcamento-estado--normal',
+  atencao: 'orcamento-estado--atencao',
+  estourado: 'orcamento-estado--estourado',
 };
 
 interface Props {
@@ -48,13 +49,13 @@ export function LinhaOrcamentoItem({ linha, onDefinir, onRemover }: Props) {
   };
 
   return (
-    <li className="py-3" data-testid={`orcamento-${categoria.id}`}>
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="min-w-0 font-medium text-slate-900">
+    <li className="orcamento-linha" data-testid={`orcamento-${categoria.id}`}>
+      <div className="orcamento-cabecalho">
+        <p className="orcamento-nome">
           {categoria.nome}
-          {categoria.arquivada ? <span className="ml-2 rounded bg-slate-200 px-1.5 py-0.5 text-xs font-normal text-slate-700">arquivada</span> : null}
+          {categoria.arquivada ? <span className="orcamento-selo">arquivada</span> : null}
         </p>
-        <div className="flex gap-2">
+        <div className="orcamento-acoes">
           <Botao
             variante="secundario"
             aria-label={`${limite === null ? 'Definir limite de' : 'Editar limite de'} ${categoria.nome}`}
@@ -75,11 +76,11 @@ export function LinhaOrcamentoItem({ linha, onDefinir, onRemover }: Props) {
       </div>
 
       {editando ? (
-        <form onSubmit={salvar} noValidate aria-label={`Limite de ${categoria.nome}`} className="mt-2 flex flex-wrap items-start gap-2">
-          <div className="min-w-[10rem] flex-1">
+        <form onSubmit={salvar} noValidate aria-label={`Limite de ${categoria.nome}`} className="orcamento-form">
+          <div className="orcamento-form-campo">
             <CampoTexto label={`Limite mensal de ${categoria.nome}`} value={texto} onChange={(e) => setTexto(e.target.value)} erro={erro} inputMode="decimal" placeholder="0,00" />
           </div>
-          <div className="flex gap-2 pt-6">
+          <div className="orcamento-form-acoes">
             <Botao type="submit">Salvar limite</Botao>
             <Botao variante="secundario" onClick={() => setEditando(false)}>
               Cancelar
@@ -89,31 +90,31 @@ export function LinhaOrcamentoItem({ linha, onDefinir, onRemover }: Props) {
       ) : null}
 
       {limite === null ? (
-        <p className="mt-1 text-sm text-slate-600">
+        <p className="orcamento-sem-limite">
           Sem limite definido · Gasto: <span data-testid="gasto">{formatarMoeda(gasto)}</span>
         </p>
       ) : (
-        <div className="mt-2 space-y-1">
+        <div className="orcamento-detalhe">
           <div
             role="progressbar"
             aria-label={`Consumo do orçamento de ${categoria.nome}`}
             aria-valuemin={0}
             aria-valuemax={100}
             aria-valuenow={Math.min(percentual ?? (gasto > 0 ? 100 : 0), 100)}
-            className="h-2.5 w-full overflow-hidden rounded-full bg-slate-200"
+            className="orcamento-trilho"
           >
-            <div className={`h-full ${COR_BARRA[estado!]}`} style={{ width: `${Math.min(percentual ?? (gasto > 0 ? 100 : 0), 100)}%` }} />
+            <div className={`orcamento-barra ${COR_BARRA[estado!]}`} style={{ width: `${Math.min(percentual ?? (gasto > 0 ? 100 : 0), 100)}%` }} />
           </div>
-          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-sm">
-            <span className={`font-medium ${COR_TEXTO[estado!]}`} data-testid="estado">
+          <div className="orcamento-resumo">
+            <span className={`orcamento-estado ${COR_TEXTO[estado!]}`} data-testid="estado">
               <span aria-hidden="true">{ICONE_ESTADO[estado!]} </span>
               {ROTULO_ESTADO[estado!]}
               {percentual !== null ? ` · ${percentual}%` : ''}
             </span>
-            <span className="text-slate-700">
+            <span className="orcamento-texto">
               Gasto <span data-testid="gasto">{formatarMoeda(gasto)}</span> de <span data-testid="limite">{formatarMoeda(limite)}</span>
             </span>
-            <span className="text-slate-700">
+            <span className="orcamento-texto">
               {restante! >= 0 ? 'Restante ' : 'Restante '}
               <Valor centavos={restante!} texto={formatarMoeda(restante!)} data-testid="restante" />
               {restante! < 0 ? (

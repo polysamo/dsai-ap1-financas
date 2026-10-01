@@ -1,0 +1,4 @@
+.metas-form { display: grid; grid-template-columns: 1fr; gap: var(--esp-3); }
+.metas-form-linha { grid-column: 1 / -1; }
+.metas-form-acoes { display: flex; flex-wrap: wrap; gap: var(--esp-2); grid-column: 1 / -1; }
+@media (min-width: 640px) { .metas-form { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

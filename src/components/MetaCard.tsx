@@ -18,6 +18,7 @@ import { useStore } from '../state/store';
 import { AporteForm } from './AporteForm';
 import { Alerta, Botao, Cartao, Valor } from './ui';
 import { MetaForm } from './MetaForm';
+import './MetaCard.css';
 
 type Modo = 'ver' | 'editar' | 'aportar' | 'historico';
 
@@ -70,18 +71,18 @@ export function MetaCard({ meta, hoje }: { meta: Meta; hoje: string }) {
   };
 
   return (
-    <Cartao className={arquivada ? 'opacity-80' : ''}>
+    <Cartao className={arquivada ? 'metas-cartao--arquivada' : ''}>
       <article aria-label={`Meta ${meta.nome}`}>
-        <div className="flex flex-wrap items-start justify-between gap-2">
-          <div className="min-w-0">
-            <h2 className="text-lg font-semibold text-slate-900">{meta.nome}</h2>
-            <p className="text-sm text-slate-600" data-testid="status">
+        <div className="metas-topo">
+          <div className="metas-identificacao">
+            <h2 className="metas-titulo">{meta.nome}</h2>
+            <p className="metas-status" data-testid="status">
               {textoStatus}
               {meta.prazo ? ` · Prazo ${formatarData(meta.prazo)}` : ' · Sem prazo'}
             </p>
           </div>
-          <p className="text-right text-sm text-slate-700">
-            <span className="text-lg font-bold text-slate-900" data-testid="acumulado">{formatarMoeda(total)}</span> de{' '}
+          <p className="metas-valores">
+            <span className="metas-acumulado" data-testid="acumulado">{formatarMoeda(total)}</span> de{' '}
             <span data-testid="alvo">{formatarMoeda(meta.valorAlvo)}</span>
           </p>
         </div>
@@ -92,11 +93,11 @@ export function MetaCard({ meta, hoje }: { meta: Meta; hoje: string }) {
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={Math.min(pct, 100)}
-          className="mt-3 h-3 w-full overflow-hidden rounded-full bg-slate-200"
+          className="metas-trilho"
         >
-          <div className={`h-full ${meta.status === 'concluida' ? 'bg-emerald-700' : 'bg-sky-600'}`} style={{ width: `${Math.min(Math.max(pct, 0), 100)}%` }} />
+          <div className={`metas-barra${meta.status === 'concluida' ? ' metas-barra--concluida' : ''}`} style={{ width: `${Math.min(Math.max(pct, 0), 100)}%` }} />
         </div>
-        <div className="mt-1 flex flex-wrap justify-between gap-2 text-sm text-slate-700">
+        <div className="metas-progresso">
           <span data-testid="percentual">{pct}% alcançado</span>
           <span>
             Falta <span data-testid="falta">{formatarMoeda(falta)}</span>
@@ -104,19 +105,19 @@ export function MetaCard({ meta, hoje }: { meta: Meta; hoje: string }) {
         </div>
 
         {!arquivada && (textoNecessario || textoRitmo) ? (
-          <div className="mt-2 space-y-0.5 text-sm text-slate-800">
+          <div className="metas-ritmo">
             {textoNecessario ? <p data-testid="necessario">{textoNecessario}</p> : null}
             {textoRitmo ? <p data-testid="ritmo">{textoRitmo}</p> : null}
           </div>
         ) : null}
 
         {erro ? (
-          <div className="mt-2">
+          <div className="metas-erro">
             <Alerta>{erro}</Alerta>
           </div>
         ) : null}
 
-        <div className="mt-3 flex flex-wrap gap-2">
+        <div className="metas-acoes">
           {!arquivada ? (
             <Botao aria-label={`Registrar lançamento em ${meta.nome}`} onClick={() => setModo(modo === 'aportar' ? 'ver' : 'aportar')}>
               Registrar aporte ou retirada
@@ -140,7 +141,7 @@ export function MetaCard({ meta, hoje }: { meta: Meta; hoje: string }) {
         </div>
 
         {modo === 'editar' ? (
-          <div className="mt-3 border-t border-slate-200 pt-3">
+          <div className="metas-painel">
             <MetaForm
               inicial={meta}
               onCancelar={() => setModo('ver')}
@@ -154,7 +155,7 @@ export function MetaCard({ meta, hoje }: { meta: Meta; hoje: string }) {
         ) : null}
 
         {modo === 'aportar' ? (
-          <div className="mt-3 border-t border-slate-200 pt-3">
+          <div className="metas-painel">
             <AporteForm
               rotulo={`Novo lançamento em ${meta.nome}`}
               onCancelar={() => setModo('ver')}
@@ -168,14 +169,14 @@ export function MetaCard({ meta, hoje }: { meta: Meta; hoje: string }) {
         ) : null}
 
         {modo === 'historico' ? (
-          <div className="mt-3 border-t border-slate-200 pt-3">
+          <div className="metas-painel">
             {aportesOrdenados.length === 0 ? (
-              <p className="text-sm text-slate-600">Nenhum lançamento ainda.</p>
+              <p className="metas-vazio">Nenhum lançamento ainda.</p>
             ) : (
-              <ul className="divide-y divide-slate-200" aria-label={`Lançamentos de ${meta.nome}`}>
+              <ul className="metas-historico" aria-label={`Lançamentos de ${meta.nome}`}>
                 {aportesOrdenados.map((a) =>
                   aporteEditandoId === a.id ? (
-                    <li key={a.id} className="py-3">
+                    <li key={a.id} className="metas-aporte-edicao">
                       <AporteForm
                         inicial={a}
                         rotulo={`Editar lançamento de ${formatarData(a.data)}`}
@@ -188,11 +189,11 @@ export function MetaCard({ meta, hoje }: { meta: Meta; hoje: string }) {
                       />
                     </li>
                   ) : (
-                    <li key={a.id} className="flex flex-wrap items-center justify-between gap-2 py-2">
-                      <span className="text-sm text-slate-800">
+                    <li key={a.id} className="metas-aporte">
+                      <span className="metas-aporte-data">
                         {formatarData(a.data)} · {a.valor < 0 ? 'Retirada' : 'Aporte'}
                       </span>
-                      <span className="flex flex-wrap items-center gap-2">
+                      <span className="metas-aporte-acoes">
                         <Valor centavos={a.valor} texto={formatarMoeda(a.valor)} />
                         <Botao variante="secundario" aria-label={`Editar lançamento de ${formatarData(a.data)}`} onClick={() => setAporteEditandoId(a.id)}>
                           Editar

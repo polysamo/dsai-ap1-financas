@@ -1,0 +1,23 @@
+.metas-cartao--arquivada { opacity: 0.8; }
+.metas-topo { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: var(--esp-2); }
+.metas-identificacao { min-width: 0; }
+.metas-titulo { margin: 0; font-size: var(--texto-lg); font-weight: 600; color: var(--cor-texto); overflow-wrap: anywhere; }
+.metas-status { margin: 0; font-size: var(--texto-sm); color: var(--cor-texto-mudo); }
+.metas-valores { margin: 0; text-align: right; font-size: var(--texto-sm); color: var(--cor-texto-suave); }
+.metas-acumulado { font-size: var(--texto-lg); font-weight: 700; color: var(--cor-texto); }
+.metas-trilho { margin-top: var(--esp-3); width: 100%; height: 0.75rem; overflow: hidden; border-radius: var(--raio-total); background: var(--cor-borda); }
+.metas-barra { height: 100%; background: var(--cor-info); }
+.metas-barra--concluida { background: var(--cor-sucesso); }
+.metas-progresso { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--esp-2); margin-top: var(--esp-1); font-size: var(--texto-sm); color: var(--cor-texto-suave); }
+.metas-ritmo { margin-top: var(--esp-2); font-size: var(--texto-sm); color: var(--cor-texto); }
+.metas-ritmo p { margin: 0 0 0.125rem; }
+.metas-erro { margin-top: var(--esp-2); }
+.metas-acoes { display: flex; flex-wrap: wrap; gap: var(--esp-2); margin-top: var(--esp-3); }
+.metas-painel { margin-top: var(--esp-3); padding-top: var(--esp-3); border-top: 1px solid var(--cor-borda); }
+.metas-vazio { margin: 0; font-size: var(--texto-sm); color: var(--cor-texto-mudo); }
+.metas-historico { margin: 0; padding: 0; list-style: none; }
+.metas-historico > li + li { border-top: 1px solid var(--cor-borda); }
+.metas-aporte-edicao { padding: var(--esp-3) 0; }
+.metas-aporte { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--esp-2); padding: var(--esp-2) 0; }
+.metas-aporte-data { font-size: var(--texto-sm); color: var(--cor-texto); }
+.metas-aporte-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: var(--esp-2); }

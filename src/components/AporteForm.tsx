@@ -4,6 +4,7 @@ import { parseValor, valorParaCampo } from '../domain/money';
 import type { DadosAporte } from '../domain/metas';
 import type { Aporte, Resultado } from '../domain/types';
 import { Alerta, Botao, CampoSelect, CampoTexto } from './ui';
+import './AporteForm.css';
 
 interface Props {
   inicial?: Aporte;
@@ -29,7 +30,7 @@ export function AporteForm({ inicial, rotulo, onSalvar, onCancelar }: Props) {
   };
 
   return (
-    <form onSubmit={enviar} noValidate aria-label={rotulo} className="grid gap-3 sm:grid-cols-3">
+    <form onSubmit={enviar} noValidate aria-label={rotulo} className="aporte-form">
       <CampoSelect label="Tipo de lançamento" value={tipo} onChange={(e) => setTipo(e.target.value as 'aporte' | 'retirada')}>
         <option value="aporte">Aporte</option>
         <option value="retirada">Retirada</option>
@@ -37,11 +38,11 @@ export function AporteForm({ inicial, rotulo, onSalvar, onCancelar }: Props) {
       <CampoTexto label="Data do lançamento" type="date" value={data} onChange={(e) => setData(e.target.value)} erro={erros.data} />
       <CampoTexto label="Valor do lançamento" value={valor} onChange={(e) => setValor(e.target.value)} erro={erros.valor} inputMode="decimal" placeholder="0,00" />
       {erros.geral ? (
-        <div className="sm:col-span-3">
+        <div className="aporte-form-linha">
           <Alerta>{erros.geral}</Alerta>
         </div>
       ) : null}
-      <div className="flex gap-2 sm:col-span-3">
+      <div className="aporte-form-acoes">
         <Botao type="submit">Salvar lançamento</Botao>
         <Botao variante="secundario" onClick={onCancelar}>
           Cancelar
