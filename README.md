@@ -5,7 +5,6 @@ Aplicativo de finanças pessoais que roda só no navegador, sem backend e sem lo
 - **URL pública:** https://dsai-ap1-financas.vercel.app
 - **Repositório:** https://github.com/polysamo/dsai-ap1-financas
 - **Dupla:** Antonio Roger Sousa de Morais e Polyana dos Santos Moraes
-- **Roteiro da apresentação:** [apresentacao-2026-10-01.pdf](apresentacao-2026-10-01.pdf)
 
 ## O que o app faz
 
