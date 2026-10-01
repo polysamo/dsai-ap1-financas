@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
+import { Drawer, KpiCard } from '../components/novos';
 import { CategoriasPanel } from '../components/CategoriasPanel';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { ExclusaoParcelaDialog } from '../components/ExclusaoParcelaDialog';
@@ -76,7 +77,7 @@ export function TransacoesPage() {
   return (
     <div>
       <TituloPagina
-        acoes={aba === 'transacoes' && !criando ? <Botao onClick={() => { setCriando(true); setEditandoId(null); }}>Nova transação</Botao> : undefined}
+        acoes={aba === 'transacoes' ? <Botao onClick={() => { setCriando(true); setEditandoId(null); }}>Nova transação</Botao> : undefined}
       >
         Transações
       </TituloPagina>
@@ -108,8 +109,7 @@ export function TransacoesPage() {
             </Alerta>
           ) : null}
 
-          {criando ? (
-            <Cartao titulo="Nova transação">
+          <Drawer aberto={criando} titulo="Nova transação" onFechar={() => setCriando(false)}>
               <TransacaoForm
                 estado={estado}
                 onCancelar={() => setCriando(false)}
@@ -119,28 +119,17 @@ export function TransacoesPage() {
                   return r;
                 }}
               />
-            </Cartao>
-          ) : null}
+          </Drawer>
 
-          <Cartao titulo="Filtros">
+          <details className="transacoes__filtros">
+            <summary>Filtros</summary>
             <FiltrosTransacoesForm estado={estado} filtros={filtros} onChange={mudarFiltros} onLimpar={() => mudarFiltros(filtrosPadrao())} />
-          </Cartao>
+          </details>
 
           <div className="transacoes__totais" aria-label="Totais do filtro" role="group">
-            <Cartao>
-              <p className="transacoes__rotulo-total">Receitas</p>
-              <p className="transacoes__total" data-testid="total-receitas">{formatarMoeda(totais.receitas)}</p>
-            </Cartao>
-            <Cartao>
-              <p className="transacoes__rotulo-total">Despesas</p>
-              <p className="transacoes__total" data-testid="total-despesas">{formatarMoeda(totais.despesas)}</p>
-            </Cartao>
-            <Cartao>
-              <p className="transacoes__rotulo-total">Resultado</p>
-              <p className="transacoes__total" data-testid="total-resultado">
-                <Valor centavos={totais.resultado} texto={formatarMoeda(totais.resultado)} />
-              </p>
-            </Cartao>
+            <KpiCard rotulo="Receitas" tom="receita" valor={<span data-testid="total-receitas">{formatarMoeda(totais.receitas)}</span>} />
+            <KpiCard rotulo="Despesas" tom="despesa" valor={<span data-testid="total-despesas">{formatarMoeda(totais.despesas)}</span>} />
+            <KpiCard rotulo="Resultado" valor={<span data-testid="total-resultado"><Valor centavos={totais.resultado} texto={formatarMoeda(totais.resultado)} /></span>} />
           </div>
 
           {estado.transacoes.length === 0 ? (
@@ -158,10 +147,16 @@ export function TransacoesPage() {
                 {filtradas.length} {filtradas.length === 1 ? 'transação' : 'transações'}
               </p>
               <ul className="transacoes__lista" aria-label="Lista de transações">
-                {visiveis.map((t) => {
+                {visiveis.map((t, i) => {
+                  const novoDia = i === 0 || visiveis[i - 1].data !== t.data;
+                  const cabecalhoDia = novoDia ? (
+                    <li key={`dia-${t.data}`} className="transacoes__dia" aria-hidden="true">
+                      {formatarData(t.data)}
+                    </li>
+                  ) : null;
                   if (editandoId === t.id) {
                     return (
-                      <li key={t.id} className="transacoes__linha transacoes__linha--edicao">
+                      <Fragment key={t.id}>{cabecalhoDia}<li className="transacoes__linha transacoes__linha--edicao">
                         <TransacaoForm
                           estado={estado}
                           inicial={t}
@@ -172,14 +167,16 @@ export function TransacoesPage() {
                             return r;
                           }}
                         />
-                      </li>
+                      </li></Fragment>
                     );
                   }
                   const cat = categoria.get(t.categoriaId);
                   const efeito = efeitoTransacao(t);
                   const rotulo = t.descricao || cat?.nome || 'Sem descrição';
                   return (
-                    <li key={t.id} className="transacoes__linha">
+                    <Fragment key={t.id}>
+                    {cabecalhoDia}
+                    <li className="transacoes__linha">
                       <div className="transacoes__info">
                         <p className="transacoes__descricao">{rotulo}</p>
                         <p className="transacoes__meta">
@@ -198,6 +195,7 @@ export function TransacoesPage() {
                         </Botao>
                       </div>
                     </li>
+                    </Fragment>
                   );
                 })}
               </ul>
