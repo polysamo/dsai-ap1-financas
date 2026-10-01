@@ -1,31 +1,75 @@
 /*
- * Tokens de design em CSS puro. Todo estilo novo usa estas variáveis; o tema escuro
- * troca os valores sob `html.dark`. Não depende de Tailwind.
+ * Tokens de design em CSS puro. Tema escuro é o padrão (html sem classe); `html.dark`
+ * repete os mesmos valores (compatibilidade) e `html.claro` troca para o tema claro.
+ * Não depende de Tailwind.
  */
-:root {
-  --cor-fundo: #f8fafc;
+:root,
+html.dark {
+  color-scheme: dark;
+  /* Superfícies: 5 níveis separados por luminosidade */
+  --cor-fundo: #0b0f17;
+  --cor-superficie: #121826;
+  --cor-superficie-2: #182032;
+  --cor-superficie-alt: #1e2840;
+  --cor-superficie-3: #263250;
+  --cor-borda: #263250;
+  --cor-borda-forte: #3a4868;
+  /* Texto: 3 níveis */
+  --cor-texto: #f1f5f9;
+  --cor-texto-suave: #c0cadb;
+  --cor-texto-mudo: #93a0b8;
+  /* Marca (ação e foco) */
+  --cor-primaria: #5eead4;
+  --cor-primaria-hover: #99f6e4;
+  --cor-primaria-suave: #0f3a3a;
+  --cor-sobre-primaria: #042f2e;
+  --cor-foco: #5eead4;
+  /* Semânticas fixas */
+  --cor-receita: #4ade80;
+  --cor-despesa: #fb923c;
+  --cor-perigo: #f87171;
+  --cor-perigo-hover: #fca5a5;
+  --cor-perigo-suave: #4a1a1a;
+  --cor-aviso: #fcd34d;
+  --cor-aviso-suave: #45330a;
+  --cor-sucesso: #4ade80;
+  --cor-sucesso-suave: #0f3320;
+  --cor-info: #7dd3fc;
+  --cor-info-suave: #0c3a58;
+}
+
+html.claro {
+  color-scheme: light;
+  --cor-fundo: #f4f6fa;
   --cor-superficie: #ffffff;
-  --cor-superficie-alt: #f1f5f9;
+  --cor-superficie-2: #f8fafc;
+  --cor-superficie-alt: #eef1f6;
+  --cor-superficie-3: #e2e8f0;
   --cor-borda: #e2e8f0;
   --cor-borda-forte: #cbd5e1;
   --cor-texto: #0f172a;
   --cor-texto-suave: #475569;
-  --cor-texto-mudo: #64748b;
-  --cor-primaria: #047857;
-  --cor-primaria-hover: #065f46;
-  --cor-primaria-suave: #d1fae5;
+  --cor-texto-mudo: #5b6a80;
+  --cor-primaria: #0f766e;
+  --cor-primaria-hover: #115e59;
+  --cor-primaria-suave: #ccfbf1;
   --cor-sobre-primaria: #ffffff;
+  --cor-foco: #0d9488;
+  --cor-receita: #15803d;
+  --cor-despesa: #c2410c;
   --cor-perigo: #b91c1c;
   --cor-perigo-hover: #991b1b;
   --cor-perigo-suave: #fee2e2;
-  --cor-aviso: #b45309;
+  --cor-aviso: #92400e;
   --cor-aviso-suave: #fef3c7;
-  --cor-sucesso: #047857;
-  --cor-sucesso-suave: #d1fae5;
+  --cor-sucesso: #15803d;
+  --cor-sucesso-suave: #dcfce7;
   --cor-info: #0369a1;
   --cor-info-suave: #e0f2fe;
-  --cor-foco: #059669;
+}
 
+:root {
+  /* Espaço base 4/8 */
   --esp-1: 0.25rem;
   --esp-2: 0.5rem;
   --esp-3: 0.75rem;
@@ -34,41 +78,17 @@
   --esp-6: 1.5rem;
   --esp-8: 2rem;
 
-  --raio: 0.5rem;
-  --raio-pequeno: 0.375rem;
+  --raio: 0.75rem; /* card */
+  --raio-pequeno: 0.5rem; /* controle */
   --raio-total: 999px;
-  --sombra: 0 1px 2px rgb(15 23 42 / 0.08);
+  --sombra: 0 1px 2px rgb(0 0 0 / 0.25);
   --fonte: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* Escala tipográfica 12/14/16/20/28/36 */
   --texto-xs: 0.75rem;
   --texto-sm: 0.875rem;
   --texto-base: 1rem;
   --texto-lg: 1.125rem;
   --texto-xl: 1.25rem;
-  --texto-2xl: 1.5rem;
-}
-
-html.dark {
-  color-scheme: dark;
-  --cor-fundo: #0a1020;
-  --cor-superficie: #111b2e;
-  --cor-superficie-alt: #1e293b;
-  --cor-borda: #334155;
-  --cor-borda-forte: #475569;
-  --cor-texto: #f8fafc;
-  --cor-texto-suave: #cbd5e1;
-  --cor-texto-mudo: #94a3b8;
-  --cor-primaria: #34d399;
-  --cor-primaria-hover: #6ee7b7;
-  --cor-primaria-suave: #064e3b;
-  --cor-sobre-primaria: #052e22;
-  --cor-perigo: #f87171;
-  --cor-perigo-hover: #fca5a5;
-  --cor-perigo-suave: #450a0a;
-  --cor-aviso: #fcd34d;
-  --cor-aviso-suave: #451a03;
-  --cor-sucesso: #6ee7b7;
-  --cor-sucesso-suave: #052e22;
-  --cor-info: #7dd3fc;
-  --cor-info-suave: #0c4a6e;
-  --cor-foco: #34d399;
+  --texto-2xl: 1.75rem;
+  --texto-3xl: 2.25rem;
 }

@@ -10,7 +10,7 @@ export interface Preferencias {
   ocultarValores: boolean;
 }
 
-export const PREFERENCIAS_PADRAO: Preferencias = { tema: 'sistema', ocultarValores: false };
+export const PREFERENCIAS_PADRAO: Preferencias = { tema: 'escuro', ocultarValores: false };
 
 const CONSULTA_ESCURO = '(prefers-color-scheme: dark)';
 
@@ -51,5 +51,6 @@ export function consultaEscuro(): MediaQueryList | null {
 export function aplicarPreferencias(prefs: Preferencias, raiz: HTMLElement = document.documentElement): void {
   const escuro = prefs.tema === 'escuro' || (prefs.tema === 'sistema' && consultaEscuro()?.matches === true);
   raiz.classList.toggle('dark', escuro);
+  raiz.classList.toggle('claro', !escuro);
   raiz.classList.toggle('ocultar-valores', prefs.ocultarValores);
 }

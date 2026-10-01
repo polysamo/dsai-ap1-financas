@@ -71,7 +71,7 @@ describe('configurações: tema (critérios 3, 4, 5)', () => {
     const grupo = screen.getByRole('radiogroup', { name: 'Tema' });
     const radios = within(grupo).getAllByRole('radio');
     expect(radios.map((r) => r.getAttribute('value'))).toEqual(['claro', 'escuro', 'sistema']);
-    expect(within(grupo).getByRole('radio', { name: /Sistema/ })).toBeChecked();
+    expect(within(grupo).getByRole('radio', { name: /Escuro/ })).toBeChecked();
   });
 
   it('Escuro adiciona dark ao html e Claro remove', async () => {
@@ -96,10 +96,11 @@ describe('configurações: tema (critérios 3, 4, 5)', () => {
     expect(html).not.toHaveClass('dark');
   });
 
-  it('o CSS redefine as variáveis do Tailwind sob html.dark e oculta valores por classe', async () => {
+  it('o CSS define tokens para o tema escuro e oculta valores por classe', async () => {
+    const tokens = await lerFonte('src/styles/tokens.css');
     const css = await lerFonte('src/index.css');
-    const dark = css.slice(css.indexOf('html.dark'));
-    for (const v of ['--color-white', '--color-slate-50', '--color-slate-600', '--color-slate-900', '--color-slate-200', '--color-emerald-700', '--color-red-700', '--color-amber-900']) {
+    const dark = tokens.slice(tokens.indexOf('html.dark'));
+    for (const v of ['--cor-fundo', '--cor-superficie', '--cor-texto', '--cor-primaria']) {
       expect(dark).toContain(`${v}:`);
     }
     expect(css).toMatch(/html\.ocultar-valores \.tabular-nums\s*\{[^}]*blur/);
@@ -157,7 +158,7 @@ describe('configurações: persistência (critérios 8, 9, 10)', () => {
   });
 
   it('leitura tolera JSON inválido, tipos errados e tema desconhecido', () => {
-    const padrao = { tema: 'sistema', ocultarValores: false };
+    const padrao = { tema: 'escuro', ocultarValores: false };
     localStorage.setItem(CHAVE_PREFERENCIAS, '{nao e json');
     expect(lerPreferencias(localStorage)).toEqual(padrao);
     localStorage.setItem(CHAVE_PREFERENCIAS, 'null');
@@ -168,7 +169,7 @@ describe('configurações: persistência (critérios 8, 9, 10)', () => {
     expect(lerPreferencias(localStorage)).toEqual({ tema: 'claro', ocultarValores: false });
     localStorage.setItem(CHAVE_PREFERENCIAS, '{nao e json');
     renderizarApp('/configuracoes');
-    expect(screen.getByRole('radio', { name: /Sistema/ })).toBeChecked();
+    expect(screen.getByRole('radio', { name: /Escuro/ })).toBeChecked();
   });
 
   it('falha ao gravar mostra alerta e a página continua funcionando', async () => {
@@ -177,9 +178,9 @@ describe('configurações: persistência (critérios 8, 9, 10)', () => {
     vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
       throw new DOMException('cota', 'QuotaExceededError');
     });
-    await usuario.click(screen.getByRole('radio', { name: /Escuro/ }));
+    await usuario.click(screen.getByRole('radio', { name: /Claro/ }));
     expect(screen.getByRole('alert')).toHaveTextContent(/Não foi possível salvar a preferência/);
-    expect(html).toHaveClass('dark');
+    expect(html).not.toHaveClass('dark');
   });
 
   it('aplicarPreferencias (usada em main.tsx) ajusta as classes do html antes da renderização', async () => {
@@ -223,9 +224,9 @@ describe('configurações: seção Dados (critérios 11, 12)', () => {
     await usuario.click(within(dialogo).getByRole('button', { name: 'Apagar tudo' }));
     expect(store.getSnapshot().estado.contas).toHaveLength(0);
     expect(localStorage.getItem(CHAVE_PREFERENCIAS)).toBeNull();
-    expect(html).not.toHaveClass('dark');
+    expect(html).toHaveClass('dark');
     expect(html).not.toHaveClass('ocultar-valores');
-    expect(screen.getByRole('radio', { name: /Sistema/ })).toBeChecked();
+    expect(screen.getByRole('radio', { name: /Escuro/ })).toBeChecked();
     expect(screen.getByRole('switch', { name: 'Ocultar valores' })).toHaveAttribute('aria-checked', 'false');
   });
 });
