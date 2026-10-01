@@ -3,9 +3,10 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { GraficoDespesasPorCategoria, GraficoReceitasDespesas } from '../components/Graficos';
 import { ProjecaoCard } from '../components/ProjecaoCard';
 import { RecorrenciasPanel } from '../components/RecorrenciasPanel';
-import { Botao, Cartao, CampoTexto, EstadoVazio, TituloPagina, Valor } from '../components/ui';
+import { Cartao, EstadoVazio, TituloPagina, Valor } from '../components/ui';
+import { KpiCard, MonthPicker } from '../components/novos';
 import { saldoTotal } from '../domain/contas';
-import { formatarData, hojeISO, mesDe, mesValido, nomeMes, somarMeses } from '../domain/date';
+import { formatarData, hojeISO, mesDe, mesValido, nomeMes } from '../domain/date';
 import { formatarMoeda, percentual } from '../domain/money';
 import { acumulado, ordenarMetas } from '../domain/metas';
 import { linhasOrcamento } from '../domain/orcamento';
@@ -41,61 +42,44 @@ export function DashboardPage() {
           <EstadoVazio
             titulo="Bem-vindo! Comece criando uma conta"
             acao={
-              <span className="dashboard__boas-vindas-acoes">
-                <Link to="/contas" className="dashboard__link dashboard__link--primario">
-                  Criar conta
-                </Link>
-                <Link to="/transacoes" className="dashboard__link dashboard__link--secundario">
-                  Registrar transação
-                </Link>
-                <Link to="/configuracoes" className="dashboard__link dashboard__link--secundario">
-                  Carregar dados de exemplo
-                </Link>
-              </span>
+              <ol className="dashboard__passos" aria-label="Primeiros passos">
+                <li><span>1. Criar conta</span> <Link to="/contas" className="dashboard__link dashboard__link--primario">Criar conta</Link></li>
+                <li><span>2. Registrar transação</span> <Link to="/transacoes" className="dashboard__link dashboard__link--secundario">Registrar transação</Link></li>
+                <li><span>3. Definir orçamento</span> <Link to="/orcamento" className="dashboard__link dashboard__link--secundario">Definir orçamento</Link></li>
+                <li><Link to="/configuracoes" className="dashboard__link dashboard__link--secundario">Carregar dados de exemplo</Link></li>
+              </ol>
             }
           >
             Cadastre suas contas, registre receitas e despesas e acompanhe orçamento, metas e projeção aqui.
           </EstadoVazio>
         ) : null}
 
-        <Cartao>
-          <div className="dashboard__navegacao">
-            <Botao variante="secundario" onClick={() => irPara(somarMeses(mes, -1))}>
-              Mês anterior
-            </Botao>
-            <div className="dashboard__campo-mes">
-              <CampoTexto label="Mês" type="month" value={mes} onChange={(e) => mesValido(e.target.value) && irPara(e.target.value)} />
-            </div>
-            <Botao variante="secundario" onClick={() => irPara(somarMeses(mes, 1))}>
-              Próximo mês
-            </Botao>
-            <p className="dashboard__mes-atual" aria-live="polite">
-              {nomeMes(mes)}
-            </p>
-          </div>
-        </Cartao>
+        <div className="dashboard__mes">
+          <MonthPicker mes={mes} onChange={irPara} />
+        </div>
 
         <div className="dashboard__resumo" role="group" aria-label="Resumo do mês">
-          <Cartao>
-            <p className="dashboard__texto-mudo">Receitas do mês</p>
-            <p className="dashboard__valor" data-testid="receitas">{formatarMoeda(resumo.receitas)}</p>
-          </Cartao>
-          <Cartao>
-            <p className="dashboard__texto-mudo">Despesas do mês</p>
-            <p className="dashboard__valor" data-testid="despesas">{formatarMoeda(resumo.despesas)}</p>
-          </Cartao>
-          <Cartao>
-            <p className="dashboard__texto-mudo">Resultado do mês</p>
-            <p className="dashboard__valor" data-testid="resultado">
-              <Valor centavos={resumo.resultado} texto={formatarMoeda(resumo.resultado)} />
-            </p>
-          </Cartao>
-          <Cartao>
-            <p className="dashboard__texto-mudo">Saldo total atual</p>
-            <p className="dashboard__valor" data-testid="saldo-total">
-              <Valor centavos={saldo.total} texto={formatarMoeda(saldo.total)} />
-            </p>
-          </Cartao>
+          <div className="dashboard__saldo">
+            <KpiCard
+              destaque
+              rotulo="Saldo total atual"
+              valor={
+                <span data-testid="saldo-total">
+                  <Valor centavos={saldo.total} texto={formatarMoeda(saldo.total)} />
+                </span>
+              }
+            />
+          </div>
+          <KpiCard rotulo="Receitas do mês" tom="receita" valor={<span data-testid="receitas">{formatarMoeda(resumo.receitas)}</span>} />
+          <KpiCard rotulo="Despesas do mês" tom="despesa" valor={<span data-testid="despesas">{formatarMoeda(resumo.despesas)}</span>} />
+          <KpiCard
+            rotulo="Resultado do mês"
+            valor={
+              <span data-testid="resultado">
+                <Valor centavos={resumo.resultado} texto={formatarMoeda(resumo.resultado)} />
+              </span>
+            }
+          />
         </div>
 
         <div className="dashboard__duas-colunas">

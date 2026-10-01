@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { LinhaOrcamentoItem } from '../components/LinhaOrcamentoItem';
-import { Alerta, Botao, Cartao, CampoTexto, EstadoVazio, TituloPagina } from '../components/ui';
-import { hojeISO, mesDe, mesValido, nomeMes, somarMeses } from '../domain/date';
+import { Alerta, Botao, Cartao, EstadoVazio, TituloPagina } from '../components/ui';
+import { KpiCard, MonthPicker } from '../components/novos';
+import { hojeISO, mesDe, mesValido, somarMeses } from '../domain/date';
 import { formatarMoeda } from '../domain/money';
 import { copiarMesAnterior, definirLimite, linhasOrcamento, mesTemLimites, removerLimite, totaisOrcamento } from '../domain/orcamento';
 import { useEstado, useStore } from '../state/store';
@@ -28,22 +29,7 @@ export function OrcamentoPage() {
     <div>
       <TituloPagina>Orçamento</TituloPagina>
       <div className="orcamento-pagina">
-        <Cartao>
-          <div className="orcamento-navegacao">
-            <Botao variante="secundario" onClick={() => irPara(somarMeses(mes, -1))}>
-              Mês anterior
-            </Botao>
-            <div className="orcamento-campo-mes">
-              <CampoTexto label="Mês" type="month" value={mes} onChange={(e) => mesValido(e.target.value) && irPara(e.target.value)} />
-            </div>
-            <Botao variante="secundario" onClick={() => irPara(somarMeses(mes, 1))}>
-              Próximo mês
-            </Botao>
-            <p className="orcamento-mes-nome" aria-live="polite">
-              {nomeMes(mes)}
-            </p>
-          </div>
-        </Cartao>
+        <MonthPicker mes={mes} onChange={irPara} />
 
         {erro ? <Alerta>{erro}</Alerta> : null}
 
@@ -69,36 +55,34 @@ export function OrcamentoPage() {
         ) : (
           <>
             <div className="orcamento-totais" role="group" aria-label="Totais do mês">
-              <Cartao>
-                <p className="orcamento-total-rotulo">Soma dos limites</p>
-                <p className="orcamento-total-valor" data-testid="total-limites">{formatarMoeda(totais.limites)}</p>
-              </Cartao>
-              <Cartao>
-                <p className="orcamento-total-rotulo">Gasto nas categorias com limite</p>
-                <p className="orcamento-total-valor" data-testid="total-gasto-com-limite">{formatarMoeda(totais.gastoComLimite)}</p>
-              </Cartao>
-              <Cartao>
-                <p className="orcamento-total-rotulo">Gasto sem orçamento</p>
-                <p className="orcamento-total-valor" data-testid="total-gasto-sem-orcamento">{formatarMoeda(totais.gastoSemOrcamento)}</p>
-              </Cartao>
+              <KpiCard rotulo="Soma dos limites" valor={<span data-testid="total-limites">{formatarMoeda(totais.limites)}</span>} />
+              <KpiCard rotulo="Gasto nas categorias com limite" valor={<span data-testid="total-gasto-com-limite">{formatarMoeda(totais.gastoComLimite)}</span>} />
+              <KpiCard rotulo="Gasto sem orçamento" valor={<span data-testid="total-gasto-sem-orcamento">{formatarMoeda(totais.gastoSemOrcamento)}</span>} />
             </div>
             {estouradas > 0 ? (
               <Alerta>
                 {estouradas === 1 ? '1 categoria estourou' : `${estouradas} categorias estouraram`} o limite neste mês.
               </Alerta>
             ) : null}
-            <Cartao titulo="Limites por categoria">
-              <ul className="orcamento-lista">
-                {linhas.map((l) => (
-                  <LinhaOrcamentoItem
-                    key={l.categoria.id}
-                    linha={l}
-                    onDefinir={(limite) => store.aplicar((s) => definirLimite(s, l.categoria.id, mes, limite))}
-                    onRemover={() => store.aplicar((s) => removerLimite(s, l.categoria.id, mes))}
-                  />
-                ))}
-              </ul>
-            </Cartao>
+            {[
+              { titulo: 'Com limite', itens: linhas.filter((l) => l.limite !== null) },
+              { titulo: 'Sem limite', itens: linhas.filter((l) => l.limite === null) },
+            ]
+              .filter((g) => g.itens.length > 0)
+              .map((g) => (
+                <Cartao key={g.titulo} titulo={g.titulo === 'Com limite' ? 'Limites por categoria' : 'Sem limite definido'}>
+                  <ul className="orcamento-lista">
+                    {g.itens.map((l) => (
+                      <LinhaOrcamentoItem
+                        key={l.categoria.id}
+                        linha={l}
+                        onDefinir={(limite) => store.aplicar((s) => definirLimite(s, l.categoria.id, mes, limite))}
+                        onRemover={() => store.aplicar((s) => removerLimite(s, l.categoria.id, mes))}
+                      />
+                    ))}
+                  </ul>
+                </Cartao>
+              ))}
           </>
         )}
       </div>

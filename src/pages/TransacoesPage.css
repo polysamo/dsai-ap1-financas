@@ -19,3 +19,10 @@
 .transacoes__acoes { display: flex; flex-wrap: wrap; align-items: center; gap: var(--esp-2); }
 .transacoes__mais { margin-top: var(--esp-3); display: flex; justify-content: center; }
 @media (min-width: 640px) { .transacoes__totais { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.transacoes__totais { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--esp-3); }
+.transacoes__totais .kpi { padding: var(--esp-3); }
+.transacoes__dia { padding: var(--esp-3) 0 var(--esp-1); font-size: var(--texto-xs); color: var(--cor-texto-mudo); }
+.transacoes__filtros { background: var(--cor-superficie-2); border-radius: var(--raio); padding: var(--esp-3); }
+.transacoes__filtros summary { cursor: pointer; font-size: var(--texto-sm); font-weight: 600; }
+.transacoes__filtros[open] summary { margin-bottom: var(--esp-3); }

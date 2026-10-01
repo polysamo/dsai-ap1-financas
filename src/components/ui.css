@@ -36,7 +36,7 @@
   min-width: 0;
   border: 1px solid var(--cor-borda-forte);
   border-radius: var(--raio-pequeno);
-  background: var(--cor-superficie);
+  background: var(--cor-superficie-2);
   padding: var(--esp-2) var(--esp-3);
   font: inherit;
   font-size: var(--texto-sm);
@@ -51,8 +51,8 @@
 .ui-cartao {
   min-width: 0;
   box-sizing: border-box;
-  border: 1px solid var(--cor-borda);
-  border-radius: 0.625rem;
+  border: 1px solid transparent;
+  border-radius: var(--raio);
   background: var(--cor-superficie);
   padding: var(--esp-4);
   box-shadow: var(--sombra);

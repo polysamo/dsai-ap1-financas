@@ -1,0 +1,37 @@
+.mp { display: inline-flex; align-items: center; gap: var(--esp-1); background: var(--cor-superficie-2); border-radius: var(--raio-pequeno); padding: 2px; }
+.mp__seta { width: 2rem; height: 2rem; border-radius: var(--raio-pequeno); font-size: var(--texto-xl); line-height: 1; color: var(--cor-texto-suave); }
+.mp__seta:hover { background: var(--cor-superficie-3); color: var(--cor-texto); }
+.mp__seta:focus-visible, .drawer__fechar:focus-visible { outline: 2px solid var(--cor-foco); outline-offset: 1px; }
+.mp__rotulo { min-width: 9rem; text-align: center; font-size: var(--texto-sm); font-weight: 600; }
+
+.kpi { display: flex; flex-direction: column; gap: var(--esp-1); min-width: 0; background: var(--cor-superficie-2); border-radius: var(--raio); padding: var(--esp-4); }
+.kpi__rotulo { font-size: var(--texto-xs); color: var(--cor-texto-mudo); }
+.kpi__valor { font-size: var(--texto-xl); font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
+.kpi--destaque .kpi__valor { font-size: var(--texto-3xl); }
+.kpi--receita .kpi__valor { color: var(--cor-receita); }
+.kpi--despesa .kpi__valor { color: var(--cor-despesa); }
+.kpi--perigo .kpi__valor { color: var(--cor-perigo); }
+.kpi__variacao { font-size: var(--texto-xs); color: var(--cor-texto-suave); }
+
+.vazio { display: flex; flex-direction: column; align-items: center; gap: var(--esp-1); text-align: center; background: var(--cor-superficie-2); border-radius: var(--raio); padding: var(--esp-8) var(--esp-4); }
+.vazio__icone { color: var(--cor-texto-mudo); margin-bottom: var(--esp-2); }
+.vazio__titulo { font-weight: 600; }
+.vazio__texto { font-size: var(--texto-sm); color: var(--cor-texto-mudo); max-width: 28rem; }
+.vazio__acao { margin-top: var(--esp-3); }
+
+.pb { display: flex; align-items: center; gap: var(--esp-2); }
+.pb__trilho { flex: 1; height: 0.5rem; border-radius: var(--raio-total); background: var(--cor-superficie-3); overflow: hidden; }
+.pb__barra { height: 100%; border-radius: var(--raio-total); background: var(--cor-primaria); }
+.pb--atencao .pb__barra { background: var(--cor-aviso); }
+.pb--estourado .pb__barra { background: var(--cor-perigo); }
+.pb__estado { font-size: var(--texto-xs); color: var(--cor-texto-suave); white-space: nowrap; }
+.pb--atencao .pb__estado { color: var(--cor-aviso); }
+.pb--estourado .pb__estado { color: var(--cor-perigo); }
+
+.drawer-fundo { position: fixed; inset: 0; z-index: 50; background: rgb(0 0 0 / 0.55); display: flex; justify-content: flex-end; }
+.drawer { width: min(28rem, 100%); height: 100%; background: var(--cor-superficie); display: flex; flex-direction: column; box-shadow: -8px 0 24px rgb(0 0 0 / 0.35); }
+.drawer:focus { outline: none; }
+.drawer__topo { display: flex; align-items: center; justify-content: space-between; padding: var(--esp-4); }
+.drawer__titulo { font-size: var(--texto-xl); font-weight: 700; }
+.drawer__fechar { width: 2rem; height: 2rem; font-size: var(--texto-xl); border-radius: var(--raio-pequeno); color: var(--cor-texto-suave); }
+.drawer__corpo { flex: 1; overflow-y: auto; padding: 0 var(--esp-4) var(--esp-4); }
