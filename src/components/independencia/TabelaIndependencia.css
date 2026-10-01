@@ -1,0 +1,51 @@
+.indep-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--texto-sm);
+  text-align: left;
+}
+
+.indep-tabela caption {
+  padding-bottom: var(--esp-2);
+  text-align: left;
+  font-size: var(--texto-sm);
+  color: var(--cor-texto-suave);
+}
+
+.indep-tabela th,
+.indep-tabela td {
+  padding: var(--esp-2);
+  border-top: 1px solid var(--cor-borda);
+  color: var(--cor-texto);
+}
+
+.indep-tabela thead th {
+  border-top: 0;
+  color: var(--cor-texto-suave);
+  font-weight: 600;
+}
+
+.indep-tabela tbody th {
+  font-weight: 500;
+}
+
+.indep-tabela__num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.indep-tabela__rolagem {
+  max-height: 22rem;
+  overflow: auto;
+}
+
+.indep-tabela__nota {
+  margin: var(--esp-2) 0 0;
+  font-size: var(--texto-xs);
+  color: var(--cor-texto-suave);
+}
+
+.indep-tabela__envolt {
+  overflow-x: auto;
+}

@@ -14,6 +14,7 @@ export const itensNavegacao: ItemNavegacao[] = [
   { to: '/orcamento', rotulo: 'Orçamento' },
   { to: '/metas', rotulo: 'Metas' },
   { to: '/investimentos', rotulo: 'Investimentos' },
+  { to: '/independencia', rotulo: 'Independência' },
   { to: '/dividas', rotulo: 'Dívidas' },
   { to: '/divisao', rotulo: 'Divisão' },
   { to: '/relatorios', rotulo: 'Relatórios' },

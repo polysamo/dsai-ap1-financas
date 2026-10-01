@@ -1,0 +1,30 @@
+.indep-form__grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: var(--esp-4);
+}
+
+.indep-form__campo {
+  min-width: 0;
+}
+
+.indep-form__sugestao {
+  margin: var(--esp-1) 0 0;
+  font-size: var(--texto-xs);
+  color: var(--cor-texto-suave);
+}
+
+.indep-form__sugestao button {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--cor-primaria);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.indep-form__sugestao button:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
