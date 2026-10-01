@@ -18,6 +18,7 @@ import { useStore } from '../state/store';
 import { AporteForm } from './AporteForm';
 import { Alerta, Botao, Cartao, Valor } from './ui';
 import { MetaForm } from './MetaForm';
+import { ProgressBar } from './ProgressBar';
 import './MetaCard.css';
 
 type Modo = 'ver' | 'editar' | 'aportar' | 'historico';
@@ -87,16 +88,7 @@ export function MetaCard({ meta, hoje }: { meta: Meta; hoje: string }) {
           </p>
         </div>
 
-        <div
-          role="progressbar"
-          aria-label={`Progresso da meta ${meta.nome}`}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={Math.min(pct, 100)}
-          className="metas-trilho"
-        >
-          <div className={`metas-barra${meta.status === 'concluida' ? ' metas-barra--concluida' : ''}`} style={{ width: `${Math.min(Math.max(pct, 0), 100)}%` }} />
-        </div>
+        <ProgressBar valor={total} maximo={meta.valorAlvo} rotulo={`Progresso da meta ${meta.nome}`} estado={meta.status === 'concluida' ? 'ok' : 'atencao'} />
         <div className="metas-progresso">
           <span data-testid="percentual">{pct}% alcançado</span>
           <span>

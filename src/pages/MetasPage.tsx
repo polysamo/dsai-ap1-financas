@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { MetaCard } from '../components/MetaCard';
 import { MetaForm } from '../components/MetaForm';
-import { Botao, Cartao, EstadoVazio, TituloPagina } from '../components/ui';
+import { Drawer } from '../components/Drawer';
+import { EmptyState } from '../components/EmptyState';
+import { Botao, TituloPagina } from '../components/ui';
 import { hojeISO } from '../domain/date';
 import { criarMeta, ordenarMetas } from '../domain/metas';
 import { useEstado, useStore } from '../state/store';
@@ -19,10 +21,9 @@ export function MetasPage() {
 
   return (
     <div>
-      <TituloPagina acoes={!criando ? <Botao onClick={() => setCriando(true)}>Nova meta</Botao> : undefined}>Metas</TituloPagina>
+      <TituloPagina acoes={<Botao onClick={() => setCriando(true)}>Nova meta</Botao>}>Metas</TituloPagina>
       <div className="metas-pagina">
-        {criando ? (
-          <Cartao titulo="Nova meta">
+        <Drawer aberto={criando} titulo="Nova meta" onFechar={() => setCriando(false)}>
             <MetaForm
               onCancelar={() => setCriando(false)}
               onSalvar={(dados) => {
@@ -31,8 +32,7 @@ export function MetasPage() {
                 return r;
               }}
             />
-          </Cartao>
-        ) : null}
+        </Drawer>
 
         {arquivadas.length > 0 ? (
           <label className="metas-filtro-arquivadas">
@@ -41,10 +41,8 @@ export function MetasPage() {
           </label>
         ) : null}
 
-        {visiveis.length === 0 && !criando ? (
-          <EstadoVazio titulo="Nenhuma meta ainda" acao={<Botao onClick={() => setCriando(true)}>Crie sua primeira meta</Botao>}>
-            Defina um objetivo de poupança, como uma reserva de emergência ou uma viagem, e acompanhe seus aportes.
-          </EstadoVazio>
+        {visiveis.length === 0 ? (
+          <EmptyState titulo="Nenhuma meta ainda" descricao="Defina um objetivo de poupança e acompanhe seus aportes." acaoRotulo="Crie sua primeira meta" onAcao={() => setCriando(true)} />
         ) : null}
 
         {visiveis.map((m) => (

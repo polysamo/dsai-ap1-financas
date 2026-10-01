@@ -271,7 +271,7 @@ describe('tela Regras (critérios 4 a 7)', () => {
     await usuario.selectOptions(within(form).getByLabelText('Categoria de destino'), 'Alimentação');
     await usuario.type(within(form).getByLabelText('Tags da regra'), 'Casa');
     await usuario.click(within(form).getByRole('button', { name: 'Adicionar regra' }));
-    expect(await screen.findByRole('list', { name: 'Lista de regras' })).toHaveTextContent('Descrição contém “Mercado”');
+    expect(await screen.findByRole('list', { name: 'Lista de regras' })).toHaveTextContent('Se a descrição contém “Mercado”');
     expect(lerEstadoSalvo().regras).toMatchObject([{ padrao: 'Mercado', modo: 'contem', categoriaId: 'cat-alimentacao', tags: ['casa'], ativa: true }]);
   });
 
