@@ -1,0 +1,91 @@
+.assin-item {
+  display: grid;
+  gap: var(--esp-2);
+  padding: var(--esp-3) 0;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.assin-item:last-child {
+  border-bottom: 0;
+}
+
+.assin-item__topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-2);
+}
+
+.assin-item__nome {
+  margin: 0;
+  font-weight: 600;
+  color: var(--cor-texto);
+  overflow-wrap: anywhere;
+}
+
+.assin-selo {
+  display: inline-block;
+  margin-left: var(--esp-2);
+  padding: 0 var(--esp-2);
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-total);
+  background: var(--cor-superficie-alt);
+  color: var(--cor-texto-suave);
+  font-size: var(--texto-xs);
+  font-weight: 500;
+}
+
+.assin-selo--pendente {
+  background: var(--cor-aviso-suave);
+  color: var(--cor-aviso);
+}
+
+.assin-selo--confirmada {
+  background: var(--cor-sucesso-suave);
+  color: var(--cor-sucesso);
+}
+
+.assin-item__dados {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: var(--esp-2) var(--esp-4);
+  margin: 0;
+  font-size: var(--texto-sm);
+}
+
+.assin-item__dados dt {
+  color: var(--cor-texto-mudo);
+  font-size: var(--texto-xs);
+}
+
+.assin-item__dados dd {
+  margin: 0;
+  color: var(--cor-texto);
+  font-variant-numeric: tabular-nums;
+}
+
+.assin-item__atraso {
+  color: var(--cor-aviso);
+  font-weight: 500;
+}
+
+.assin-item__aumento {
+  margin: 0;
+  padding: var(--esp-2) var(--esp-3);
+  border: 1px solid var(--cor-aviso);
+  border-radius: var(--raio-pequeno);
+  background: var(--cor-aviso-suave);
+  color: var(--cor-aviso);
+  font-size: var(--texto-sm);
+}
+
+.assin-item__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+}
+
+.assin-item--inativa .assin-item__nome {
+  text-decoration: line-through;
+}

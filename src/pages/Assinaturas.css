@@ -1,0 +1,47 @@
+.assin-pagina {
+  display: grid;
+  gap: var(--esp-4);
+}
+
+.assin-intro {
+  margin: 0;
+  color: var(--cor-texto-suave);
+  font-size: var(--texto-sm);
+}
+
+.assin-resumo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: var(--esp-3);
+  margin: 0;
+}
+
+.assin-resumo__item dt {
+  color: var(--cor-texto-mudo);
+  font-size: var(--texto-xs);
+}
+
+.assin-resumo__item dd {
+  margin: 0;
+  color: var(--cor-texto);
+  font-size: var(--texto-xl);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.assin-lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.assin-recolhida > summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--cor-texto);
+}
+
+.assin-recolhida > summary:focus-visible {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}

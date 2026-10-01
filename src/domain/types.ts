@@ -3,6 +3,7 @@ import type { Transferencia } from './transferencias';
 
 import type { CenarioIndependencia } from './independencia';
 import type { MetaPatrimonio } from './patrimonio';
+import type { DecisaoAssinatura } from './assinaturas';
 export type Centavos = number;
 /** Data no formato AAAA-MM-DD. */
 export type DataISO = string;
@@ -224,6 +225,7 @@ export interface AppState {
   transferencias?: Transferencia[];
   cenariosIndependencia?: CenarioIndependencia[];
   metasPatrimonio?: MetaPatrimonio[];
+  assinaturasDecisoes?: DecisaoAssinatura[];
 }
 
 export type Resultado<T> = { ok: true; valor: T } | { ok: false; erro: string; campo?: string };
