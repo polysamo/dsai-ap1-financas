@@ -1,4 +1,4 @@
-import { SCHEMA_ATUAL } from '../storage/storage';
+import { SCHEMA_ATUAL, estadoInicial } from '../storage/storage';
 import { dataValida, diasNoMes, mesDe, somarMeses } from '../domain/date';
 import type { Aporte, Ativo, AppState, Conta, Meta, Mes, Orcamento, Recorrencia, Transacao } from '../domain/types';
 import { categoriasPadrao } from './categoriasPadrao';
@@ -134,6 +134,8 @@ export function gerarExemplo(hoje: string): AppState {
   ];
 
   return {
+    // Módulos sem dados de exemplo herdam o valor inicial.
+    ...estadoInicial(),
     schemaVersion: SCHEMA_ATUAL,
     contas,
     categorias: categoriasPadrao(),
