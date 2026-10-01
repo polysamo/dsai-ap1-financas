@@ -134,5 +134,9 @@ export function gerarExemplo(hoje: string): AppState {
       { id: 'ex-ag-luz', descricao: 'Conta de luz', tipo: 'despesa', valor: 18990, vencimento: dataNoMes(somarMeses(mesAtual, 1), 12), categoriaId: 'cat-moradia', contaId: ID_CORRENTE, criadoEm: 1 },
       { id: 'ex-ag-salario', descricao: 'Salário', tipo: 'receita', valor: 550000, vencimento: dataNoMes(somarMeses(mesAtual, 1), 5), categoriaId: 'cat-salario', contaId: ID_CORRENTE, criadoEm: 2 },
     ],
+    regras: [
+      { id: 'ex-regra-mercado', padrao: 'supermercado', modo: 'contem', tipo: 'despesa', categoriaId: 'cat-alimentacao', tags: ['mercado'], ativa: true },
+      { id: 'ex-regra-streaming', padrao: 'streaming', modo: 'igual', tipo: 'despesa', categoriaId: 'cat-lazer', tags: [], ativa: true },
+    ],
   };
 }

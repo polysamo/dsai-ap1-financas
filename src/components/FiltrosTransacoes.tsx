@@ -1,3 +1,4 @@
+import { listarTags } from '../domain/tags';
 import type { FiltrosTransacoes } from '../domain/transacoes';
 import type { AppState, TipoMovimento } from '../domain/types';
 import { Botao, CampoSelect, CampoTexto } from './ui';
@@ -40,6 +41,14 @@ export function FiltrosTransacoesForm({ estado, filtros, onChange, onLimpar }: P
         <option value="">Todos</option>
         <option value="receita">Receitas</option>
         <option value="despesa">Despesas</option>
+      </CampoSelect>
+      <CampoSelect label="Filtrar por tag" value={filtros.tag ?? ''} onChange={(e) => atualizar({ tag: e.target.value || undefined })}>
+        <option value="">Todas</option>
+        {listarTags(estado.transacoes).map((t) => (
+          <option key={t} value={t}>
+            {t}
+          </option>
+        ))}
       </CampoSelect>
       <CampoTexto label="Buscar na descrição" value={filtros.texto ?? ''} onChange={(e) => atualizar({ texto: e.target.value || undefined })} autoComplete="off" />
       <div className="flex items-end">

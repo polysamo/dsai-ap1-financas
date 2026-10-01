@@ -19,6 +19,7 @@ export function estadoInicial(): AppState {
     importacoes: [],
     pagamentosFatura: [],
     agenda: [],
+    regras: [],
   };
 }
 

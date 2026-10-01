@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { hojeISO } from '../domain/date';
 import { parseValor, valorParaCampo } from '../domain/money';
+import { formatarTags, parseTags, TAG_TAMANHO_MAX, TAGS_MAX } from '../domain/tags';
 import type { DadosTransacao } from '../domain/transacoes';
 import type { AppState, Resultado, TipoMovimento, Transacao } from '../domain/types';
 import { Alerta, Botao, CampoSelect, CampoTexto } from './ui';
@@ -13,7 +14,7 @@ interface Props {
   onCancelar: () => void;
 }
 
-type Erros = Partial<Record<'contaId' | 'categoriaId' | 'valor' | 'data' | 'descricao' | 'geral', string>>;
+type Erros = Partial<Record<'contaId' | 'categoriaId' | 'valor' | 'data' | 'descricao' | 'tags' | 'geral', string>>;
 
 export function TransacaoForm({ estado, inicial, onSalvar, onCancelar }: Props) {
   const contasDisponiveis = estado.contas.filter((c) => !c.arquivada || c.id === inicial?.contaId);
@@ -23,6 +24,7 @@ export function TransacaoForm({ estado, inicial, onSalvar, onCancelar }: Props) 
   const [valor, setValor] = useState(inicial ? valorParaCampo(inicial.valor) : '');
   const [data, setData] = useState(inicial?.data ?? hojeISO());
   const [descricao, setDescricao] = useState(inicial?.descricao ?? '');
+  const [tags, setTags] = useState(formatarTags(inicial?.tags));
   const [erros, setErros] = useState<Erros>({});
 
   if (contasDisponiveis.length === 0) {
@@ -50,7 +52,7 @@ export function TransacaoForm({ estado, inicial, onSalvar, onCancelar }: Props) 
       setErros({ valor: 'Informe um valor válido, como 49,90.' });
       return;
     }
-    const r = onSalvar({ contaId, categoriaId, tipo, valor: centavos, data, descricao });
+    const r = onSalvar({ contaId, categoriaId, tipo, valor: centavos, data, descricao, tags: parseTags(tags) });
     if (!r.ok) setErros(r.campo ? { [r.campo]: r.erro } : { geral: r.erro });
   };
 
@@ -79,6 +81,14 @@ export function TransacaoForm({ estado, inicial, onSalvar, onCancelar }: Props) 
       <CampoTexto label="Valor" value={valor} onChange={(e) => setValor(e.target.value)} erro={erros.valor} inputMode="decimal" placeholder="0,00" />
       <CampoTexto label="Data" type="date" value={data} onChange={(e) => setData(e.target.value)} erro={erros.data} />
       <CampoTexto label="Descrição" value={descricao} onChange={(e) => setDescricao(e.target.value)} erro={erros.descricao} maxLength={140} autoComplete="off" />
+      <CampoTexto
+        label="Tags"
+        value={tags}
+        onChange={(e) => setTags(e.target.value)}
+        erro={erros.tags}
+        dica={`Opcional, separadas por vírgula (até ${TAGS_MAX}, ${TAG_TAMANHO_MAX} caracteres cada).`}
+        autoComplete="off"
+      />
       {erros.geral ? (
         <div className="sm:col-span-2 lg:col-span-3">
           <Alerta>{erros.geral}</Alerta>
