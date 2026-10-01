@@ -1,0 +1,6 @@
+.exclusao-parcela { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: var(--esp-4); background: rgb(15 23 42 / 0.5); }
+.exclusao-parcela__caixa { width: 100%; max-width: 28rem; max-height: 100%; overflow-y: auto; border-radius: var(--raio); background: var(--cor-superficie); color: var(--cor-texto); padding: var(--esp-5); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.25); }
+.exclusao-parcela__titulo { margin: 0; font-size: var(--texto-lg); font-weight: 600; }
+.exclusao-parcela__texto { margin: var(--esp-2) 0 0; font-size: var(--texto-sm); color: var(--cor-texto-suave); overflow-wrap: anywhere; }
+.exclusao-parcela__acoes { margin-top: var(--esp-4); display: flex; flex-direction: column; gap: var(--esp-2); }
+@media (min-width: 640px) { .exclusao-parcela__acoes { flex-direction: row; justify-content: flex-end; } }

@@ -1,0 +1,21 @@
+.transacoes__abas { display: flex; gap: var(--esp-1); margin-bottom: var(--esp-4); border-bottom: 1px solid var(--cor-borda); overflow-x: auto; }
+.transacoes__aba { border: 0; border-bottom: 2px solid transparent; background: transparent; font: inherit; cursor: pointer; border-radius: var(--raio-pequeno) var(--raio-pequeno) 0 0; padding: var(--esp-2) var(--esp-4); font-size: var(--texto-sm); font-weight: 500; color: var(--cor-texto-mudo); }
+.transacoes__aba:hover { color: var(--cor-texto); }
+.transacoes__aba:focus-visible { outline: 2px solid var(--cor-foco); outline-offset: 0; }
+.transacoes__aba--ativa, .transacoes__aba--ativa:hover { border-bottom-color: var(--cor-primaria); color: var(--cor-primaria); }
+.transacoes__painel { display: flex; flex-direction: column; gap: var(--esp-4); }
+.transacoes__desfazer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--esp-2); }
+.transacoes__totais { display: grid; gap: var(--esp-3); grid-template-columns: minmax(0, 1fr); }
+.transacoes__rotulo-total { margin: 0; font-size: var(--texto-sm); color: var(--cor-texto-mudo); }
+.transacoes__total { margin: 0; font-size: var(--texto-xl); font-weight: 700; }
+.transacoes__contagem { margin: 0 0 var(--esp-2); font-size: var(--texto-sm); color: var(--cor-texto-mudo); }
+.transacoes__lista { list-style: none; margin: 0; padding: 0; }
+.transacoes__linha { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--esp-2); padding: var(--esp-3) 0; }
+.transacoes__linha--edicao { display: block; }
+.transacoes__linha + .transacoes__linha { border-top: 1px solid var(--cor-borda); }
+.transacoes__info { min-width: 0; flex: 1 1 12rem; }
+.transacoes__descricao { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; color: var(--cor-texto); }
+.transacoes__meta { margin: 0; font-size: var(--texto-xs); color: var(--cor-texto-mudo); overflow-wrap: anywhere; }
+.transacoes__acoes { display: flex; flex-wrap: wrap; align-items: center; gap: var(--esp-2); }
+.transacoes__mais { margin-top: var(--esp-3); display: flex; justify-content: center; }
+@media (min-width: 640px) { .transacoes__totais { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

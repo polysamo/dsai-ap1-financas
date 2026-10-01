@@ -3,6 +3,7 @@ import { ROTULO_TIPO_CONTA, TIPOS_CONTA, type DadosConta } from '../domain/conta
 import { parseValor, valorParaCampo } from '../domain/money';
 import type { Conta, Resultado, TipoConta } from '../domain/types';
 import { Alerta, Botao, CampoSelect, CampoTexto } from './ui';
+import './ContaForm.css';
 
 interface Props {
   inicial?: Conta;
@@ -43,7 +44,7 @@ export function ContaForm({ inicial, onSalvar, onCancelar }: Props) {
   };
 
   return (
-    <form onSubmit={enviar} noValidate className="grid gap-3 sm:grid-cols-3" aria-label={inicial ? 'Editar conta' : 'Nova conta'}>
+    <form onSubmit={enviar} noValidate className="conta-form" aria-label={inicial ? 'Editar conta' : 'Nova conta'}>
       <CampoTexto label="Nome" value={nome} onChange={(e) => setNome(e.target.value)} erro={erros.nome} maxLength={80} autoComplete="off" />
       <CampoSelect label="Tipo" value={tipo} onChange={(e) => setTipo(e.target.value as TipoConta)}>
         {TIPOS_CONTA.map((t) => (
@@ -62,19 +63,19 @@ export function ContaForm({ inicial, onSalvar, onCancelar }: Props) {
         dica="Aceita valores negativos, como -50,00."
       />
       {tipo === 'cartao' ? (
-        <fieldset className="grid gap-3 sm:col-span-3 sm:grid-cols-3">
-          <legend className="mb-1 text-sm font-medium text-slate-700">Ciclo do cartão (opcional, preencha tudo ou nada)</legend>
+        <fieldset className="conta-form__cartao">
+          <legend className="conta-form__legenda">Ciclo do cartão (opcional, preencha tudo ou nada)</legend>
           <CampoTexto label="Dia de fechamento" value={fechamento} onChange={(e) => setFechamento(e.target.value)} erro={erros.diaFechamento} inputMode="numeric" placeholder="1 a 28" />
           <CampoTexto label="Dia de vencimento" value={vencimento} onChange={(e) => setVencimento(e.target.value)} erro={erros.diaVencimento} inputMode="numeric" placeholder="1 a 28" />
           <CampoTexto label="Limite do cartão" value={limite} onChange={(e) => setLimite(e.target.value)} erro={erros.limite} inputMode="decimal" placeholder="0,00" />
         </fieldset>
       ) : null}
       {erros.geral ? (
-        <div className="sm:col-span-3">
+        <div className="conta-form__largo">
           <Alerta>{erros.geral}</Alerta>
         </div>
       ) : null}
-      <div className="flex gap-2 sm:col-span-3">
+      <div className="conta-form__acoes">
         <Botao type="submit">{inicial ? 'Salvar alterações' : 'Criar conta'}</Botao>
         <Botao variante="secundario" onClick={onCancelar}>
           Cancelar

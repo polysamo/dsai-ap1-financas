@@ -1,0 +1,9 @@
+.conta-form { display: grid; gap: var(--esp-3); grid-template-columns: minmax(0, 1fr); }
+.conta-form__cartao { display: grid; gap: var(--esp-3); grid-template-columns: minmax(0, 1fr); border: 0; margin: 0; padding: 0; min-width: 0; }
+.conta-form__legenda { margin-bottom: var(--esp-1); font-size: var(--texto-sm); font-weight: 500; color: var(--cor-texto-suave); }
+.conta-form__acoes { display: flex; flex-wrap: wrap; gap: var(--esp-2); }
+@media (min-width: 640px) {
+  .conta-form { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .conta-form__cartao { grid-column: span 3; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .conta-form__largo, .conta-form__acoes { grid-column: span 3; }
+}

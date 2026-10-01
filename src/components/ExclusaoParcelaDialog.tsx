@@ -2,6 +2,7 @@ import { useEffect, useId } from 'react';
 import type { EscopoExclusao } from '../domain/cartoes';
 import type { Transacao } from '../domain/types';
 import { Botao } from './ui';
+import './ExclusaoParcelaDialog.css';
 
 interface Props {
   transacao: Transacao;
@@ -19,15 +20,15 @@ export function ExclusaoParcelaDialog({ transacao, onEscolher, onCancelar }: Pro
   }, [onCancelar]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4">
-      <div role="dialog" aria-modal="true" aria-labelledby={idTitulo} className="w-full max-w-md rounded-lg bg-white p-5 shadow-xl">
-        <h2 id={idTitulo} className="text-lg font-semibold text-slate-900">
+    <div className="exclusao-parcela">
+      <div role="dialog" aria-modal="true" aria-labelledby={idTitulo} className="exclusao-parcela__caixa">
+        <h2 id={idTitulo} className="exclusao-parcela__titulo">
           Excluir parcela?
         </h2>
-        <p className="mt-2 text-sm text-slate-700">
+        <p className="exclusao-parcela__texto">
           "{transacao.descricao}" faz parte de uma compra em {transacao.parcela?.total} parcelas. O que você quer excluir?
         </p>
-        <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-end">
+        <div className="exclusao-parcela__acoes">
           <Botao variante="secundario" onClick={onCancelar}>
             Cancelar
           </Botao>
