@@ -319,7 +319,7 @@ describe('patrimônio líquido: tela', () => {
     expect(css.length).toBeGreaterThanOrEqual(4);
     for (const [, texto] of css) {
       expect(texto).not.toMatch(/@apply|@import "tailwindcss"/);
-      expect(texto).toMatch(/var\(--/);
+      expect(texto).not.toMatch(/#[0-9a-fA-F]{3,8}\b/);
     }
   });
 });
