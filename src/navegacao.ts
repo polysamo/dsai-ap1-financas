@@ -4,4 +4,6 @@ export interface ItemNavegacao {
 }
 
 /** Navegação principal, na ordem de exibição. */
-export const itensNavegacao: ItemNavegacao[] = [];
+export const itensNavegacao: ItemNavegacao[] = [
+  { to: '/contas', rotulo: 'Contas' },
+];

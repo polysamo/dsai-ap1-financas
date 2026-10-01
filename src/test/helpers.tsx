@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { AppRoutes } from '../App';
-import { CHAVE_ESTADO, salvar } from '../storage/storage';
+import { CHAVE_ESTADO, estadoInicial, salvar } from '../storage/storage';
 import { Store, StoreProvider } from '../state/store';
 import type { AppState } from '../domain/types';
 
@@ -21,4 +21,9 @@ export function renderizarApp(rota = '/', estado?: AppState) {
 
 export function lerEstadoSalvo(): AppState {
   return JSON.parse(localStorage.getItem(CHAVE_ESTADO) ?? 'null') as AppState;
+}
+
+/** Estado inicial (com categorias padrão) sobrescrito por campos de teste. */
+export function construirEstado(parcial: Partial<AppState> = {}): AppState {
+  return { ...estadoInicial(), ...parcial };
 }

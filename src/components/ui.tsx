@@ -1,4 +1,4 @@
-import { useId, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes } from 'react';
+import { useId, type ButtonHTMLAttributes, type HTMLAttributes, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes } from 'react';
 
 const base =
   'w-full min-w-0 rounded-md border bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-600';
@@ -145,7 +145,11 @@ export function Alerta({ tipo = 'erro', children }: { tipo?: 'erro' | 'aviso' | 
 }
 
 /** Valor monetário com sinal e cor: positivo em verde, negativo em vermelho (o sinal vai no texto). */
-export function Valor({ centavos, texto, className = '' }: { centavos: number; texto: string; className?: string }) {
+export function Valor({ centavos, texto, className = '', ...props }: { centavos: number; texto: string } & HTMLAttributes<HTMLSpanElement>) {
   const cor = centavos < 0 ? 'text-red-700' : centavos > 0 ? 'text-emerald-800' : 'text-slate-700';
-  return <span className={`whitespace-nowrap font-medium tabular-nums ${cor} ${className}`}>{texto}</span>;
+  return (
+    <span className={`whitespace-nowrap font-medium tabular-nums ${cor} ${className}`} {...props}>
+      {texto}
+    </span>
+  );
 }

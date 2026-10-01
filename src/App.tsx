@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { FalhaCarregamento } from './components/FalhaCarregamento';
 import { Layout } from './components/Layout';
+import { ContasPage } from './pages/ContasPage';
 import { DadosPage } from './pages/DadosPage';
 import { useSnapshot } from './state/store';
 
@@ -11,7 +12,8 @@ export function AppRoutes() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route path="/" element={<Navigate to="/dados" replace />} />
+        <Route path="/" element={<Navigate to="/contas" replace />} />
+        <Route path="/contas" element={<ContasPage />} />
         <Route path="/dados" element={<DadosPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
