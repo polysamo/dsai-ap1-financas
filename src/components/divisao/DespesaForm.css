@@ -1,0 +1,9 @@
+.divisao-despesa-form { display: grid; gap: var(--esp-3); }
+.divisao-despesa-form__grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: var(--esp-3); }
+.divisao-despesa-form__divisao { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: var(--esp-3); margin: 0; padding: var(--esp-3); border: 1px solid var(--cor-borda); border-radius: var(--raio); }
+.divisao-despesa-form__divisao legend { padding: 0 var(--esp-1); font-size: var(--texto-sm); font-weight: 600; color: var(--cor-texto); }
+.divisao-despesa-form__check { display: flex; align-items: center; gap: var(--esp-2); font-size: var(--texto-sm); color: var(--cor-texto); }
+.divisao-despesa-form__soma, .divisao-despesa-form__erro { grid-column: 1 / -1; margin: 0; font-size: var(--texto-sm); }
+.divisao-despesa-form__soma { color: var(--cor-texto-suave); }
+.divisao-despesa-form__erro { color: var(--cor-perigo); }
+.divisao-despesa-form__acoes { display: flex; flex-wrap: wrap; gap: var(--esp-2); }

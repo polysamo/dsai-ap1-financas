@@ -1,0 +1,9 @@
+.divisao-historico { display: grid; gap: var(--esp-3); }
+.divisao-historico__filtros { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: var(--esp-3); }
+.divisao-historico__lista { display: grid; margin: 0; padding: 0; list-style: none; }
+.divisao-historico__item { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--esp-2) var(--esp-3); padding: var(--esp-3) 0; border-bottom: 1px solid var(--cor-borda); }
+.divisao-historico__texto { display: grid; min-width: 0; }
+.divisao-historico__titulo { overflow-wrap: anywhere; font-weight: 600; color: var(--cor-texto); font-size: var(--texto-sm); }
+.divisao-historico__detalhe { color: var(--cor-texto-mudo); font-size: var(--texto-xs); }
+.divisao-historico__valor { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--cor-texto); }
+.divisao-historico__acoes { display: flex; grid-column: 1 / -1; gap: var(--esp-2); }

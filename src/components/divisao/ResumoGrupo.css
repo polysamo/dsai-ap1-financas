@@ -1,0 +1,8 @@
+.divisao-resumo { display: grid; gap: var(--esp-3); }
+.divisao-resumo__totais { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: var(--esp-3); margin: 0; }
+.divisao-resumo__totais dt { font-size: var(--texto-sm); color: var(--cor-texto-suave); }
+.divisao-resumo__totais dd { margin: 0; font-size: var(--texto-lg); font-weight: 700; font-variant-numeric: tabular-nums; color: var(--cor-texto); }
+.divisao-resumo__tabela { width: 100%; border-collapse: collapse; font-size: var(--texto-sm); }
+.divisao-resumo__tabela caption { padding-bottom: var(--esp-1); text-align: left; font-weight: 600; color: var(--cor-texto); }
+.divisao-resumo__tabela th, .divisao-resumo__tabela td { padding: var(--esp-1) var(--esp-2); border-bottom: 1px solid var(--cor-borda); text-align: right; font-variant-numeric: tabular-nums; }
+.divisao-resumo__tabela th:first-child { text-align: left; font-weight: 500; }

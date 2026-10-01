@@ -1,0 +1,13 @@
+.divisao-saldos { display: grid; gap: var(--esp-3); }
+.divisao-saldos__lista, .divisao-saldos__sugestoes { display: grid; margin: 0; padding: 0; list-style: none; }
+.divisao-saldos__item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0 var(--esp-3); padding: var(--esp-2) 0; border-bottom: 1px solid var(--cor-borda); font-size: var(--texto-sm); }
+.divisao-saldos__nome { font-weight: 600; color: var(--cor-texto); }
+.divisao-saldos__detalhe { grid-column: 1; color: var(--cor-texto-mudo); font-size: var(--texto-xs); }
+.divisao-saldos__situacao { grid-column: 2; grid-row: 1 / span 2; align-self: center; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--cor-texto-suave); }
+.divisao-saldos__situacao--recebe { color: var(--cor-sucesso); }
+.divisao-saldos__situacao--deve { color: var(--cor-perigo); }
+.divisao-saldos__subtitulo { margin: var(--esp-2) 0 0; font-size: var(--texto-base); font-weight: 600; color: var(--cor-texto); }
+.divisao-saldos__sugestao { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--esp-2); padding: var(--esp-2) 0; border-bottom: 1px solid var(--cor-borda); font-size: var(--texto-sm); }
+.divisao-saldos__vazio { margin: 0; padding: var(--esp-2) var(--esp-3); border-radius: var(--raio); background: var(--cor-sucesso-suave); color: var(--cor-sucesso); font-size: var(--texto-sm); }
+.divisao-saldos__erro { margin: 0; font-size: var(--texto-sm); color: var(--cor-perigo); }
+.divisao-saldos__form { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); align-items: end; gap: var(--esp-3); padding-top: var(--esp-3); border-top: 1px solid var(--cor-borda); }

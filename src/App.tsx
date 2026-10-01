@@ -7,6 +7,7 @@ import { CartoesPage } from './pages/CartoesPage';
 import { ContasPage } from './pages/ContasPage';
 import { ConfiguracoesPage } from './pages/ConfiguracoesPage';
 import { DividasPage } from './pages/DividasPage';
+import { DivisaoPage } from './pages/DivisaoPage';
 import { ImportarCsvPage } from './pages/ImportarCsvPage';
 import { InvestimentosPage } from './pages/InvestimentosPage';
 import { MetasPage } from './pages/MetasPage';
@@ -34,6 +35,7 @@ export function AppRoutes() {
         <Route path="/regras" element={<RegrasPage />} />
         <Route path="/investimentos" element={<InvestimentosPage />} />
         <Route path="/dividas" element={<DividasPage />} />
+        <Route path="/divisao" element={<DivisaoPage />} />
         <Route path="/importar" element={<ImportarCsvPage />} />
         <Route path="/relatorios" element={<RelatoriosPage />} />
         <Route path="/configuracoes" element={<ConfiguracoesPage />} />

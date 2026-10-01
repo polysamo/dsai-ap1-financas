@@ -1,0 +1,4 @@
+.divisao-pagina { min-width: 0; }
+.divisao-pagina__acoes { display: flex; flex-wrap: wrap; gap: var(--esp-2); }
+.divisao-pagina__corpo { display: grid; gap: var(--esp-4); }
+.divisao-pagina__bloco { margin-top: var(--esp-4); }
