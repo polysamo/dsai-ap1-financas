@@ -1,5 +1,4 @@
 .benef-pagina { display: flex; flex-direction: column; gap: var(--esp-4); }
-.benef-filtros { display: grid; gap: var(--esp-3); grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); }
 .benef-colunas { display: grid; gap: var(--esp-4); grid-template-columns: minmax(0, 1fr); }
 @media (min-width: 64rem) {
   .benef-colunas { grid-template-columns: minmax(18rem, 26rem) minmax(0, 1fr); align-items: start; }
@@ -21,7 +20,9 @@
 }
 .benef-item:hover { background: var(--cor-superficie-2); }
 .benef-item--ativo { border-color: var(--cor-primaria); background: var(--cor-primaria-suave); }
-.benef-item__nome { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.benef-item__cabecalho { min-width: 0; display: flex; align-items: center; flex-wrap: wrap; gap: var(--esp-1); }
+.benef-item__nome { min-width: 0; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.benef-item__selos { display: inline-flex; flex-wrap: wrap; gap: var(--esp-1); }
 .benef-item__total { font-weight: 600; }
 .benef-item__meta { grid-column: 1 / -1; font-size: var(--texto-xs); color: var(--cor-texto-mudo); }
 .benef-item__barra { grid-column: 1 / -1; height: 4px; border-radius: var(--raio-total); background: var(--cor-superficie-3); overflow: hidden; }
