@@ -18,6 +18,7 @@ export const atalhos: Atalho[] = [
   { teclas: 'g i', letra: 'i', rota: '/importar', descricao: 'Ir para Importar CSV' },
   { teclas: 'g r', letra: 'r', rota: '/relatorios', descricao: 'Ir para Relatórios' },
   { teclas: '?', descricao: 'Mostrar a lista de atalhos' },
+  { teclas: 'Ctrl+K', descricao: 'Abrir a busca global (também /)' },
   { teclas: 'Ctrl+Z', descricao: 'Desfazer a última alteração' },
   { teclas: 'Ctrl+Shift+Z', descricao: 'Refazer a alteração desfeita (também Ctrl+Y)' },
 ];

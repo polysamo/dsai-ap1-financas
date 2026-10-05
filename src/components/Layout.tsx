@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { OnboardingEAtalhos } from './OnboardingEAtalhos';
 import { gruposNavegacao, itensRodape, rotuloDe } from '../navegacao';
 import { PreferenciasProvider } from '../state/preferencias';
 import { BotaoOcultarValores } from './BotaoOcultarValores';
 import { Drawer } from './novos';
+import { BuscaGlobal, useAtalhoBusca } from './busca/BuscaGlobal';
 import { AvisoHistorico, BotoesHistorico, useHistoricoUI } from './historico/ControlesHistorico';
 import './Layout.css';
 
@@ -53,7 +54,7 @@ function Sidebar() {
   );
 }
 
-function BarraInferior() {
+function BarraInferior({ onBuscar }: { onBuscar: () => void }) {
   const [mais, setMais] = useState(false);
   const { pathname } = useLocation();
   useEffect(() => setMais(false), [pathname]);
@@ -77,6 +78,16 @@ function BarraInferior() {
         </button>
       </nav>
       <Drawer aberto={mais} titulo="Mais" onFechar={() => setMais(false)}>
+        <button
+          type="button"
+          className="layout-link"
+          onClick={() => {
+            setMais(false);
+            onBuscar();
+          }}
+        >
+          Buscar
+        </button>
         <nav aria-label="Mais páginas" className="layout-nav">
           {[...gruposNavegacao.flatMap((g) => g.itens), ...itensRodape.map((i) => i.to)].map((to) => (
             <NavLink key={to} to={to} end={to === '/'} className={classeLink}>
@@ -92,6 +103,9 @@ function BarraInferior() {
 export function Layout() {
   const estreito = useEstreito();
   const historico = useHistoricoUI();
+  const [buscando, setBuscando] = useState(false);
+  const abrirBusca = useCallback(() => setBuscando(true), []);
+  useAtalhoBusca(abrirBusca);
   return (
     <PreferenciasProvider>
       <div className="layout-raiz">
@@ -99,6 +113,9 @@ export function Layout() {
         <div className="layout-conteudo">
           <div className="layout-topo">
             <BotoesHistorico ui={historico} />
+            <button type="button" className="layout-buscar" aria-keyshortcuts="Control+K" onClick={abrirBusca}>
+              Buscar <kbd>Ctrl K</kbd>
+            </button>
             <BotaoOcultarValores />
           </div>
           <AvisoHistorico ui={historico} />
@@ -107,7 +124,8 @@ export function Layout() {
             <Outlet />
           </main>
         </div>
-        {estreito ? <BarraInferior /> : null}
+        {estreito ? <BarraInferior onBuscar={abrirBusca} /> : null}
+        {buscando ? <BuscaGlobal onFechar={() => setBuscando(false)} /> : null}
       </div>
     </PreferenciasProvider>
   );

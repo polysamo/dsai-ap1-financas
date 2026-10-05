@@ -1,4 +1,5 @@
 import { Fragment, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Drawer, KpiCard } from '../components/novos';
 import { CategoriasPanel } from '../components/CategoriasPanel';
 import { ConfirmDialog } from '../components/ConfirmDialog';
@@ -10,7 +11,7 @@ import { LoteForm } from '../components/lote/LoteForm';
 import { aplicarLote, excluirLote, mensagemLote, restringirSelecao, resumoSelecao, type ResultadoLote } from '../domain/lote';
 import { Alerta, Botao, Cartao, EstadoVazio, TituloPagina, Valor } from '../components/ui';
 import { excluirParcela } from '../domain/cartoes';
-import { formatarData, hojeISO, mesDe, primeiroDia, ultimoDia } from '../domain/date';
+import { dataValida, formatarData, hojeISO, mesDe, primeiroDia, ultimoDia } from '../domain/date';
 import { formatarMoeda } from '../domain/money';
 import { formatarTags } from '../domain/tags';
 import {
@@ -34,13 +35,31 @@ function filtrosPadrao(): FiltrosTransacoes {
   return { de: primeiroDia(mes), ate: ultimoDia(mes) };
 }
 
+/** Filtros vindos da URL (`texto`, `de`, `ate`), usados pela busca global; sem nenhum, o mês atual. */
+export function filtrosDaUrl(params: URLSearchParams): FiltrosTransacoes {
+  const texto = params.get('texto') ?? '';
+  const de = params.get('de') ?? '';
+  const ate = params.get('ate') ?? '';
+  if (!texto && !dataValida(de) && !dataValida(ate)) return filtrosPadrao();
+  return { ...(texto ? { texto } : {}), ...(dataValida(de) ? { de } : {}), ...(dataValida(ate) ? { ate } : {}) };
+}
+
 type Aba = 'transacoes' | 'categorias';
 
 export function TransacoesPage() {
   const store = useStore();
   const estado = useEstado();
-  const [aba, setAba] = useState<Aba>('transacoes');
-  const [filtros, setFiltros] = useState<FiltrosTransacoes>(filtrosPadrao);
+  const [params] = useSearchParams();
+  const abaDaUrl: Aba = params.get('aba') === 'categorias' ? 'categorias' : 'transacoes';
+  const [aba, setAba] = useState<Aba>(abaDaUrl);
+  const [filtros, setFiltros] = useState<FiltrosTransacoes>(() => filtrosDaUrl(params));
+  // A busca global pode trocar a URL com a tela já aberta: os filtros acompanham.
+  const [urlAnterior, setUrlAnterior] = useState(params.toString());
+  if (params.toString() !== urlAnterior) {
+    setUrlAnterior(params.toString());
+    setFiltros(filtrosDaUrl(params));
+    setAba(abaDaUrl);
+  }
   const [limite, setLimite] = useState(TAMANHO_PAGINA);
   const [criando, setCriando] = useState(false);
   const [editandoId, setEditandoId] = useState<string | null>(null);

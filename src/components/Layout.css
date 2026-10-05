@@ -53,3 +53,19 @@
 @media print {
   .layout-sidebar, .layout-barra, .layout-topo { display: none; }
 }
+.layout-buscar {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-3);
+  margin-right: var(--esp-3);
+  padding: var(--esp-2) var(--esp-3);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-pequeno);
+  background: var(--cor-superficie);
+  color: var(--cor-texto-mudo);
+  font: inherit;
+  font-size: var(--texto-sm);
+  cursor: pointer;
+}
+.layout-buscar:hover { border-color: var(--cor-borda-forte); color: var(--cor-texto); }
+.layout-buscar kbd { font-family: inherit; font-size: var(--texto-xs); padding: 0 var(--esp-1); border: 1px solid var(--cor-borda); border-radius: var(--raio-pequeno); }
