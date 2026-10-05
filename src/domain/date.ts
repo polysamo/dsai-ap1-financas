@@ -72,3 +72,26 @@ export function ultimoDia(mes: Mes): DataISO {
   const [ano, m] = mes.split('-').map(Number);
   return `${mes}-${String(diasNoMes(ano, m)).padStart(2, '0')}`;
 }
+
+const MS_DIA = 86_400_000;
+
+/** Meia-noite UTC da data, para contar dias sem interferência de fuso ou horário de verão. */
+function diaUTC(iso: DataISO): number {
+  const [a, m, d] = iso.split('-').map(Number);
+  return Date.UTC(a, m - 1, d);
+}
+
+/** Soma (ou subtrai) dias corridos. */
+export function somarDias(data: DataISO, dias: number): DataISO {
+  return new Date(diaUTC(data) + dias * MS_DIA).toISOString().slice(0, 10);
+}
+
+/** Dias de `de` até `ate` (negativo se `ate` vem antes). */
+export function diasEntre(de: DataISO, ate: DataISO): number {
+  return Math.round((diaUTC(ate) - diaUTC(de)) / MS_DIA);
+}
+
+/** Dia da semana da data (0 = domingo). */
+export function diaDaSemana(data: DataISO): number {
+  return new Date(diaUTC(data)).getUTCDay();
+}

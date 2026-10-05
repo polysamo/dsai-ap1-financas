@@ -1,4 +1,4 @@
-import { dataValida, diasNoMes, hojeISO } from './date';
+import { dataValida, diasEntre, diasNoMes, hojeISO, somarDias } from './date';
 import { novoId } from './id';
 import { normalizarTexto } from './transacoes';
 import { falha, ok, type AppState, type Centavos, type DataISO, type Resultado } from './types';
@@ -78,25 +78,9 @@ export interface TotaisAssinaturas {
 
 // ---------- datas ----------
 
-const MS_DIA = 86_400_000;
-
-function paraUTC(iso: DataISO): number {
-  const [a, m, d] = iso.split('-').map(Number);
-  return Date.UTC(a, m - 1, d);
-}
-
-function deUTC(ms: number): DataISO {
-  const d = new Date(ms);
-  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`;
-}
-
-export function diasEntre(a: DataISO, b: DataISO): number {
-  return Math.round((paraUTC(b) - paraUTC(a)) / MS_DIA);
-}
-
 /** Soma um período à data, preservando o dia do mês (limitado ao último dia do mês de destino). */
 export function somarPeriodo(data: DataISO, frequencia: FrequenciaAssinatura): DataISO {
-  if (frequencia === 'semanal') return deUTC(paraUTC(data) + 7 * MS_DIA);
+  if (frequencia === 'semanal') return somarDias(data, 7);
   const [a, m, d] = data.split('-').map(Number);
   const meses = frequencia === 'mensal' ? 1 : 12;
   const total = a * 12 + (m - 1) + meses;

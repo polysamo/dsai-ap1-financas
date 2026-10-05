@@ -1,4 +1,4 @@
-import { mesDe, somarMeses } from './date';
+import { diasEntre, mesDe, somarMeses } from './date';
 import { percentualDecimal } from './relatorios';
 import { normalizarTexto } from './transacoes';
 import { falha, ok, type AppState, type Centavos, type DataISO, type Mes, type Resultado, type Transacao } from './types';
@@ -57,12 +57,10 @@ export function inicioDoPeriodo(periodo: PeriodoBeneficiarios, hoje: DataISO): D
   return `${somarMeses(mesDe(hoje), -(periodo - 1))}-01`;
 }
 
-const diaUTC = (iso: DataISO) => Date.UTC(+iso.slice(0, 4), +iso.slice(5, 7) - 1, +iso.slice(8, 10));
-
 function intervaloMedio(datas: DataISO[]): number | null {
   const unicas = [...new Set(datas)].sort();
   if (unicas.length < 2) return null;
-  const dias = (diaUTC(unicas[unicas.length - 1]) - diaUTC(unicas[0])) / 86400000;
+  const dias = diasEntre(unicas[0], unicas[unicas.length - 1]);
   return Math.round(dias / (unicas.length - 1));
 }
 

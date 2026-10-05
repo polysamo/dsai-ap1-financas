@@ -1,7 +1,6 @@
 import { cartoesAtivos, cicloFatura, mesFaturaAberta, resumoFatura } from './cartoes';
 import { saldosPorConta } from './contas';
-import { dataValida, formatarData, mesDe, nomeMes, somarMeses } from './date';
-import { somarDias } from './agenda';
+import { dataValida, diasEntre, formatarData, mesDe, nomeMes, somarDias, somarMeses } from './date';
 import { aporteMensalNecessario, acumulado, situacaoRitmo } from './metas';
 import { formatarMoeda } from './money';
 import { linhasOrcamento } from './orcamento';
@@ -87,12 +86,6 @@ export function preferenciasDe(estado: AppState): PreferenciasAlertas {
 // ------------------------------------------------------------------- cálculo
 
 const PESO: Record<Severidade, number> = { critico: 0, atencao: 1, info: 2 };
-
-function diasEntre(de: DataISO, ate: DataISO): number {
-  const [a1, m1, d1] = de.split('-').map(Number);
-  const [a2, m2, d2] = ate.split('-').map(Number);
-  return Math.round((Date.UTC(a2, m2 - 1, d2) - Date.UTC(a1, m1 - 1, d1)) / 86_400_000);
-}
 
 function emDias(dias: number): string {
   if (dias === 0) return 'hoje';

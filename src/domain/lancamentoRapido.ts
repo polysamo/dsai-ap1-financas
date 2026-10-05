@@ -1,6 +1,6 @@
 import { ordenarContas } from './contas';
 import { sugerirCategoria, sugerirTags } from './csv';
-import { dataParaISO, dataValida } from './date';
+import { dataValida, diaDaSemana, somarDias } from './date';
 import { parseValor } from './money';
 import { normalizarTag } from './tags';
 import { normalizarTexto, type DadosTransacao } from './transacoes';
@@ -21,14 +21,6 @@ const PALAVRAS_RECEITA = new Set(['recebi', 'receita']);
 /** Dias da semana como `Date.getDay()` (0 = domingo), sem acento e sem "-feira". */
 const DIAS_SEMANA: Record<string, number> = { domingo: 0, segunda: 1, terca: 2, quarta: 3, quinta: 4, sexta: 5, sabado: 6 };
 
-const deISO = (iso: DataISO) => new Date(Number(iso.slice(0, 4)), Number(iso.slice(5, 7)) - 1, Number(iso.slice(8, 10)));
-
-function somarDias(iso: DataISO, dias: number): DataISO {
-  const d = deISO(iso);
-  d.setDate(d.getDate() + dias);
-  return dataParaISO(d);
-}
-
 /** Interpreta um termo de data; `undefined` se o termo não é de data, `null` se parece data mas é inválido. */
 export function lerData(termo: string, hoje: DataISO): DataISO | null | undefined {
   const t = normalizarTexto(termo).replace(/-feira$/, '');
@@ -36,7 +28,7 @@ export function lerData(termo: string, hoje: DataISO): DataISO | null | undefine
   if (t === 'ontem') return somarDias(hoje, -1);
   if (t === 'anteontem') return somarDias(hoje, -2);
   if (t in DIAS_SEMANA) {
-    const atras = (deISO(hoje).getDay() - DIAS_SEMANA[t] + 7) % 7;
+    const atras = (diaDaSemana(hoje) - DIAS_SEMANA[t] + 7) % 7;
     return somarDias(hoje, -atras);
   }
   const m = /^(\d{1,2})\/(\d{1,2})(?:\/(\d{2}|\d{4}))?$/.exec(t);

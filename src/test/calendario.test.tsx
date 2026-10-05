@@ -10,12 +10,11 @@ import {
   marcarComoPago,
   reabrirAgendamento,
   situacaoAgendamento,
-  somarDias,
   totaisAgenda,
   type DadosAgendamento,
 } from '../domain/agenda';
 import { saldoConta } from '../domain/contas';
-import { hojeISO } from '../domain/date';
+import { hojeISO, somarDias } from '../domain/date';
 import type { Agendamento, AppState, Conta } from '../domain/types';
 import { itensNavegacao } from '../navegacao';
 import { CHAVE_ESTADO, carregar } from '../storage/storage';

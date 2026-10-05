@@ -1,4 +1,4 @@
-import { dataValida } from './date';
+import { dataValida, diasEntre } from './date';
 import { novoId, proximoTempo } from './id';
 import { aplicarLote, type ResultadoLote } from './lote';
 import { percentualDecimal } from './relatorios';
@@ -65,9 +65,8 @@ export function excluirEvento(estado: AppState, id: string): Resultado<AppState>
   return ok({ ...estado, eventos: listaEventos(estado).filter((e) => e.id !== id) });
 }
 
-const diaUTC = (iso: DataISO) => Date.UTC(+iso.slice(0, 4), +iso.slice(5, 7) - 1, +iso.slice(8, 10));
 /** Dias de `de` até `ate`, contando os dois extremos. */
-const diasInclusivos = (de: DataISO, ate: DataISO) => Math.round((diaUTC(ate) - diaUTC(de)) / 86400000) + 1;
+const diasInclusivos = (de: DataISO, ate: DataISO) => diasEntre(de, ate) + 1;
 
 export interface LinhaCategoriaEvento {
   categoriaId: string;

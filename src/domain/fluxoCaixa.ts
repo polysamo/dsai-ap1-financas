@@ -1,7 +1,6 @@
-import { somarDias } from './agenda';
 import { cartoesAtivos, mesFaturaAberta, resumoFatura } from './cartoes';
 import { saldoTotal } from './contas';
-import { diasNoMes, formatarData, mesDe, somarMeses } from './date';
+import { diasNoMes, formatarData, mesDe, somarDias, somarMeses } from './date';
 import { resumoDivida } from './dividas';
 import { formatarMoeda } from './money';
 import type { AppState, Centavos, DataISO, Recorrencia } from './types';

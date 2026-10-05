@@ -1,5 +1,5 @@
 import { dataDaParcela } from './cartoes';
-import { dataValida, mesDe } from './date';
+import { dataValida, mesDe, somarDias } from './date';
 import { novoId, proximoTempo } from './id';
 import { DESCRICAO_MAX } from './transacoes';
 import {
@@ -154,11 +154,6 @@ export function totaisAgenda(itens: Agendamento[]): TotaisAgenda {
     t[chave] += a.valor;
   }
   return t;
-}
-
-export function somarDias(data: DataISO, dias: number): DataISO {
-  const [a, m, d] = data.split('-').map(Number);
-  return new Date(Date.UTC(a, m - 1, d + dias)).toISOString().slice(0, 10);
 }
 
 export interface AlertaVencimentos {

@@ -1,6 +1,6 @@
 import { ID_OUTROS_DESPESA, ID_OUTROS_RECEITA } from '../data/categoriasPadrao';
 import { efeitoTransacao } from './contas';
-import { dataValida } from './date';
+import { dataValida, diasEntre } from './date';
 import { novoId, proximoTempo } from './id';
 import { parseValor } from './money';
 import { falha, ok, type AppState, type Centavos, type DataISO, type Resultado, type Transacao } from './types';
@@ -237,11 +237,6 @@ export function interpretarExtrato(texto: string): { linhas: LinhaExtrato[]; err
   return { linhas, erros };
 }
 
-function diasEntre(a: DataISO, b: DataISO): number {
-  const ms = (d: DataISO) => Date.UTC(Number(d.slice(0, 4)), Number(d.slice(5, 7)) - 1, Number(d.slice(8, 10)));
-  return Math.abs(Math.round((ms(a) - ms(b)) / 86400000));
-}
-
 export interface ParSugerido {
   linha: LinhaExtrato;
   transacao: Transacao;
@@ -259,7 +254,7 @@ export function sugerirPares(
   for (const linha of linhas) {
     for (const transacao of transacoes) {
       if (efeitoTransacao(transacao) !== linha.valor) continue;
-      const dias = diasEntre(linha.data, transacao.data);
+      const dias = Math.abs(diasEntre(linha.data, transacao.data));
       if (dias <= toleranciaDias) candidatos.push({ linha, transacao, dias });
     }
   }

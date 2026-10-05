@@ -1,4 +1,4 @@
-import { dataParaISO, dataValida, mesDe } from './date';
+import { dataValida, diasEntre, mesDe, somarDias } from './date';
 import { novoId } from './id';
 import { criarMeta } from './metas';
 import { formatarMoeda } from './money';
@@ -42,13 +42,6 @@ export interface DadosDesejo {
 }
 
 export const listaDesejos = (estado: Pick<AppState, 'desejos'>): Desejo[] => estado.desejos ?? [];
-
-function somarDias(iso: DataISO, dias: number): DataISO {
-  const d = new Date(Number(iso.slice(0, 4)), Number(iso.slice(5, 7)) - 1, Number(iso.slice(8, 10)) + dias);
-  return dataParaISO(d);
-}
-
-const diasEntre = (de: DataISO, ate: DataISO) => Math.round((Date.UTC(+ate.slice(0, 4), +ate.slice(5, 7) - 1, +ate.slice(8, 10)) - Date.UTC(+de.slice(0, 4), +de.slice(5, 7) - 1, +de.slice(8, 10))) / 86400000);
 
 function validar(estado: AppState, dados: DadosDesejo, categoriaAtual?: string): Resultado<DadosDesejo> {
   const nome = dados.nome.trim();
