@@ -6,6 +6,7 @@ import { formatarMoeda } from '../../domain/money';
 import { nomeCompleto } from '../../domain/subcategorias';
 import type { AppState, Resultado } from '../../domain/types';
 import { DateField } from '../novos';
+import { Badge, type TomBadge } from '../../ds/Badge';
 import { Botao, CampoSelect } from '../ui';
 
 interface Props {
@@ -50,6 +51,9 @@ function CompraForm({ estado, onComprar, onCancelar }: { estado: AppState; onCom
   );
 }
 
+const TOM_PRIORIDADE: Record<Desejo['prioridade'], TomBadge> = { alta: 'perigo', media: 'aviso', baixa: 'neutro' };
+const TOM_VEREDITO: Record<Analise['veredito']['tipo'], TomBadge> = { pode: 'sucesso', espere: 'aviso', nao: 'perigo' };
+
 export function CartaoDesejo({ desejo, analise, estado, onComprar, onDesistir, onCriarMeta, onEditar, onExcluir }: Props) {
   const [comprando, setComprando] = useState(false);
   const { veredito } = analise;
@@ -59,12 +63,15 @@ export function CartaoDesejo({ desejo, analise, estado, onComprar, onDesistir, o
         <div>
           <h3 className="desejo__nome">{desejo.nome}</h3>
           <p className="desejo__meta">
-            Prioridade {ROTULO_PRIORIDADE[desejo.prioridade].toLowerCase()} · {nomeCompleto(estado.categorias, desejo.categoriaId)} · anotado em {formatarData(desejo.criadoEm)}
+            {nomeCompleto(estado.categorias, desejo.categoriaId)} · anotado em {formatarData(desejo.criadoEm)}
           </p>
+          <Badge tom={TOM_PRIORIDADE[desejo.prioridade]}>Prioridade {ROTULO_PRIORIDADE[desejo.prioridade].toLowerCase()}</Badge>
         </div>
         <p className="desejo__preco tabular-nums">{formatarMoeda(desejo.preco)}</p>
       </header>
-      <p className="desejo__veredito">{textoVeredito(veredito)}</p>
+      <p className="desejo__veredito">
+        <Badge tom={TOM_VEREDITO[veredito.tipo]}>{textoVeredito(veredito)}</Badge>
+      </p>
       <ul className="desejo__verificacoes" aria-label={`Análise de ${desejo.nome}`}>
         {analise.verificacoes.map((v) => (
           <li key={v.id} className={v.aprovada ? 'desejo__ok' : 'desejo__falha'}>

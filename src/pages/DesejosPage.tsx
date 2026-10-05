@@ -1,9 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { CartaoDesejo } from '../components/desejos/CartaoDesejo';
 import { DesejoForm } from '../components/desejos/DesejoForm';
 import { KpiCard } from '../components/novos';
-import { Alerta, Botao, Cartao, EstadoVazio, TituloPagina } from '../components/ui';
+import { Botao, Cartao, EstadoVazio, TituloPagina } from '../components/ui';
+import { useAtalhoNovo } from '../lib/atalhos';
+import { useFeedback } from '../state/useFeedback';
 import { formatarData, hojeISO } from '../domain/date';
 import {
   analisarDesejo,
@@ -30,23 +32,33 @@ export function DesejosPage() {
   const hoje = hojeISO();
   const [editando, setEditando] = useState<Desejo | null>(null);
   const [excluindo, setExcluindo] = useState<Desejo | null>(null);
-  const [aviso, setAviso] = useState<{ tipo: 'sucesso' | 'erro'; texto: string } | null>(null);
+  const feedback = useFeedback();
+
+  /** Leva o foco ao primeiro campo do formulário de novo desejo. */
+  const irParaFormulario = useCallback(() => {
+    setEditando(null);
+    document.querySelector<HTMLInputElement>('form[aria-label="Novo desejo"] input')?.focus();
+  }, []);
+  useAtalhoNovo(irParaFormulario);
 
   const desejos = listaDesejos(estado);
   const ativos = useMemo(() => ordenarAtivos(desejos), [desejos]);
   const concluidos = desejos.filter((d) => d.situacao !== 'ativo').sort((a, b) => (b.concluidoEm ?? '').localeCompare(a.concluidoEm ?? ''));
   const totais = totaisDesejos(desejos);
 
-  const executar = (operacao: (s: AppState) => Resultado<AppState>, sucesso: string): Resultado<void> => {
+  /** Para formulários: o erro volta para o campo, então só o sucesso vira notificação. */
+  const aplicarEmFormulario = (operacao: (s: AppState) => Resultado<AppState>, mensagem: string): Resultado<void> => {
     const r = store.aplicar(operacao);
-    setAviso(r.ok ? { tipo: 'sucesso', texto: sucesso } : { tipo: 'erro', texto: r.erro });
+    if (r.ok) feedback.sucesso(mensagem, true);
     return r.ok ? ok(undefined) : r;
   };
+  const { executar } = feedback;
 
   return (
     <div className="desejos-pagina">
-      <TituloPagina>Lista de desejos</TituloPagina>
-      {aviso ? <Alerta tipo={aviso.tipo}>{aviso.texto}</Alerta> : null}
+      <TituloPagina descricao="Anote o que quer comprar, espere e veja se a compra cabe na reserva, no orçamento e na sobra do mês." acoes={<Botao onClick={irParaFormulario}>Novo desejo</Botao>}>
+        Lista de desejos
+      </TituloPagina>
 
       <div className="desejos-totais" role="group" aria-label="Totais da lista">
         <KpiCard rotulo="Total dos desejos ativos" valor={<span data-testid="total-ativos">{formatarMoeda(totais.ativos)}</span>} />
@@ -60,7 +72,7 @@ export function DesejosPage() {
           inicial={editando ?? undefined}
           onCancelar={editando ? () => setEditando(null) : undefined}
           onSalvar={(dados) => {
-            const r = executar((s) => (editando ? editarDesejo(s, editando.id, dados) : criarDesejo(s, dados, hoje)), editando ? 'Desejo atualizado.' : 'Desejo anotado.');
+            const r = aplicarEmFormulario((s) => (editando ? editarDesejo(s, editando.id, dados) : criarDesejo(s, dados, hoje)), editando ? 'Desejo atualizado.' : 'Desejo anotado.');
             if (r.ok) setEditando(null);
             return r;
           }}
@@ -68,7 +80,7 @@ export function DesejosPage() {
       </Cartao>
 
       {ativos.length === 0 ? (
-        <EstadoVazio titulo="Nenhum desejo anotado">
+        <EstadoVazio titulo="Nenhum desejo anotado" acao={<Botao onClick={irParaFormulario}>Anotar meu primeiro desejo</Botao>}>
           Anote o que você quer comprar e espere alguns dias antes de decidir: a regra dos 30 dias evita compras por impulso. O app avisa quando a compra cabe na sua reserva, no orçamento e na sobra do mês.
         </EstadoVazio>
       ) : (
@@ -79,7 +91,7 @@ export function DesejosPage() {
               desejo={d}
               estado={estado}
               analise={analisarDesejo(estado, d, hoje)}
-              onComprar={(contaId, data) => executar((s) => comprarDesejo(s, d.id, contaId, data), `Compra de ${d.nome} registrada como despesa.`)}
+              onComprar={(contaId, data) => aplicarEmFormulario((s) => comprarDesejo(s, d.id, contaId, data), `Compra de ${d.nome} registrada como despesa.`)}
               onDesistir={() => executar((s) => desistirDesejo(s, d.id, hoje), `Você desistiu de ${d.nome}: ${formatarMoeda(d.preco)} economizados.`)}
               onCriarMeta={() => executar((s) => metaDoDesejo(s, d.id, hoje), `Meta "${d.nome}" criada em Metas.`)}
               onEditar={() => setEditando(d)}
