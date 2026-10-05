@@ -11,6 +11,8 @@ import { formatarMoeda, percentual } from '../domain/money';
 import { acumulado, ordenarMetas } from '../domain/metas';
 import { linhasOrcamento } from '../domain/orcamento';
 import { calcularProjecao, despesasPorCategoria, resumoMes, serieMensal } from '../domain/projecao';
+import { saudeFinanceira } from '../domain/saude';
+import { MedidorNota } from '../components/saude/MedidorNota';
 import { useEstado } from '../state/store';
 import './DashboardPage.css';
 
@@ -33,6 +35,7 @@ export function DashboardPage() {
   const temLimites = estado.orcamentos.some((o) => o.mes === mes);
   const metasAtivas = ordenarMetas(estado.metas.filter((m) => m.status === 'ativa'));
   const semContas = estado.contas.filter((c) => !c.arquivada).length === 0;
+  const saude = useMemo(() => saudeFinanceira(estado, hoje), [estado, hoje]);
 
   return (
     <div>
@@ -81,6 +84,12 @@ export function DashboardPage() {
             }
           />
         </div>
+
+        {saude.nota !== null && saude.classificacao !== null ? (
+          <Cartao titulo="Saúde financeira" acoes={<Link to="/saude" className="dashboard__link dashboard__link--secundario">Ver indicadores</Link>}>
+            <MedidorNota nota={saude.nota} classificacao={saude.classificacao} compacto />
+          </Cartao>
+        ) : null}
 
         <div className="dashboard__duas-colunas">
           <Cartao titulo="Despesas por categoria">

@@ -1,0 +1,42 @@
+.saude-pagina { display: flex; flex-direction: column; gap: var(--esp-4); }
+.saude-periodo { margin: var(--esp-3) 0 0; font-size: var(--texto-sm); color: var(--cor-texto-mudo); }
+
+.saude-medidor { --cor-nota: var(--cor-primaria); }
+.saude-medidor--saudavel { --cor-nota: var(--cor-sucesso); }
+.saude-medidor--estavel { --cor-nota: var(--cor-info); }
+.saude-medidor--atencao { --cor-nota: var(--cor-aviso); }
+.saude-medidor--critica { --cor-nota: var(--cor-perigo); }
+.saude-medidor__nota { display: flex; align-items: baseline; gap: var(--esp-2); margin: 0 0 var(--esp-2); }
+.saude-medidor__numero { font-size: var(--texto-3xl); font-weight: 700; color: var(--cor-nota); }
+.saude-medidor--compacto .saude-medidor__numero { font-size: var(--texto-2xl); }
+.saude-medidor__de { color: var(--cor-texto-mudo); }
+.saude-medidor__classe { margin-left: var(--esp-2); font-weight: 600; }
+.saude-medidor__trilho { height: 0.6rem; border-radius: var(--raio-total); background: var(--cor-superficie-3); overflow: hidden; }
+.saude-medidor__barra { height: 100%; border-radius: inherit; background: var(--cor-nota); }
+
+.saude-recomendacoes { margin: 0; padding-left: var(--esp-5); display: flex; flex-direction: column; gap: var(--esp-2); }
+
+.saude-grade { display: grid; gap: var(--esp-3); grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); }
+.saude-indicador {
+  --cor-faixa: var(--cor-borda-forte);
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+  padding: var(--esp-4);
+  border: 1px solid var(--cor-borda);
+  border-top: 3px solid var(--cor-faixa);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+}
+.saude-indicador--otimo { --cor-faixa: var(--cor-sucesso); }
+.saude-indicador--bom { --cor-faixa: var(--cor-info); }
+.saude-indicador--atencao { --cor-faixa: var(--cor-aviso); }
+.saude-indicador--critico { --cor-faixa: var(--cor-perigo); }
+.saude-indicador__cabecalho { display: flex; justify-content: space-between; gap: var(--esp-2); align-items: baseline; }
+.saude-indicador__titulo { margin: 0; font-size: var(--texto-base); }
+.saude-indicador__faixa { font-size: var(--texto-xs); font-weight: 600; color: var(--cor-faixa); text-transform: uppercase; letter-spacing: 0.04em; }
+.saude-indicador__valor { margin: 0; font-size: var(--texto-2xl); font-weight: 700; }
+.saude-indicador__pontos { margin: 0; font-size: var(--texto-sm); color: var(--cor-texto-suave); }
+.saude-indicador__explicacao { margin: var(--esp-2) 0 0; font-size: var(--texto-sm); color: var(--cor-texto-mudo); }
+
+.saude-dashboard { display: flex; flex-direction: column; gap: var(--esp-3); }

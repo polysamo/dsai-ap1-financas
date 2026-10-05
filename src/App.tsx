@@ -5,6 +5,7 @@ import { Layout } from './components/Layout';
 import { DashboardPage } from './pages/DashboardPage';
 import { AssinaturasPage } from './pages/AssinaturasPage';
 import { CalculadorasPage } from './pages/CalculadorasPage';
+import { SaudePage } from './pages/SaudePage';
 import { AlertasPage } from './pages/AlertasPage';
 import { CalendarioPage } from './pages/CalendarioPage';
 import { CartoesPage } from './pages/CartoesPage';
@@ -44,6 +45,7 @@ export function AppRoutes() {
         <Route path="/assinaturas" element={<AssinaturasPage />} />
         <Route path="/calendario" element={<CalendarioPage />} />
         <Route path="/fluxo" element={<FluxoPage />} />
+        <Route path="/saude" element={<SaudePage />} />
         <Route path="/alertas" element={<AlertasPage />} />
         <Route path="/orcamento" element={<OrcamentoPage />} />
         <Route path="/orcamento-anual" element={<OrcamentoAnualPage />} />

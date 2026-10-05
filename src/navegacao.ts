@@ -14,6 +14,7 @@ export const itensNavegacao: ItemNavegacao[] = [
   { to: '/assinaturas', rotulo: 'Assinaturas' },
   { to: '/calendario', rotulo: 'Calendário' },
   { to: '/fluxo', rotulo: 'Fluxo de caixa' },
+  { to: '/saude', rotulo: 'Saúde financeira' },
   { to: '/alertas', rotulo: 'Alertas' },
   { to: '/orcamento', rotulo: 'Orçamento' },
   { to: '/orcamento-anual', rotulo: 'Orçamento anual' },
@@ -38,7 +39,7 @@ export interface GrupoNavegacao {
 
 /** Agrupamento da sidebar; rotas fora dos grupos caem em "Mais". */
 export const gruposNavegacao: GrupoNavegacao[] = [
-  { titulo: 'Visão geral', itens: ['/', '/calendario', '/relatorios', '/fluxo', '/alertas', '/patrimonio'] },
+  { titulo: 'Visão geral', itens: ['/', '/calendario', '/relatorios', '/fluxo', '/saude', '/alertas', '/patrimonio'] },
   { titulo: 'Movimentação', itens: ['/transacoes', '/contas', '/cartoes', '/transferencias', '/assinaturas', '/conciliacao'] },
   { titulo: 'Planejamento', itens: ['/orcamento', '/orcamento-anual', '/metas', '/dividas', '/investimentos', '/independencia', '/calculadoras', '/divisao'] },
   { titulo: 'Automação', itens: ['/regras', '/importar', '/importar-ofx'] },
