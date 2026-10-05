@@ -69,9 +69,12 @@ function ehObjeto(x: unknown): x is Dados {
   return typeof x === 'object' && x !== null && !Array.isArray(x);
 }
 
+/** Todo item das listas principais precisa ser um objeto com `id`; senão as telas quebrariam ao ler os campos. */
+const itemValido = (x: unknown): boolean => ehObjeto(x) && typeof x.id === 'string';
+
 function estruturaValida(dados: Dados): boolean {
   return (
-    CHAVES_LISTA.every((k) => Array.isArray(dados[k])) &&
+    CHAVES_LISTA.every((k) => Array.isArray(dados[k]) && (dados[k] as unknown[]).every((x) => k === 'orcamentos' || itemValido(x))) &&
     ehObjeto(dados.mapeamentosCsv) &&
     dados.schemaVersion === SCHEMA_ATUAL
   );

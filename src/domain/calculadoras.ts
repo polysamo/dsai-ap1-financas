@@ -37,6 +37,8 @@ function validarInteiro<T>(n: number, campo: Campo<T>, min: number, max: number,
   return null;
 }
 
+const ERRO_GRANDE = 'O resultado é grande demais para ser calculado. Reduza o prazo ou a taxa.';
+
 const primeiroErro = (...erros: (Resultado<void> | null)[]): Resultado<void> => erros.find((e) => e !== null) ?? ok(undefined);
 
 // ------------------------------------------------------------ juros compostos
@@ -94,6 +96,7 @@ export function jurosCompostos(d: DadosJuros): Resultado<ResultadoJuros> {
     anterior = saldo;
   }
   const saldoFinal = linhas[linhas.length - 1].saldo;
+  if (!Number.isSafeInteger(saldoFinal)) return falha(ERRO_GRANDE);
   const totalAportado = d.inicial + d.aporteMensal * d.meses;
   return ok({ linhas, saldoFinal, totalAportado, totalJuros: saldoFinal - totalAportado });
 }
@@ -213,6 +216,7 @@ export function rendaFixa(d: DadosRendaFixa): Resultado<ResultadoRendaFixa> {
   if (!v.ok) return v;
   const taxaAnualBruta = d.indexador === 'pre' ? d.taxaAnual : (d.cdiAnual * d.percentualCdi) / 100;
   const bruto = Math.round(d.valor * (Math.pow(fator(taxaAnualBruta), d.dias / 365) - 1));
+  if (!Number.isSafeInteger(bruto + d.valor)) return falha(ERRO_GRANDE);
   const aIof = aliquotaIof(d.dias);
   const iof = Math.round((bruto * aIof) / 100);
   const aIr = d.isento ? 0 : aliquotaIr(d.dias);
