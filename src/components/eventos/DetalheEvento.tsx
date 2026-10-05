@@ -2,6 +2,7 @@ import { formatarData } from '../../domain/date';
 import { ROTULO_SITUACAO_EVENTO, type Evento, type ResumoEvento } from '../../domain/eventos';
 import { formatarMoeda, formatarPercentual } from '../../domain/money';
 import { ProgressBar } from '../novos';
+import { Badge, type TomBadge } from '../../ds/Badge';
 import { Botao, Valor } from '../ui';
 import '../../styles/tabela-dados.css';
 
@@ -13,6 +14,8 @@ interface Props {
   onEditar: () => void;
   onExcluir: () => void;
 }
+
+const TOM: Record<ResumoEvento['situacao'], TomBadge> = { dentro: 'sucesso', atencao: 'aviso', estourado: 'perigo' };
 
 export function DetalheEvento({ evento, resumo, semTag, onEtiquetar, onEditar, onExcluir }: Props) {
   const passou = resumo.projecao !== null && resumo.projecao > evento.orcamento;
@@ -41,7 +44,7 @@ export function DetalheEvento({ evento, resumo, semTag, onEtiquetar, onEditar, o
         <div>
           <dt>Situação</dt>
           <dd data-testid="evento-situacao">
-            {ROTULO_SITUACAO_EVENTO[resumo.situacao]} ({formatarPercentual(resumo.percentual)})
+            <Badge tom={TOM[resumo.situacao]}>{ROTULO_SITUACAO_EVENTO[resumo.situacao]}</Badge> ({formatarPercentual(resumo.percentual)})
           </dd>
         </div>
       </dl>
