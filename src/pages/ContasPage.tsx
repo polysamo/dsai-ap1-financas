@@ -1,6 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Alerta, Botao, Cartao, TituloPagina, Valor } from '../components/ui';
+import { Botao, Cartao, TituloPagina, Valor } from '../components/ui';
+import { Badge } from '../ds/Badge';
+import { useAtalhoNovo } from '../lib/atalhos';
+import { useFeedback } from '../state/useFeedback';
 import { Drawer } from '../ds/Drawer';
 import { EmptyState } from '../components/EmptyState';
 import { ConfirmDialog } from '../components/ConfirmDialog';
@@ -36,19 +39,15 @@ export function ContasPage() {
   };
   const [editandoId, setEditandoId] = useState<string | null>(null);
   const [excluindo, setExcluindo] = useState<Conta | null>(null);
-  const [erro, setErro] = useState<string | null>(null);
+  const { executar, sucesso } = useFeedback();
+  const abrirCriacao = useCallback(() => setCriando(true), []);
+  useAtalhoNovo(abrirCriacao);
 
   const saldos = useMemo(() => saldosPorConta(estado), [estado]);
   const total = useMemo(() => saldoTotal(estado), [estado]);
   const editando = estado.contas.find((c) => c.id === editandoId);
   const ativas = ordenarContas(estado.contas.filter((c) => !c.arquivada));
   const arquivadas = ordenarContas(estado.contas.filter((c) => c.arquivada));
-
-  const executar = (op: Parameters<typeof store.aplicar>[0]) => {
-    const r = store.aplicar(op);
-    setErro(r.ok ? null : r.erro);
-    return r;
-  };
 
   const linha = (conta: Conta) => {
     const saldo = saldos.get(conta.id) ?? 0;
@@ -57,7 +56,10 @@ export function ContasPage() {
       <li key={conta.id} className="contas__card" data-testid="conta-card">
         <div className="contas__info">
           <p className="contas__nome">{conta.nome}</p>
-          <p className="contas__tipo">{ROTULO_TIPO_CONTA[conta.tipo]}</p>
+          <p className="contas__tipo">
+            {ROTULO_TIPO_CONTA[conta.tipo]}{' '}
+            {conta.arquivada ? <Badge tom="neutro">Arquivada</Badge> : conta.tipo === 'cartao' ? <Badge tom="info">Cartão</Badge> : null}
+          </p>
         </div>
         <p className="contas__saldo">
           <Valor centavos={saldo} texto={formatarMoeda(saldo)} />
@@ -67,11 +69,11 @@ export function ContasPage() {
             Editar
           </Botao>
           {conta.arquivada ? (
-            <Botao variante="secundario" aria-label={`Reativar ${conta.nome}`} onClick={() => executar((s) => reativarConta(s, conta.id))}>
+            <Botao variante="secundario" aria-label={`Reativar ${conta.nome}`} onClick={() => executar((s) => reativarConta(s, conta.id), 'Conta reativada.')}>
               Reativar
             </Botao>
           ) : (
-            <Botao variante="secundario" aria-label={`Arquivar ${conta.nome}`} onClick={() => executar((s) => arquivarConta(s, conta.id))}>
+            <Botao variante="secundario" aria-label={`Arquivar ${conta.nome}`} onClick={() => executar((s) => arquivarConta(s, conta.id), 'Conta arquivada.')}>
               Arquivar
             </Botao>
           )}
@@ -87,16 +89,20 @@ export function ContasPage() {
 
   return (
     <div>
-      <TituloPagina acoes={<Botao onClick={() => setCriando(true)}>Nova conta</Botao>}>Contas</TituloPagina>
+      <TituloPagina descricao="Onde seu dinheiro está: bancos, carteira, cartões e investimentos. O saldo é sempre calculado pelas transações." acoes={<Botao onClick={() => setCriando(true)}>Nova conta</Botao>}>
+        Contas
+      </TituloPagina>
       <div className="contas__pilha">
-        {erro ? <Alerta>{erro}</Alerta> : null}
         <Drawer aberto={criando} titulo="Nova conta" onFechar={fecharCriacao}>
           <ContaForm
             tipoInicial={tipoNovo}
             onCancelar={fecharCriacao}
             onSalvar={(dados) => {
               const r = store.aplicar((s) => criarConta(s, dados));
-              if (r.ok) fecharCriacao();
+              if (r.ok) {
+                fecharCriacao();
+                sucesso('Conta criada.', true);
+              }
               return r;
             }}
           />
@@ -108,7 +114,10 @@ export function ContasPage() {
               onCancelar={() => setEditandoId(null)}
               onSalvar={(dados: DadosConta) => {
                 const r = store.aplicar((s) => editarConta(s, editando.id, dados));
-                if (r.ok) setEditandoId(null);
+                if (r.ok) {
+                  setEditandoId(null);
+                  sucesso('Conta atualizada.', true);
+                }
                 return r;
               }}
             />
@@ -156,7 +165,7 @@ export function ContasPage() {
           perigo
           onCancelar={() => setExcluindo(null)}
           onConfirmar={() => {
-            executar((s) => excluirConta(s, excluindo.id));
+            executar((s) => excluirConta(s, excluindo.id), 'Conta excluída.');
             setExcluindo(null);
           }}
         />
