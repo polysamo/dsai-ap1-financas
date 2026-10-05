@@ -1,0 +1,30 @@
+.calc-aviso { margin: 0 0 var(--esp-4); font-size: var(--texto-sm); color: var(--cor-texto-mudo); }
+.calc-abas { display: flex; flex-wrap: wrap; gap: var(--esp-1); margin-bottom: var(--esp-4); border-bottom: 1px solid var(--cor-borda); }
+.calc-aba {
+  padding: var(--esp-2) var(--esp-3);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: var(--texto-sm);
+  cursor: pointer;
+}
+.calc-aba:hover { color: var(--cor-texto); }
+.calc-aba--ativa { border-bottom-color: var(--cor-primaria); color: var(--cor-primaria); font-weight: 600; }
+.calc-form { display: flex; flex-direction: column; gap: var(--esp-4); align-items: flex-start; }
+.calc-campos { display: grid; width: 100%; gap: var(--esp-3); grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); }
+.calc-opcao { display: inline-flex; align-items: center; gap: var(--esp-2); font-size: var(--texto-sm); color: var(--cor-texto-suave); }
+.calc-resultado { width: 100%; }
+.calc-resultado__titulo { margin: 0 0 var(--esp-3); font-size: var(--texto-lg); }
+.calc-resultado__grade { display: grid; gap: var(--esp-3); grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); margin: 0; }
+.calc-resultado__item { padding: var(--esp-3); border: 1px solid var(--cor-borda); border-radius: var(--raio-pequeno); background: var(--cor-superficie-2); }
+.calc-resultado__item dt { font-size: var(--texto-xs); color: var(--cor-texto-mudo); }
+.calc-resultado__item dd { margin: var(--esp-1) 0 0; font-size: var(--texto-lg); font-weight: 600; }
+.calc-resultado__item--destaque { border-color: var(--cor-primaria); }
+.calc-resultado__item--destaque dd { color: var(--cor-primaria); }
+.calc-grafico { margin-top: var(--esp-4); }
+.calc-grafico__area { height: 16rem; }
+.calc-detalhes { margin-top: var(--esp-3); }
+.calc-detalhes summary { cursor: pointer; color: var(--cor-texto-suave); font-size: var(--texto-sm); }
+.calc-tabela-rolagem { max-height: 20rem; overflow: auto; margin-top: var(--esp-2); }

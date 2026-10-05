@@ -4,6 +4,7 @@ import { FalhaCarregamento } from './components/FalhaCarregamento';
 import { Layout } from './components/Layout';
 import { DashboardPage } from './pages/DashboardPage';
 import { AssinaturasPage } from './pages/AssinaturasPage';
+import { CalculadorasPage } from './pages/CalculadorasPage';
 import { AlertasPage } from './pages/AlertasPage';
 import { CalendarioPage } from './pages/CalendarioPage';
 import { CartoesPage } from './pages/CartoesPage';
@@ -50,6 +51,7 @@ export function AppRoutes() {
         <Route path="/regras" element={<RegrasPage />} />
         <Route path="/investimentos" element={<InvestimentosPage />} />
         <Route path="/independencia" element={<IndependenciaPage />} />
+        <Route path="/calculadoras" element={<CalculadorasPage />} />
         <Route path="/dividas" element={<DividasPage />} />
         <Route path="/divisao" element={<DivisaoPage />} />
         <Route path="/patrimonio" element={<PatrimonioPage />} />
