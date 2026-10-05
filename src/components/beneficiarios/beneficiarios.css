@@ -1,0 +1,39 @@
+.benef-pagina { display: flex; flex-direction: column; gap: var(--esp-4); }
+.benef-filtros { display: grid; gap: var(--esp-3); grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); }
+.benef-colunas { display: grid; gap: var(--esp-4); grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 64rem) {
+  .benef-colunas { grid-template-columns: minmax(18rem, 26rem) minmax(0, 1fr); align-items: start; }
+}
+.benef-lista { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--esp-1); max-height: 70vh; overflow-y: auto; }
+.benef-item {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px var(--esp-2);
+  padding: var(--esp-2) var(--esp-3);
+  border: 1px solid transparent;
+  border-radius: var(--raio-pequeno);
+  background: none;
+  color: var(--cor-texto);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.benef-item:hover { background: var(--cor-superficie-2); }
+.benef-item--ativo { border-color: var(--cor-primaria); background: var(--cor-primaria-suave); }
+.benef-item__nome { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.benef-item__total { font-weight: 600; }
+.benef-item__meta { grid-column: 1 / -1; font-size: var(--texto-xs); color: var(--cor-texto-mudo); }
+.benef-item__barra { grid-column: 1 / -1; height: 4px; border-radius: var(--raio-total); background: var(--cor-superficie-3); overflow: hidden; }
+.benef-item__barra span { display: block; height: 100%; background: var(--cor-despesa); }
+.benef-dica { margin: 0; color: var(--cor-texto-mudo); font-size: var(--texto-sm); }
+
+.benef-detalhe { display: flex; flex-direction: column; gap: var(--esp-4); }
+.benef-detalhe__numeros { display: grid; gap: var(--esp-3); grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); margin: 0; }
+.benef-detalhe__numeros dt { font-size: var(--texto-xs); color: var(--cor-texto-mudo); }
+.benef-detalhe__numeros dd { margin: var(--esp-1) 0 0; font-weight: 600; }
+.benef-detalhe__link { color: var(--cor-primaria); font-size: var(--texto-sm); }
+.benef-detalhe__form { display: flex; flex-wrap: wrap; gap: var(--esp-2); align-items: flex-end; }
+.benef-detalhe__subtitulo { margin: 0 0 var(--esp-2); font-size: var(--texto-base); }
+.benef-detalhe__mesclas { margin: 0; padding: 0; list-style: none; }
+.benef-detalhe__mesclas li { display: flex; justify-content: space-between; gap: var(--esp-2); padding: var(--esp-1) 0; font-size: var(--texto-sm); }

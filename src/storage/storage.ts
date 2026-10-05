@@ -33,6 +33,7 @@ export function estadoInicial(): AppState {
     preferenciasAlertas: preferenciasPadrao(),
     desejos: [],
     eventos: [],
+    beneficiarios: { nomes: {}, mesclas: {} },
   };
 }
 

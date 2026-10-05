@@ -10,6 +10,7 @@ import type { RolloverCategorias } from './orcamentoAnual';
 import type { PreferenciasAlertas } from './alertas';
 import type { Desejo } from './desejos';
 import type { Evento } from './eventos';
+import type { DadosBeneficiarios } from './beneficiarios';
 
 export type Centavos = number;
 /** Data no formato AAAA-MM-DD. */
@@ -248,6 +249,8 @@ export interface AppState {
   desejos?: Desejo[];
   /** Eventos e viagens com orçamento próprio; ausente em dados antigos. */
   eventos?: Evento[];
+  /** Nomes e mesclas de beneficiários; ausente em dados antigos. */
+  beneficiarios?: DadosBeneficiarios;
 }
 
 export type Resultado<T> = { ok: true; valor: T } | { ok: false; erro: string; campo?: string };

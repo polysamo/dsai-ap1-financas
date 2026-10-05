@@ -8,6 +8,7 @@ import { CalculadorasPage } from './pages/CalculadorasPage';
 import { SaudePage } from './pages/SaudePage';
 import { DesejosPage } from './pages/DesejosPage';
 import { EventosPage } from './pages/EventosPage';
+import { BeneficiariosPage } from './pages/BeneficiariosPage';
 import { AlertasPage } from './pages/AlertasPage';
 import { CalendarioPage } from './pages/CalendarioPage';
 import { CartoesPage } from './pages/CartoesPage';
@@ -48,6 +49,7 @@ export function AppRoutes() {
         <Route path="/calendario" element={<CalendarioPage />} />
         <Route path="/fluxo" element={<FluxoPage />} />
         <Route path="/saude" element={<SaudePage />} />
+        <Route path="/beneficiarios" element={<BeneficiariosPage />} />
         <Route path="/alertas" element={<AlertasPage />} />
         <Route path="/orcamento" element={<OrcamentoPage />} />
         <Route path="/orcamento-anual" element={<OrcamentoAnualPage />} />
