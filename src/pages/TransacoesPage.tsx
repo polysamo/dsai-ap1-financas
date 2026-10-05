@@ -8,6 +8,7 @@ import { FiltrosTransacoesForm } from '../components/FiltrosTransacoes';
 import { TransacaoForm } from '../components/TransacaoForm';
 import { BarraLote, ROTULO_ACAO_LOTE, type AcaoLote } from '../components/lote/BarraLote';
 import { LoteForm } from '../components/lote/LoteForm';
+import { LancamentoRapido } from '../components/LancamentoRapido';
 import { aplicarLote, excluirLote, mensagemLote, restringirSelecao, resumoSelecao, type ResultadoLote } from '../domain/lote';
 import { Alerta, Botao, Cartao, EstadoVazio, TituloPagina, Valor } from '../components/ui';
 import { excluirParcela } from '../domain/cartoes';
@@ -145,6 +146,7 @@ export function TransacoesPage() {
         <div role="tabpanel" id="painel-transacoes" aria-labelledby="aba-transacoes" className="transacoes__painel">
           {erro ? <Alerta>{erro}</Alerta> : null}
           {mensagem ? <Alerta tipo="sucesso">{mensagem}</Alerta> : null}
+          <LancamentoRapido />
 
           <Drawer aberto={criando} titulo="Nova transação" onFechar={() => setCriando(false)}>
               <TransacaoForm
