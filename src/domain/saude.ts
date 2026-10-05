@@ -63,10 +63,28 @@ const umaCasa = (n: number) => n.toLocaleString('pt-BR', { minimumFractionDigits
 const pct = (n: number) => `${umaCasa(n)}%`;
 const arred1 = (n: number) => Math.round(n * 10) / 10;
 
-interface Base {
+/** Médias mensais de receita e despesa nos meses de referência (os mesmos da projeção). */
+export interface MediasMensais {
   meses: Mes[];
   receitaMedia: Centavos;
   despesaMedia: Centavos;
+}
+
+type Base = MediasMensais;
+
+export function mediasMensais(estado: AppState, hoje: DataISO): MediasMensais {
+  const meses = mesesBase(estado.transacoes, hoje);
+  const resumos = meses.map((m) => resumoMes(estado.transacoes, m));
+  const media = (f: (r: (typeof resumos)[number]) => number) => (meses.length ? Math.round(resumos.reduce((s, r) => s + f(r), 0) / meses.length) : 0);
+  return { meses, receitaMedia: media((r) => r.receitas), despesaMedia: media((r) => r.despesas) };
+}
+
+const TIPOS_LIQUIDOS = new Set(['corrente', 'poupanca', 'dinheiro']);
+
+/** Dinheiro de liquidez imediata: saldo positivo das contas ativas corrente, poupança e dinheiro. */
+export function reservaLiquida(estado: AppState): Centavos {
+  const saldos = saldosPorConta(estado);
+  return estado.contas.filter((c) => !c.arquivada && TIPOS_LIQUIDOS.has(c.tipo)).reduce((s, c) => s + Math.max(saldos.get(c.id) ?? 0, 0), 0);
 }
 
 function montar(id: IdIndicador, titulo: string, explicacao: string, valor: string | null, pontos: number | null, recomendacao?: string): Indicador {
@@ -88,13 +106,10 @@ function indicadorPoupanca(base: Base): Indicador {
   return montar('poupanca', 'Taxa de poupança', explicacao, pct(taxa), pontos, `Para poupar 20% da renda, o resultado mensal precisa melhorar ${formatarMoeda(falta)}.`);
 }
 
-const TIPOS_LIQUIDOS = new Set(['corrente', 'poupanca', 'dinheiro']);
-
 function indicadorReserva(estado: AppState, base: Base): Indicador {
   const explicacao = 'Quantos meses de despesas o saldo em conta corrente, poupança e dinheiro cobre. O ideal é 6 meses.';
   if (base.despesaMedia === 0) return montar('reserva', 'Reserva de emergência', explicacao, null, null);
-  const saldos = saldosPorConta(estado);
-  const reserva = estado.contas.filter((c) => !c.arquivada && TIPOS_LIQUIDOS.has(c.tipo)).reduce((s, c) => s + Math.max(saldos.get(c.id) ?? 0, 0), 0);
+  const reserva = reservaLiquida(estado);
   const meses = arred1(reserva / base.despesaMedia);
   const pontos = pontuar(meses, [
     [(v) => v >= 6, 100],
@@ -177,10 +192,7 @@ function indicadorTendencia(estado: AppState, base: Base): Indicador {
 
 /** Calcula todos os indicadores e a nota geral; não altera o estado. */
 export function saudeFinanceira(estado: AppState, hoje: DataISO): SaudeFinanceira {
-  const meses = mesesBase(estado.transacoes, hoje);
-  const resumos = meses.map((m) => resumoMes(estado.transacoes, m));
-  const media = (f: (r: (typeof resumos)[number]) => number) => (meses.length ? Math.round(resumos.reduce((s, r) => s + f(r), 0) / meses.length) : 0);
-  const base: Base = { meses, receitaMedia: media((r) => r.receitas), despesaMedia: media((r) => r.despesas) };
+  const base = mediasMensais(estado, hoje);
   const indicadores = [
     indicadorPoupanca(base),
     indicadorReserva(estado, base),
@@ -191,5 +203,5 @@ export function saudeFinanceira(estado: AppState, hoje: DataISO): SaudeFinanceir
   ];
   const comDados = indicadores.filter((i) => i.pontos !== null);
   const nota = comDados.length ? Math.round(comDados.reduce((s, i) => s + (i.pontos ?? 0), 0) / comDados.length) : null;
-  return { indicadores, nota, classificacao: nota === null ? null : classificar(nota), mesesReferencia: meses };
+  return { indicadores, nota, classificacao: nota === null ? null : classificar(nota), mesesReferencia: base.meses };
 }

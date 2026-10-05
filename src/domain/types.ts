@@ -8,6 +8,7 @@ import type { EstadoConciliacoes } from './conciliacao';
 
 import type { RolloverCategorias } from './orcamentoAnual';
 import type { PreferenciasAlertas } from './alertas';
+import type { Desejo } from './desejos';
 
 export type Centavos = number;
 /** Data no formato AAAA-MM-DD. */
@@ -242,6 +243,8 @@ export interface AppState {
   rolloverCategorias?: RolloverCategorias;
   /** Opcional para dados antigos e para o exemplo; leia com `preferenciasDe`. */
   preferenciasAlertas?: PreferenciasAlertas;
+  /** Lista de desejos; ausente em dados antigos, tratada como vazia. */
+  desejos?: Desejo[];
 }
 
 export type Resultado<T> = { ok: true; valor: T } | { ok: false; erro: string; campo?: string };

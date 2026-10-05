@@ -1,0 +1,34 @@
+.desejos-pagina { display: flex; flex-direction: column; gap: var(--esp-4); }
+.desejos-totais { display: grid; gap: var(--esp-3); grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+.desejos-form { display: grid; gap: var(--esp-3); grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); align-items: start; }
+.desejos-form__acoes { display: flex; gap: var(--esp-2); align-self: end; }
+.desejos-lista { display: grid; gap: var(--esp-3); grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr)); }
+
+.desejo {
+  --cor-veredito: var(--cor-perigo);
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  padding: var(--esp-4);
+  border: 1px solid var(--cor-borda);
+  border-left: 4px solid var(--cor-veredito);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+}
+.desejo--pode { --cor-veredito: var(--cor-sucesso); }
+.desejo--espere { --cor-veredito: var(--cor-aviso); }
+.desejo__cabecalho { display: flex; justify-content: space-between; gap: var(--esp-3); }
+.desejo__nome { margin: 0; font-size: var(--texto-lg); }
+.desejo__meta { margin: var(--esp-1) 0 0; font-size: var(--texto-xs); color: var(--cor-texto-mudo); }
+.desejo__preco { margin: 0; font-size: var(--texto-lg); font-weight: 700; white-space: nowrap; }
+.desejo__veredito { margin: 0; font-weight: 700; color: var(--cor-veredito); }
+.desejo__verificacoes { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--esp-1); font-size: var(--texto-sm); }
+.desejo__ok strong { color: var(--cor-sucesso); }
+.desejo__falha strong { color: var(--cor-perigo); }
+.desejo__acoes { display: flex; flex-wrap: wrap; gap: var(--esp-2); }
+.desejo__compra { display: flex; flex-direction: column; gap: var(--esp-2); }
+.desejo__erro { margin: 0; color: var(--cor-perigo); font-size: var(--texto-sm); }
+
+.desejos-concluidos summary { cursor: pointer; color: var(--cor-texto-suave); }
+.desejos-concluidos ul { margin: var(--esp-2) 0 0; padding: 0; list-style: none; }
+.desejos-concluido { display: flex; justify-content: space-between; gap: var(--esp-2); padding: var(--esp-2) 0; border-bottom: 1px solid var(--cor-borda); font-size: var(--texto-sm); }

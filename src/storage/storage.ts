@@ -31,6 +31,7 @@ export function estadoInicial(): AppState {
     conciliacoes: { fechadas: [], rascunhos: {} },
     rolloverCategorias: [],
     preferenciasAlertas: preferenciasPadrao(),
+    desejos: [],
   };
 }
 
