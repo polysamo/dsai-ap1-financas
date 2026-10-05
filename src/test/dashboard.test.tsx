@@ -226,8 +226,8 @@ describe('dashboard: tela', () => {
     expect(screen.getByRole('img', { name: /receitas e despesas dos últimos 6 meses/i })).toBeInTheDocument();
     const tabela = screen.getByRole('table', { name: 'Receitas e despesas por mês', hidden: true });
     expect(within(tabela).getAllByRole('row', { hidden: true })).toHaveLength(7);
-    const total = screen.getByTestId('total-categorias');
-    expect(total).toHaveTextContent(/R\$/);
+    const categorias = screen.getByRole('table', { name: 'Despesas por categoria', hidden: true });
+    expect(within(categorias).getByRole('row', { name: /Total/, hidden: true })).toHaveTextContent(/R\$/);
   });
 
   it('critério 5: destaca categorias estouradas e em atenção; sem limites, convida a defini-los', () => {

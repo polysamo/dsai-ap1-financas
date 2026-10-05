@@ -1,0 +1,20 @@
+.grafico { margin: 0; display: flex; flex-direction: column; gap: var(--esp-3); min-width: 0; }
+.grafico__titulo { font-size: var(--texto-sm); font-weight: var(--peso-semibold); color: var(--cor-texto-suave); }
+.grafico__area { width: 100%; min-width: 0; }
+.grafico__vazio { margin: 0; padding: var(--esp-6) var(--esp-4); border-radius: var(--raio); background: var(--cor-superficie-2); color: var(--cor-texto-mudo); font-size: var(--texto-sm); text-align: center; }
+.grafico-legenda { display: flex; flex-wrap: wrap; gap: var(--esp-2) var(--esp-4); margin: 0; padding: 0; list-style: none; font-size: var(--texto-xs); color: var(--cor-texto-suave); }
+.grafico-legenda__item { display: inline-flex; align-items: center; gap: var(--esp-2); }
+.grafico-legenda__amostra { display: inline-block; width: 0.75rem; height: 0.75rem; border-radius: 2px; flex-shrink: 0; }
+.grafico-dica { padding: var(--esp-2) var(--esp-3); border: 1px solid var(--cor-borda-forte); border-radius: var(--raio-pequeno); background: var(--cor-superficie); box-shadow: var(--sombra-md); font-size: var(--texto-sm); }
+.grafico-dica__rotulo { margin: 0 0 var(--esp-1); font-weight: var(--peso-semibold); }
+.grafico-dica__linha { display: flex; align-items: center; gap: var(--esp-2); margin: 0; }
+.grafico-dica__linha strong { margin-left: auto; padding-left: var(--esp-3); }
+.grafico__detalhes { font-size: var(--texto-sm); }
+.grafico__resumo { cursor: pointer; color: var(--cor-texto-suave); font-size: var(--texto-xs); }
+.grafico__tabela { width: 100%; margin-top: var(--esp-2); border-collapse: collapse; font-size: var(--texto-sm); }
+.grafico__tabela th, .grafico__tabela td { padding: var(--esp-1) var(--esp-2); border-bottom: 1px solid var(--cor-borda); text-align: left; }
+.grafico__tabela thead th { font-size: var(--texto-xs); color: var(--cor-texto-mudo); font-weight: var(--peso-semibold); }
+.grafico__tabela tfoot th, .grafico__tabela tfoot td { font-weight: var(--peso-semibold); border-bottom: 0; }
+.grafico__num { text-align: right !important; font-variant-numeric: tabular-nums; }
+.recharts-cartesian-grid line { stroke: var(--cor-borda); }
+.recharts-text { fill: var(--cor-texto-mudo); }

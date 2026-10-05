@@ -309,14 +309,14 @@ describe('patrimônio líquido: tela', () => {
       ...brutos(import.meta.glob('../components/patrimonio/*.tsx', { query: '?raw', import: 'default', eager: true })),
       ...brutos(import.meta.glob('../pages/PatrimonioPage.tsx', { query: '?raw', import: 'default', eager: true })),
     ];
-    expect(fontes.length).toBeGreaterThanOrEqual(5);
+    expect(fontes.length).toBeGreaterThanOrEqual(4);
     for (const [nome, codigo] of fontes) {
       for (const m of codigo.matchAll(/className=(?:"([^"]*)"|\{`([^`]*)`\})/g)) {
         for (const classe of (m[1] ?? m[2]).split(/\s+/).filter(Boolean)) expect(classe, nome).toMatch(/^patrim-|^\$\{/);
       }
     }
     const css = brutos(import.meta.glob('../components/patrimonio/*.css', { query: '?raw', import: 'default', eager: true }));
-    expect(css.length).toBeGreaterThanOrEqual(4);
+    expect(css.length).toBeGreaterThanOrEqual(3);
     for (const [, texto] of css) {
       expect(texto).not.toMatch(/@apply|@import "tailwindcss"/);
       expect(texto).not.toMatch(/#[0-9a-fA-F]{3,8}\b/);

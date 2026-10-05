@@ -151,3 +151,13 @@ html.claro {
 @media (prefers-reduced-motion: reduce) {
   :root { --mov-rapido: 0ms; --mov-normal: 0ms; --mov-lento: 0ms; }
 }
+
+/* Paleta categórica dos gráficos (Okabe-Ito adaptada): 8 cores com contraste mínimo de 3:1 contra a superfície de cada tema. */
+:root, html.dark {
+  --grafico-1: #60a5fa; --grafico-2: #fb923c; --grafico-3: #4ade80; --grafico-4: #f472b6;
+  --grafico-5: #facc15; --grafico-6: #a78bfa; --grafico-7: #2dd4bf; --grafico-8: #f87171;
+}
+html.claro {
+  --grafico-1: #1d4ed8; --grafico-2: #c2410c; --grafico-3: #15803d; --grafico-4: #be185d;
+  --grafico-5: #a16207; --grafico-6: #6d28d9; --grafico-7: #0f766e; --grafico-8: #b91c1c;
+}

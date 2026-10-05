@@ -1,7 +1,7 @@
 /* Investimentos: CSS puro com tokens de design. */
 .invest-pagina { display: grid; gap: var(--esp-4); }
 .invest-duas-colunas { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--esp-4); }
-@media (min-width: 1024px) { .invest-duas-colunas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .invest-duas-colunas { grid-template-columns: repeat(2, minmax(0, 1fr)); }}
 
 .invest-texto-suave { margin: 0; font-size: var(--texto-sm); color: var(--cor-texto-suave); }
 .invest-espaco-cima { margin-top: var(--esp-3); }
@@ -9,11 +9,10 @@
 .invest-num { font-variant-numeric: tabular-nums; }
 .invest-forte { font-weight: 600; }
 .invest-grande { font-size: var(--texto-lg); }
-.invest-direita { text-align: right; }
 
 .invest-metricas { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--esp-3); margin: 0; }
 .invest-metricas dd { margin: 0; overflow-wrap: anywhere; }
-@media (min-width: 640px) { .invest-metricas { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 640px) { .invest-metricas { grid-template-columns: repeat(3, minmax(0, 1fr)); }}
 .invest-acoes { display: flex; flex-wrap: wrap; gap: var(--esp-2); }
 
 .invest-alocacao { display: grid; gap: var(--esp-3); margin: 0; padding: 0; list-style: none; }
@@ -35,14 +34,5 @@
 .invest-form-botoes { display: flex; flex-wrap: wrap; gap: var(--esp-2); }
 @media (min-width: 640px) {
   .invest-form-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .invest-form-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
 
-.invest-grafico { width: 100%; height: 14rem; }
-.invest-tabela { width: 100%; margin-top: var(--esp-2); border-collapse: collapse; text-align: left; }
-.invest-tabela thead tr { color: var(--cor-texto-suave); }
-.invest-tabela th, .invest-tabela td { padding: var(--esp-1) 0; }
-.invest-tabela thead th { font-weight: 500; text-align: left; }
-.invest-tabela tbody th { font-weight: 400; text-align: left; }
-.invest-tabela tbody tr { border-top: 1px solid var(--cor-borda); }
-.invest-tabela .invest-direita { text-align: right; }
+  .invest-form-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }}

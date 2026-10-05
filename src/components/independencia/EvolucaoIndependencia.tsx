@@ -1,16 +1,9 @@
-import { CartesianGrid, Legend, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { LineChart } from '../../charts';
 import { Cartao } from '../ui';
 import { formatarMoeda } from '../../domain/money';
 import type { ParametrosIndependencia, Simulacao } from '../../domain/independencia';
 import './EvolucaoIndependencia.css';
 import './TabelaIndependencia.css';
-
-const COR_PATRIMONIO = '#1d4ed8';
-const COR_APORTADO = '#c2410c';
-
-const emReais = (centavos: number) => centavos / 100;
-const rotuloEixo = (valor: unknown) => `R$ ${Number(valor).toLocaleString('pt-BR')}`;
-const dica = (valor: unknown) => formatarMoeda(Math.round(Number(valor) * 100));
 
 interface Props {
   parametros: ParametrosIndependencia;
@@ -26,29 +19,27 @@ export function EvolucaoIndependencia({ parametros, simulacao }: Props) {
     );
   }
   const pontos = [
-    { ano: 0, Patrimônio: emReais(parametros.patrimonio), Aportado: 0 },
-    ...simulacao.anual.map((p) => ({ ano: p.meses / 12, Patrimônio: emReais(p.patrimonio), Aportado: emReais(p.aportado) })),
+    { ano: 0, patrimonio: parametros.patrimonio, aportado: 0 },
+    ...simulacao.anual.map((p) => ({ ano: p.meses / 12, patrimonio: p.patrimonio, aportado: p.aportado })),
   ];
   return (
     <Cartao titulo="Evolução do patrimônio">
-      <div
-        role="img"
-        aria-label={`Gráfico de linhas da evolução anual do patrimônio até ${formatarMoeda(simulacao.alvo)}; a tabela abaixo traz os mesmos valores`}
-        className="indep-evolucao__grafico"
-      >
-        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
-          <LineChart data={pontos} margin={{ left: 8, right: 16 }}>
-            <CartesianGrid vertical={false} strokeDasharray="3 3" />
-            <XAxis dataKey="ano" type="number" domain={[0, 'dataMax']} tickFormatter={(v) => `${Math.round(Number(v))} a`} fontSize={12} />
-            <YAxis tickFormatter={rotuloEixo} fontSize={12} width={88} />
-            <Tooltip formatter={dica} labelFormatter={(v) => `${Number(v).toLocaleString('pt-BR', { maximumFractionDigits: 1 })} anos`} />
-            <Legend />
-            <ReferenceLine y={emReais(simulacao.alvo)} stroke={COR_APORTADO} strokeDasharray="6 4" label={{ value: 'Alvo', fontSize: 12, position: 'insideTopLeft' }} />
-            <Line type="monotone" dataKey="Patrimônio" stroke={COR_PATRIMONIO} strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="Aportado" stroke={COR_APORTADO} strokeWidth={2} dot={false} />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+      <LineChart
+        descricao={`Gráfico de linhas da evolução anual do patrimônio até ${formatarMoeda(simulacao.alvo)}; a tabela abaixo traz os mesmos valores`}
+        rotuloTabela="Evolução do patrimônio"
+        dados={pontos}
+        chaveX="ano"
+        rotuloX="Ano"
+        formatarX={(v) => `${Math.round(Number(v))} a`}
+        eixoNumerico
+        series={[
+          { chave: 'patrimonio', nome: 'Patrimônio', cor: 1 },
+          { chave: 'aportado', nome: 'Aportado', cor: 2 },
+        ]}
+        referencia={{ valor: simulacao.alvo, rotulo: 'Alvo' }}
+        pontos={false}
+        semTabela
+      />
       <details className="indep-evolucao__detalhes" open>
         <summary>Tabela anual da evolução</summary>
         <div className="indep-tabela__envolt indep-tabela__rolagem">

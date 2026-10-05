@@ -1,30 +1,27 @@
-import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { LineChart } from '../../charts';
 import { jurosCompostos, type MesJuros } from '../../domain/calculadoras';
 import { formatarMoeda } from '../../domain/money';
 import { Botao, CampoTexto } from '../ui';
 import { Resultados } from './Resultados';
 import { useCalculadora } from './useCalculadora';
 
-const rotuloEixo = (valor: unknown) => `R$ ${Number(valor).toLocaleString('pt-BR')}`;
-const dica = (valor: unknown) => formatarMoeda(Math.round(Number(valor) * 100));
-
 function GraficoJuros({ linhas }: { linhas: MesJuros[] }) {
-  const pontos = linhas.map((l) => ({ mes: l.mes, Saldo: l.saldo / 100, Aportado: l.aportado / 100 }));
   return (
     <div className="calc-grafico">
-      <div role="img" aria-label={`Gráfico da evolução do saldo e do total aportado em ${linhas.length} meses`} className="calc-grafico__area">
-        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
-          <LineChart data={pontos} margin={{ left: 8, right: 16, top: 8 }}>
-            <CartesianGrid vertical={false} strokeDasharray="3 3" />
-            <XAxis dataKey="mes" fontSize={12} minTickGap={24} />
-            <YAxis tickFormatter={rotuloEixo} fontSize={12} width={90} />
-            <Tooltip formatter={dica} labelFormatter={(m) => `Mês ${m}`} />
-            <Legend />
-            <Line type="monotone" dataKey="Saldo" stroke="var(--cor-primaria)" strokeWidth={2} dot={false} isAnimationActive={false} />
-            <Line type="monotone" dataKey="Aportado" stroke="var(--cor-texto-mudo)" strokeDasharray="4 4" dot={false} isAnimationActive={false} />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+      <LineChart
+        descricao={`Gráfico da evolução do saldo e do total aportado em ${linhas.length} meses`}
+        rotuloTabela="Saldo e total aportado por mês"
+        dados={linhas.map((l) => ({ mes: l.mes, saldo: l.saldo, aportado: l.aportado }))}
+        chaveX="mes"
+        rotuloX="Mês"
+        formatarX={(m) => `Mês ${m}`}
+        series={[
+          { chave: 'saldo', nome: 'Saldo', cor: 1 },
+          { chave: 'aportado', nome: 'Aportado', cor: 2 },
+        ]}
+        pontos={false}
+        semTabela
+      />
       <details className="calc-detalhes">
         <summary>Ver mês a mês</summary>
         <div className="calc-tabela-rolagem">

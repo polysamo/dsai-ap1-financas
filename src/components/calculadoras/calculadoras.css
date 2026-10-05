@@ -24,7 +24,6 @@
 .calc-resultado__item--destaque { border-color: var(--cor-primaria); }
 .calc-resultado__item--destaque dd { color: var(--cor-primaria); }
 .calc-grafico { margin-top: var(--esp-4); }
-.calc-grafico__area { height: 16rem; }
 .calc-detalhes { margin-top: var(--esp-3); }
 .calc-detalhes summary { cursor: pointer; color: var(--cor-texto-suave); font-size: var(--texto-sm); }
 .calc-tabela-rolagem { max-height: 20rem; overflow: auto; margin-top: var(--esp-2); }
