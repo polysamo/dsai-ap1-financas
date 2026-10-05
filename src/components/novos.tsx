@@ -1,4 +1,4 @@
-import { useId, useState, type InputHTMLAttributes, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { nomeMes, somarMeses } from '../domain/date';
 import './novos.css';
 
@@ -34,65 +34,4 @@ export { EmptyState } from '../ds/EmptyState';
 export { ProgressBar, estadoProgresso, type EstadoProgresso } from '../ds/ProgressBar';
 export { Drawer } from '../ds/Drawer';
 
-const paraExibicao = (iso: string) => (/^\d{4}-\d{2}-\d{2}$/.test(iso) ? `${iso.slice(8)}/${iso.slice(5, 7)}/${iso.slice(0, 4)}` : '');
-
-function mascara(texto: string): string {
-  const d = texto.replace(/\D/g, '').slice(0, 8);
-  if (d.length <= 2) return d;
-  if (d.length <= 4) return `${d.slice(0, 2)}/${d.slice(2)}`;
-  return `${d.slice(0, 2)}/${d.slice(2, 4)}/${d.slice(4)}`;
-}
-
-function paraISO(exibicao: string): string {
-  const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(exibicao);
-  if (!m) return '';
-  const [, d, mes, a] = m;
-  const dt = new Date(Number(a), Number(mes) - 1, Number(d));
-  return dt.getFullYear() === Number(a) && dt.getMonth() === Number(mes) - 1 && dt.getDate() === Number(d) ? `${a}-${mes}-${d}` : '';
-}
-
-type DateFieldProps = { label: string; erro?: string; dica?: string; value: string; onChange: (iso: string) => void } & Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'type'>;
-
-/** Campo de data dd/mm/aaaa independente do locale; value/onChange usam AAAA-MM-DD ('' quando incompleto). */
-export function DateField({ label, erro, dica, value, onChange, className = '', ...props }: DateFieldProps) {
-  const id = useId();
-  const [texto, setTexto] = useState(paraExibicao(value));
-  const [ultimo, setUltimo] = useState(value);
-  if (value !== ultimo) {
-    setUltimo(value);
-    if (paraISO(texto) !== value) setTexto(paraExibicao(value));
-  }
-  const msg = erro ?? dica;
-  return (
-    <div className="ui-campo">
-      <label htmlFor={id} className="ui-campo__rotulo">
-        {label}
-      </label>
-      <input
-        id={id}
-        type="text"
-        inputMode="numeric"
-        placeholder="dd/mm/aaaa"
-        maxLength={10}
-        autoComplete="off"
-        aria-invalid={erro ? true : undefined}
-        aria-describedby={msg ? `${id}-msg` : undefined}
-        className={`ds-controle tabular-nums ${erro ? 'ds-controle--erro' : ''} ${className}`}
-        {...props}
-        value={texto}
-        onChange={(e) => {
-          const t = mascara(e.target.value);
-          setTexto(t);
-          const iso = paraISO(t);
-          setUltimo(iso);
-          onChange(iso);
-        }}
-      />
-      {msg ? (
-        <p id={`${id}-msg`} role={erro ? 'alert' : undefined} className={erro ? 'ui-campo__erro' : 'ui-campo__dica'}>
-          {msg}
-        </p>
-      ) : null}
-    </div>
-  );
-}
+export { DatePicker as DateField } from '../ds/DatePicker';

@@ -119,8 +119,8 @@ describe('critério 11: saldo diário e fontes', () => {
 
   it('não inclui itens pagos, recorrência inativa nem dívida "emprestei"', () => {
     const chaves = itensPrevistos(cenario(), HOJE, 30).map((i) => i.chave);
-    expect(chaves.some((c) => c.includes('a4'))).toBe(false);
-    expect(chaves.some((c) => c.includes('r3'))).toBe(false);
+    expect(chaves.some((c) => c === 'agendamento:a4')).toBe(false);
+    expect(chaves.some((c) => c.startsWith('recorrencia:r3:'))).toBe(false);
     expect(chaves.filter((c) => c.startsWith('divida:'))).toHaveLength(1);
   });
 

@@ -1,0 +1,13 @@
+.ds-data { position: relative; }
+.ds-data .ds-controle { padding-right: var(--esp-10); }
+.ds-data__abrir { position: absolute; top: 0.25rem; right: var(--esp-1); }
+.ds-calendario { position: absolute; z-index: var(--z-dropdown); top: calc(100% + var(--esp-1)); right: 0; width: 17rem; padding: var(--esp-3); border: 1px solid var(--cor-borda-forte); border-radius: var(--raio); background: var(--cor-superficie); box-shadow: var(--sombra-md); }
+.ds-calendario__topo { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--esp-2); }
+.ds-calendario__mes { font-size: var(--texto-sm); font-weight: var(--peso-semibold); text-transform: capitalize; }
+.ds-calendario__grade { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
+.ds-calendario__semana { font-size: var(--texto-xs); color: var(--cor-texto-mudo); padding: var(--esp-1) 0; }
+.ds-calendario__dia { aspect-ratio: 1; border: 1px solid transparent; border-radius: var(--raio-xs); background: none; color: var(--cor-texto); font: inherit; font-size: var(--texto-sm); cursor: pointer; }
+.ds-calendario__dia:hover { background: var(--cor-superficie-alt); }
+.ds-calendario__dia:focus-visible { outline: none; box-shadow: var(--anel-foco); }
+.ds-calendario__dia--hoje { border-color: var(--cor-borda-forte); }
+.ds-calendario__dia--escolhido { background: var(--cor-primaria); color: var(--cor-sobre-primaria); font-weight: var(--peso-semibold); }
