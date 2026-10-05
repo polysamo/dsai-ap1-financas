@@ -25,11 +25,8 @@
 .desafio__cabecalho { display: flex; justify-content: space-between; gap: var(--esp-2); }
 .desafio__nome { margin: 0; font-size: var(--texto-lg); }
 .desafio__tipo { margin: var(--esp-1) 0 0; font-size: var(--texto-xs); color: var(--cor-texto-mudo); }
-.desafio__situacao { font-size: var(--texto-xs); font-weight: 600; color: var(--cor-desafio); white-space: nowrap; }
 .desafio__linha { margin: 0; font-size: var(--texto-sm); }
 .desafio__dica { margin: 0; font-size: var(--texto-sm); color: var(--cor-texto-suave); }
-.desafio__trilho { height: 0.5rem; border-radius: var(--raio-total); background: var(--cor-superficie-3); overflow: hidden; }
-.desafio__barra { height: 100%; background: var(--cor-desafio); }
 .desafio__semanas { display: grid; gap: var(--esp-1); grid-template-columns: repeat(13, minmax(0, 1fr)); }
 .desafio__semana { position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1; border: 1px solid var(--cor-borda); border-radius: var(--raio-pequeno); font-size: var(--texto-xs); cursor: pointer; }
 .desafio__semana input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }

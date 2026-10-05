@@ -16,15 +16,15 @@ import {
 import { formatarMoeda } from '../../domain/money';
 import { nomeCompleto } from '../../domain/subcategorias';
 import type { AppState, DataISO } from '../../domain/types';
+import { Badge, type TomBadge } from '../../ds/Badge';
+import { ProgressBar } from '../../ds/ProgressBar';
 import { Botao } from '../ui';
 
+const TOM_SITUACAO: Record<SituacaoDesafio, TomBadge> = { futuro: 'neutro', andamento: 'info', concluido: 'sucesso', falhou: 'perigo', abandonado: 'neutro' };
+
+/** Progresso do desafio: sem o texto de estado, porque aqui "cheio" é bom, não estourado. */
 function Barra({ percentual, rotulo }: { percentual: number; rotulo: string }) {
-  const p = Math.max(0, Math.min(100, percentual));
-  return (
-    <div role="progressbar" aria-label={rotulo} aria-valuemin={0} aria-valuemax={100} aria-valuenow={p} className="desafio__trilho">
-      <div className="desafio__barra" style={{ width: `${p}%` }} />
-    </div>
-  );
+  return <ProgressBar valor={percentual} max={100} rotulo={rotulo} estado="ok" mostrarEstado={false} />;
 }
 
 function Semanas({ desafio, hoje, onAlternar }: { desafio: Desafio52; hoje: DataISO; onAlternar: (semana: number) => void }) {
@@ -76,7 +76,7 @@ function Teto({ desafio, estado, hoje }: { desafio: DesafioTeto; estado: AppStat
         {nomeCompleto(estado.categorias, desafio.categoriaId)} até {formatarData(p.fim)} · gasto {formatarMoeda(p.gasto)} de {formatarMoeda(desafio.limite)} ·{' '}
         {p.restante >= 0 ? `restam ${formatarMoeda(p.restante)}` : `passou ${formatarMoeda(-p.restante)}`}
       </p>
-      <Barra percentual={p.percentual} rotulo={`Consumo do teto de ${desafio.nome}`} />
+      <ProgressBar valor={p.gasto} max={desafio.limite} rotulo={`Consumo do teto de ${desafio.nome}`} />
       {p.porDia !== null ? <p className="desafio__dica">Cabem {formatarMoeda(p.porDia)} por dia até o fim.</p> : null}
     </>
   );
@@ -103,7 +103,7 @@ export function CartaoDesafio({ desafio, situacao, estado, hoje, onAlternarSeman
             {ROTULO_TIPO_DESAFIO[desafio.tipo]} · desde {formatarData(desafio.inicio)}
           </p>
         </div>
-        <span className="desafio__situacao">{ROTULO_SITUACAO_DESAFIO[situacao]}</span>
+        <Badge tom={TOM_SITUACAO[situacao]}>{ROTULO_SITUACAO_DESAFIO[situacao]}</Badge>
       </header>
       {desafio.tipo === 'semanas52' ? <Semanas desafio={desafio} hoje={hoje} onAlternar={onAlternarSemana} /> : null}
       {desafio.tipo === 'sem-gastos' ? <SemGastos desafio={desafio} estado={estado} hoje={hoje} /> : null}
