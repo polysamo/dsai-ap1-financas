@@ -17,7 +17,7 @@ Modelo: `Categoria` ganha `paiId?: string`. Só há um nível: uma subcategoria 
 7. No painel de categorias, cada pai lista suas subcategorias recuadas, e o formulário de edição permite renomear e trocar o pai.
 8. No orçamento do mês, o gasto da linha do pai inclui o das subcategorias; a linha da subcategoria mostra só o próprio gasto.
 9. Os totais do orçamento não contam o mesmo gasto duas vezes: o limite de uma subcategoria cujo pai tem limite não entra no total de limites, e o gasto de uma subcategoria conta como "com limite" se ela ou o pai tiverem limite.
-10. No relatório mensal, a opção "Agrupar subcategorias" (ligada por padrão) soma as linhas das subcategorias na do pai e recalcula os percentuais; desligada, mostra cada subcategoria com o nome completo.
+10. No relatório mensal, quando existe alguma subcategoria, a opção "Agrupar subcategorias" (ligada por padrão) soma as linhas das subcategorias na do pai e recalcula os percentuais; desligada, mostra cada subcategoria com o nome completo.
 11. Uma categoria cujo `paiId` aponta para uma categoria que não existe mais é tratada como de primeiro nível em listas, nomes e somas.
 
 ## Fora do escopo
