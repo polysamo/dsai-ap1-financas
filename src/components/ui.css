@@ -1,23 +1,5 @@
 
 
-.ui-cartao {
-  min-width: 0;
-  box-sizing: border-box;
-  border: 1px solid transparent;
-  border-radius: var(--raio);
-  background: var(--cor-superficie);
-  padding: var(--esp-4);
-  box-shadow: var(--sombra);
-}
-.ui-cartao__cabecalho {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--esp-2);
-  margin-bottom: var(--esp-3);
-}
-.ui-cartao__titulo { margin: 0; font-size: var(--texto-base); font-weight: 600; color: var(--cor-texto); }
 
 .ui-titulo-pagina {
   display: flex;

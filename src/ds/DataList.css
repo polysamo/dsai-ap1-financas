@@ -1,0 +1,6 @@
+.ds-dados { margin: 0; display: flex; flex-direction: column; gap: var(--esp-2); }
+.ds-dados--colunas { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: var(--esp-3); }
+.ds-dados__par { display: flex; justify-content: space-between; gap: var(--esp-3); }
+.ds-dados--colunas .ds-dados__par { flex-direction: column; justify-content: flex-start; gap: var(--esp-1); }
+.ds-dados dt { font-size: var(--texto-xs); color: var(--cor-texto-mudo); }
+.ds-dados dd { margin: 0; font-size: var(--texto-sm); font-weight: var(--peso-medio); font-variant-numeric: tabular-nums; }

@@ -1,0 +1,9 @@
+.ds-acordeao { border: 1px solid var(--cor-borda); border-radius: var(--raio); overflow: hidden; }
+.ds-acordeao__item + .ds-acordeao__item { border-top: 1px solid var(--cor-borda); }
+.ds-acordeao__titulo { margin: 0; font-size: var(--texto-base); }
+.ds-acordeao__botao { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: var(--esp-3); padding: var(--esp-3) var(--esp-4); border: 0; background: var(--cor-superficie); color: var(--cor-texto); font: inherit; font-weight: var(--peso-medio); text-align: left; cursor: pointer; }
+.ds-acordeao__botao:hover { background: var(--cor-superficie-2); }
+.ds-acordeao__botao:focus-visible { outline: none; box-shadow: inset var(--anel-foco); }
+.ds-acordeao__seta { transition: transform var(--mov-normal) var(--mov-curva); color: var(--cor-texto-mudo); }
+.ds-acordeao__seta--aberta { transform: rotate(180deg); }
+.ds-acordeao__painel { padding: var(--esp-3) var(--esp-4) var(--esp-4); background: var(--cor-superficie-2); font-size: var(--texto-sm); color: var(--cor-texto-suave); }

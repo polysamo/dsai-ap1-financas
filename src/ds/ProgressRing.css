@@ -1,0 +1,5 @@
+.ds-anel { position: relative; display: inline-flex; align-items: center; justify-content: center; }
+.ds-anel svg { position: absolute; inset: 0; }
+.ds-anel__trilho { stroke: var(--cor-superficie-3); }
+.ds-anel__barra { stroke: var(--cor-primaria); transition: stroke-dashoffset var(--mov-lento) var(--mov-curva); }
+.ds-anel__valor { font-size: var(--texto-sm); font-weight: var(--peso-semibold); }

@@ -12,18 +12,5 @@
 .kpi--perigo .kpi__valor { color: var(--cor-perigo); }
 .kpi__variacao { font-size: var(--texto-xs); color: var(--cor-texto-suave); }
 
-.vazio { display: flex; flex-direction: column; align-items: center; gap: var(--esp-1); text-align: center; background: var(--cor-superficie-2); border-radius: var(--raio); padding: var(--esp-8) var(--esp-4); }
-.vazio__icone { color: var(--cor-texto-mudo); margin-bottom: var(--esp-2); }
-.vazio__titulo { font-weight: 600; }
-.vazio__texto { font-size: var(--texto-sm); color: var(--cor-texto-mudo); max-width: 28rem; }
-.vazio__acao { margin-top: var(--esp-3); }
 
-.pb { display: flex; align-items: center; gap: var(--esp-2); }
-.pb__trilho { flex: 1; height: 0.5rem; border-radius: var(--raio-total); background: var(--cor-superficie-3); overflow: hidden; }
-.pb__barra { height: 100%; border-radius: var(--raio-total); background: var(--cor-primaria); }
-.pb--atencao .pb__barra { background: var(--cor-aviso); }
-.pb--estourado .pb__barra { background: var(--cor-perigo); }
-.pb__estado { font-size: var(--texto-xs); color: var(--cor-texto-suave); white-space: nowrap; }
-.pb--atencao .pb__estado { color: var(--cor-aviso); }
-.pb--estourado .pb__estado { color: var(--cor-perigo); }
 

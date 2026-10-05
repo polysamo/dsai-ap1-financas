@@ -1,0 +1,5 @@
+.ds-vazio { display: flex; flex-direction: column; align-items: center; gap: var(--esp-1); padding: var(--esp-8) var(--esp-4); border-radius: var(--raio); background: var(--cor-superficie-2); text-align: center; }
+.ds-vazio__ilustracao { margin-bottom: var(--esp-2); color: var(--cor-texto-mudo); }
+.ds-vazio__titulo { margin: 0; font-weight: var(--peso-semibold); }
+.ds-vazio__texto { margin: 0; max-width: 28rem; font-size: var(--texto-sm); color: var(--cor-texto-mudo); line-height: var(--linha-normal); }
+.ds-vazio__acao { margin-top: var(--esp-3); }

@@ -1,0 +1,19 @@
+.ds-tabela-envoltorio { display: flex; flex-direction: column; gap: var(--esp-3); }
+.ds-tabela { width: 100%; border-collapse: collapse; font-size: var(--texto-sm); }
+.ds-tabela th, .ds-tabela td { padding: var(--esp-2) var(--esp-3); border-bottom: 1px solid var(--cor-borda); text-align: left; vertical-align: middle; }
+.ds-tabela thead th { font-size: var(--texto-xs); font-weight: var(--peso-semibold); text-transform: uppercase; letter-spacing: 0.04em; color: var(--cor-texto-mudo); white-space: nowrap; }
+.ds-tabela tbody tr:hover { background: var(--cor-superficie-2); }
+.ds-tabela__linha--marcada { background: var(--cor-primaria-suave); }
+.ds-tabela__direita { text-align: right !important; font-variant-numeric: tabular-nums; }
+.ds-tabela__selecao { width: 2.5rem; }
+.ds-tabela__ordenar { padding: 0; border: 0; background: none; color: inherit; font: inherit; text-transform: inherit; letter-spacing: inherit; cursor: pointer; }
+.ds-tabela__ordenar:hover { color: var(--cor-texto); }
+.ds-tabela__ordenar:focus-visible { outline: none; box-shadow: var(--anel-foco); border-radius: var(--raio-xs); }
+@media (max-width: 47.99rem) {
+  .ds-tabela, .ds-tabela tbody, .ds-tabela tr, .ds-tabela td { display: block; }
+  .ds-tabela thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .ds-tabela tr { margin-bottom: var(--esp-3); padding: var(--esp-2) var(--esp-3); border: 1px solid var(--cor-borda); border-radius: var(--raio); background: var(--cor-superficie); }
+  .ds-tabela td { display: flex; justify-content: space-between; gap: var(--esp-3); padding: var(--esp-1) 0; border-bottom: 0; text-align: right; }
+  .ds-tabela td[data-rotulo]::before { content: attr(data-rotulo); color: var(--cor-texto-mudo); font-size: var(--texto-xs); text-align: left; }
+  .ds-tabela__direita { text-align: right !important; }
+}

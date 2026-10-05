@@ -1,0 +1,6 @@
+.ds-migalhas__lista { display: flex; flex-wrap: wrap; align-items: center; gap: var(--esp-1); margin: 0; padding: 0; list-style: none; font-size: var(--texto-sm); }
+.ds-migalhas__item + .ds-migalhas__item::before { content: '›'; margin-right: var(--esp-1); color: var(--cor-texto-mudo); }
+.ds-migalhas__item a { color: var(--cor-texto-suave); text-decoration: none; }
+.ds-migalhas__item a:hover { color: var(--cor-primaria); text-decoration: underline; }
+.ds-migalhas__item a:focus-visible { outline: none; box-shadow: var(--anel-foco); border-radius: var(--raio-xs); }
+.ds-migalhas__atual { color: var(--cor-texto); font-weight: var(--peso-medio); }

@@ -1,5 +1,0 @@
-.pbar { width: 100%; height: 0.5rem; overflow: hidden; border-radius: 999px; background: var(--cor-superficie-2, var(--cor-borda)); }
-.pbar__preench { height: 100%; border-radius: 999px; background: var(--cor-info); }
-.pbar__preench--ok { background: var(--cor-sucesso, var(--cor-info)); }
-.pbar__preench--atencao { background: var(--cor-aviso, var(--cor-info)); }
-.pbar__preench--estourado { background: var(--cor-perigo, var(--cor-info)); }

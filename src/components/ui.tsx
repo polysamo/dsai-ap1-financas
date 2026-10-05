@@ -1,6 +1,7 @@
 import type { HTMLAttributes, ReactNode } from 'react';
 import { EmptyState } from './novos';
 import { Alert } from '../ds/Alert';
+import { Card } from '../ds/Card';
 import { Button } from '../ds/Button';
 import { Input } from '../ds/Input';
 import { Select } from '../ds/Select';
@@ -9,19 +10,6 @@ import './ui.css';
 
 const juntar = (...partes: (string | false | undefined)[]) => partes.filter(Boolean).join(' ');
 
-export function Cartao({ titulo, children, acoes, className = '' }: { titulo?: string; children: ReactNode; acoes?: ReactNode; className?: string }) {
-  return (
-    <section className={juntar('ui-cartao', className)}>
-      {titulo || acoes ? (
-        <div className="ui-cartao__cabecalho">
-          {titulo ? <h2 className="ui-cartao__titulo">{titulo}</h2> : <span />}
-          {acoes}
-        </div>
-      ) : null}
-      {children}
-    </section>
-  );
-}
 
 export function TituloPagina({ children, acoes }: { children: ReactNode; acoes?: ReactNode }) {
   return (
@@ -51,3 +39,4 @@ export const Botao = Button;
 export const CampoTexto = Input;
 export const CampoSelect = Select;
 export const Alerta = Alert;
+export const Cartao = Card;

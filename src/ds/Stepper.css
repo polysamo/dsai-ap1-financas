@@ -1,0 +1,9 @@
+.ds-etapas { display: flex; flex-wrap: wrap; gap: var(--esp-4); margin: 0; padding: 0; list-style: none; counter-reset: etapa; }
+.ds-etapas__etapa { display: flex; align-items: center; gap: var(--esp-2); }
+.ds-etapas__marca { display: inline-flex; align-items: center; justify-content: center; width: 1.75rem; height: 1.75rem; border: 2px solid var(--cor-borda-forte); border-radius: var(--raio-total); font-size: var(--texto-xs); font-weight: var(--peso-semibold); color: var(--cor-texto-mudo); }
+.ds-etapas__texto { display: flex; flex-direction: column; font-size: var(--texto-sm); }
+.ds-etapas__descricao { font-size: var(--texto-xs); color: var(--cor-texto-mudo); }
+.ds-etapas__etapa--atual .ds-etapas__marca { border-color: var(--cor-primaria); background: var(--cor-primaria-suave); color: var(--cor-primaria); }
+.ds-etapas__etapa--atual .ds-etapas__rotulo { font-weight: var(--peso-semibold); }
+.ds-etapas__etapa--concluida .ds-etapas__marca { border-color: var(--cor-sucesso); background: var(--cor-sucesso); color: var(--cor-fundo); }
+.ds-etapas__etapa--pendente { color: var(--cor-texto-mudo); }

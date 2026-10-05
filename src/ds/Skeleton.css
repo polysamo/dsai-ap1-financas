@@ -1,0 +1,7 @@
+.ds-esqueleto-grupo { display: flex; flex-direction: column; gap: var(--esp-2); width: 100%; }
+.ds-esqueleto { display: block; background: linear-gradient(90deg, var(--cor-superficie-3), var(--cor-superficie-alt), var(--cor-superficie-3)); background-size: 200% 100%; border-radius: var(--raio-xs); animation: ds-brilho 1.4s linear infinite; }
+.ds-esqueleto--texto { height: 0.875rem; width: 100%; }
+.ds-esqueleto--bloco { width: 100%; height: 6rem; border-radius: var(--raio); }
+.ds-esqueleto--circulo { width: 2.5rem; height: 2.5rem; border-radius: var(--raio-total); }
+@keyframes ds-brilho { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .ds-esqueleto { animation: none; } }

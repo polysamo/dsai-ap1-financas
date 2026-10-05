@@ -30,47 +30,8 @@ export function KpiCard({ rotulo, valor, variacao, destaque = false, tom }: { ro
   );
 }
 
-/** Estado vazio: ícone discreto, título curto, uma frase e ação primária (botão). */
-export function EmptyState({ titulo, children, acao }: { titulo: string; children?: ReactNode; acao?: ReactNode }) {
-  return (
-    <div className="vazio">
-      <svg className="vazio__icone" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <rect x="3" y="5" width="18" height="14" rx="3" />
-        <path d="M3 10h18M8 15h4" />
-      </svg>
-      <p className="vazio__titulo">{titulo}</p>
-      {children ? <p className="vazio__texto">{children}</p> : null}
-      {acao ? <div className="vazio__acao">{acao}</div> : null}
-    </div>
-  );
-}
-
-export type EstadoProgresso = 'ok' | 'atencao' | 'estourado';
-
-export function estadoProgresso(gasto: number, limite: number): EstadoProgresso {
-  if (limite > 0 && gasto > limite) return 'estourado';
-  if (limite > 0 && gasto / limite >= 0.8) return 'atencao';
-  return 'ok';
-}
-
-const TEXTO_ESTADO: Record<EstadoProgresso, string> = { ok: 'Dentro do limite', atencao: 'Atenção', estourado: 'Estourado' };
-
-/** Barra semântica: o estado também aparece em texto (cor nunca é a única informação). */
-export function ProgressBar({ valor, max, rotulo, mostrarEstado = true }: { valor: number; max: number; rotulo: string; mostrarEstado?: boolean }) {
-  const estado = estadoProgresso(valor, max);
-  const pct = max > 0 ? Math.min(100, Math.round((valor / max) * 100)) : 0;
-  return (
-    <div className={`pb pb--${estado}`}>
-      <div className="pb__trilho" role="progressbar" aria-label={rotulo} aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct}>
-        <div className="pb__barra" style={{ width: `${pct}%` }} />
-      </div>
-      {mostrarEstado ? <span className="pb__estado">{TEXTO_ESTADO[estado]}</span> : null}
-    </div>
-  );
-}
-
-
-/** Painel lateral acessível: role=dialog, foco preso, Esc fecha, foco volta ao gatilho. */
+export { EmptyState } from '../ds/EmptyState';
+export { ProgressBar, estadoProgresso, type EstadoProgresso } from '../ds/ProgressBar';
 export { Drawer } from '../ds/Drawer';
 
 const paraExibicao = (iso: string) => (/^\d{4}-\d{2}-\d{2}$/.test(iso) ? `${iso.slice(8)}/${iso.slice(5, 7)}/${iso.slice(0, 4)}` : '');

@@ -1,0 +1,8 @@
+.ds-progresso { display: flex; align-items: center; gap: var(--esp-2); --cor-barra: var(--cor-primaria); }
+.ds-progresso--atencao { --cor-barra: var(--cor-aviso); }
+.ds-progresso--estourado { --cor-barra: var(--cor-perigo); }
+.ds-progresso__trilho { flex: 1; height: 0.5rem; border-radius: var(--raio-total); background: var(--cor-superficie-3); overflow: hidden; }
+.ds-progresso__barra { height: 100%; border-radius: var(--raio-total); background: var(--cor-barra); transition: width var(--mov-lento) var(--mov-curva); }
+.ds-progresso__estado { font-size: var(--texto-xs); color: var(--cor-texto-suave); white-space: nowrap; }
+.ds-progresso--atencao .ds-progresso__estado { color: var(--cor-aviso); }
+.ds-progresso--estourado .ds-progresso__estado { color: var(--cor-perigo); }

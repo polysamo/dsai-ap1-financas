@@ -1,0 +1,3 @@
+.ds-avatar { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: 2.5rem; height: 2.5rem; border-radius: var(--raio-total); background: var(--cor-primaria-suave); color: var(--cor-primaria); font-size: var(--texto-sm); font-weight: var(--peso-semibold); object-fit: cover; }
+.ds-avatar--pequeno { width: 1.75rem; height: 1.75rem; font-size: var(--texto-xs); }
+.ds-avatar--grande { width: 3.5rem; height: 3.5rem; font-size: var(--texto-lg); }

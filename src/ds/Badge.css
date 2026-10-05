@@ -1,0 +1,6 @@
+.ds-selo { display: inline-flex; align-items: center; padding: 2px var(--esp-2); border-radius: var(--raio-total); font-size: var(--texto-xs); font-weight: var(--peso-semibold); line-height: var(--linha-normal); background: var(--cor-superficie-3); color: var(--cor-texto-suave); }
+.ds-selo--primario { background: var(--cor-primaria-suave); color: var(--cor-primaria); }
+.ds-selo--sucesso { background: var(--cor-sucesso-suave); color: var(--cor-sucesso); }
+.ds-selo--aviso { background: var(--cor-aviso-suave); color: var(--cor-aviso); }
+.ds-selo--perigo { background: var(--cor-perigo-suave); color: var(--cor-perigo); }
+.ds-selo--info { background: var(--cor-info-suave); color: var(--cor-info); }

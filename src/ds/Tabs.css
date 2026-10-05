@@ -1,0 +1,16 @@
+.ds-abas__lista { display: flex; flex-wrap: wrap; gap: var(--esp-1); border-bottom: 1px solid var(--cor-borda); }
+.ds-abas__aba {
+  padding: var(--esp-2) var(--esp-4);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: var(--texto-sm);
+  cursor: pointer;
+  transition: color var(--mov-rapido) var(--mov-curva), border-color var(--mov-rapido) var(--mov-curva);
+}
+.ds-abas__aba:hover { color: var(--cor-texto); }
+.ds-abas__aba:focus-visible { outline: none; box-shadow: var(--anel-foco); border-radius: var(--raio-xs); }
+.ds-abas__aba--ativa { border-bottom-color: var(--cor-primaria); color: var(--cor-primaria); font-weight: var(--peso-semibold); }
+.ds-abas__painel { padding-top: var(--esp-4); }
