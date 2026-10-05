@@ -1,0 +1,4 @@
+.ds-busca-campo { position: relative; }
+.ds-busca-campo .ds-controle { padding-right: var(--esp-10); }
+.ds-busca-campo .ds-controle::-webkit-search-cancel-button { display: none; }
+.ds-busca-campo__limpar { position: absolute; top: 50%; right: var(--esp-1); transform: translateY(-50%); }

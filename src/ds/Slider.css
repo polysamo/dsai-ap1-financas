@@ -1,0 +1,4 @@
+.ds-slider { display: flex; align-items: center; gap: var(--esp-3); }
+.ds-slider__entrada { flex: 1; min-width: 0; accent-color: var(--cor-primaria); cursor: pointer; }
+.ds-slider__entrada:focus-visible { outline: none; box-shadow: var(--anel-foco); border-radius: var(--raio-total); }
+.ds-slider__valor { min-width: 4rem; text-align: right; font-size: var(--texto-sm); font-weight: var(--peso-semibold); }

@@ -1,0 +1,28 @@
+.ds-switch { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 0 var(--esp-3); }
+.ds-switch .ds-campo__dica { grid-column: 2; }
+.ds-switch__rotulo { font-size: var(--texto-sm); cursor: pointer; }
+.ds-switch__trilho {
+  position: relative;
+  width: 2.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-total);
+  background: var(--cor-superficie-3);
+  cursor: pointer;
+  transition: background var(--mov-normal) var(--mov-curva);
+}
+.ds-switch__trilho[aria-checked='true'] { background: var(--cor-primaria); border-color: var(--cor-primaria); }
+.ds-switch__trilho:focus-visible { outline: none; box-shadow: var(--anel-foco); }
+.ds-switch__trilho:disabled { opacity: 0.55; cursor: not-allowed; }
+.ds-switch__botao {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: var(--raio-total);
+  background: var(--cor-texto);
+  transition: transform var(--mov-normal) var(--mov-curva);
+}
+.ds-switch__trilho[aria-checked='true'] .ds-switch__botao { transform: translateX(1rem); background: var(--cor-sobre-primaria); }

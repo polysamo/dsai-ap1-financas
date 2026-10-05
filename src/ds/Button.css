@@ -1,0 +1,29 @@
+.ds-botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-2);
+  min-height: var(--altura-controle);
+  padding: 0 var(--esp-4);
+  border: 1px solid transparent;
+  border-radius: var(--raio-pequeno);
+  font: inherit;
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-semibold);
+  line-height: 1;
+  cursor: pointer;
+  transition: background var(--mov-rapido) var(--mov-curva), border-color var(--mov-rapido) var(--mov-curva), color var(--mov-rapido) var(--mov-curva);
+}
+.ds-botao--pequeno { min-height: var(--altura-controle-pequeno); padding: 0 var(--esp-3); font-size: var(--texto-xs); }
+.ds-botao:focus-visible { outline: none; box-shadow: var(--anel-foco); }
+.ds-botao:disabled { opacity: 0.55; cursor: not-allowed; }
+.ds-botao--primario { background: var(--cor-primaria); color: var(--cor-sobre-primaria); }
+.ds-botao--primario:hover:not(:disabled) { background: var(--cor-primaria-hover); }
+.ds-botao--secundario { background: var(--cor-superficie-2); border-color: var(--cor-borda-forte); color: var(--cor-texto); }
+.ds-botao--secundario:hover:not(:disabled) { background: var(--cor-superficie-alt); }
+.ds-botao--perigo { background: var(--cor-perigo); color: var(--cor-fundo); }
+.ds-botao--perigo:hover:not(:disabled) { background: var(--cor-perigo-hover); }
+.ds-botao--fantasma { background: transparent; color: var(--cor-texto-suave); }
+.ds-botao--fantasma:hover:not(:disabled) { background: var(--cor-superficie-alt); color: var(--cor-texto); }
+.ds-botao--link { min-height: 0; padding: 0; background: none; color: var(--cor-primaria); text-decoration: underline; font-weight: var(--peso-medio); }
+.ds-botao--link:hover:not(:disabled) { color: var(--cor-primaria-hover); }

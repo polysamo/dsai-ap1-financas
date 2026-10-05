@@ -1,0 +1,18 @@
+.ds-icone-botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--altura-controle);
+  height: var(--altura-controle);
+  border: 1px solid transparent;
+  border-radius: var(--raio-pequeno);
+  background: transparent;
+  color: var(--cor-texto-suave);
+  cursor: pointer;
+  transition: background var(--mov-rapido) var(--mov-curva), color var(--mov-rapido) var(--mov-curva);
+}
+.ds-icone-botao--pequeno { width: var(--altura-controle-pequeno); height: var(--altura-controle-pequeno); }
+.ds-icone-botao:hover:not(:disabled) { background: var(--cor-superficie-alt); color: var(--cor-texto); }
+.ds-icone-botao:focus-visible { outline: none; box-shadow: var(--anel-foco); }
+.ds-icone-botao:disabled { opacity: 0.55; cursor: not-allowed; }
+.ds-icone-botao__icone { display: inline-flex; line-height: 1; }

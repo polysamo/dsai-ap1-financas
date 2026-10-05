@@ -1,0 +1,23 @@
+.ds-campo { display: flex; flex-direction: column; gap: var(--esp-1); min-width: 0; }
+.ds-campo__rotulo { font-size: var(--texto-sm); font-weight: var(--peso-medio); color: var(--cor-texto-suave); }
+.ds-campo__dica { margin: 0; font-size: var(--texto-xs); color: var(--cor-texto-mudo); }
+.ds-campo__erro { margin: 0; font-size: var(--texto-xs); color: var(--cor-perigo); }
+
+.ds-controle {
+  width: 100%;
+  min-height: var(--altura-controle);
+  padding: 0 var(--esp-3);
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-pequeno);
+  background: var(--cor-superficie-2);
+  color: var(--cor-texto);
+  font: inherit;
+  font-size: var(--texto-sm);
+  transition: border-color var(--mov-rapido) var(--mov-curva), box-shadow var(--mov-rapido) var(--mov-curva);
+}
+.ds-controle::placeholder { color: var(--cor-texto-mudo); }
+.ds-controle:hover:not(:disabled) { border-color: var(--cor-texto-mudo); }
+.ds-controle:focus-visible { outline: none; border-color: var(--cor-foco); box-shadow: var(--anel-foco); }
+.ds-controle:disabled { opacity: 0.55; cursor: not-allowed; }
+.ds-controle--erro { border-color: var(--cor-perigo); }
+textarea.ds-controle { padding: var(--esp-2) var(--esp-3); min-height: 5rem; resize: vertical; line-height: var(--linha-normal); }
