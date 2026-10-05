@@ -92,3 +92,62 @@ html.claro {
   --texto-2xl: 1.75rem;
   --texto-3xl: 2.25rem;
 }
+
+/*
+ * Fundação do design system: escalas, tipografia, espaço, raio, sombra, movimento e camadas.
+ * As variáveis semânticas acima (--cor-*) trocam com o tema; estas escalas são a matéria-prima.
+ */
+:root {
+  /* Escalas de cor: 50 (mais claro) a 900 (mais escuro) */
+  --escala-neutra-50: #f8fafc; --escala-neutra-100: #f1f5f9; --escala-neutra-200: #e2e8f0; --escala-neutra-300: #cbd5e1; --escala-neutra-400: #94a3b8;
+  --escala-neutra-500: #64748b; --escala-neutra-600: #475569; --escala-neutra-700: #334155; --escala-neutra-800: #1e293b; --escala-neutra-900: #0f172a;
+  --escala-primaria-50: #f0fdfa; --escala-primaria-100: #ccfbf1; --escala-primaria-200: #99f6e4; --escala-primaria-300: #5eead4; --escala-primaria-400: #2dd4bf;
+  --escala-primaria-500: #14b8a6; --escala-primaria-600: #0d9488; --escala-primaria-700: #0f766e; --escala-primaria-800: #115e59; --escala-primaria-900: #134e4a;
+  --escala-sucesso-50: #f0fdf4; --escala-sucesso-100: #dcfce7; --escala-sucesso-200: #bbf7d0; --escala-sucesso-300: #86efac; --escala-sucesso-400: #4ade80;
+  --escala-sucesso-500: #22c55e; --escala-sucesso-600: #16a34a; --escala-sucesso-700: #15803d; --escala-sucesso-800: #166534; --escala-sucesso-900: #14532d;
+  --escala-aviso-50: #fffbeb; --escala-aviso-100: #fef3c7; --escala-aviso-200: #fde68a; --escala-aviso-300: #fcd34d; --escala-aviso-400: #fbbf24;
+  --escala-aviso-500: #f59e0b; --escala-aviso-600: #d97706; --escala-aviso-700: #b45309; --escala-aviso-800: #92400e; --escala-aviso-900: #78350f;
+  --escala-perigo-50: #fef2f2; --escala-perigo-100: #fee2e2; --escala-perigo-200: #fecaca; --escala-perigo-300: #fca5a5; --escala-perigo-400: #f87171;
+  --escala-perigo-500: #ef4444; --escala-perigo-600: #dc2626; --escala-perigo-700: #b91c1c; --escala-perigo-800: #991b1b; --escala-perigo-900: #7f1d1d;
+  --escala-info-50: #f0f9ff; --escala-info-100: #e0f2fe; --escala-info-200: #bae6fd; --escala-info-300: #7dd3fc; --escala-info-400: #38bdf8;
+  --escala-info-500: #0ea5e9; --escala-info-600: #0284c7; --escala-info-700: #0369a1; --escala-info-800: #075985; --escala-info-900: #0c4a6e;
+
+  /* Tipografia */
+  --fonte-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --peso-normal: 400; --peso-medio: 500; --peso-semibold: 600; --peso-negrito: 700;
+  --linha-justa: 1.2; --linha-normal: 1.5; --linha-solta: 1.7;
+
+  /* Espaçamento 1 a 12 (múltiplos de 4px) */
+  --esp-7: 1.75rem; --esp-9: 2.25rem; --esp-10: 2.5rem; --esp-11: 2.75rem; --esp-12: 3rem;
+
+  /* Raios */
+  --raio-xs: 0.25rem; --raio-lg: 1rem;
+
+  /* Sombras */
+  --sombra-sm: 0 1px 2px rgb(0 0 0 / 0.2);
+  --sombra-md: 0 4px 12px rgb(0 0 0 / 0.25);
+  --sombra-lg: 0 12px 32px rgb(0 0 0 / 0.35);
+
+  /* Movimento */
+  --mov-rapido: 120ms; --mov-normal: 200ms; --mov-lento: 320ms;
+  --mov-curva: cubic-bezier(0.2, 0, 0, 1);
+  --mov-curva-saida: cubic-bezier(0, 0, 0.2, 1);
+
+  /* Camadas */
+  --z-base: 0; --z-sticky: 10; --z-dropdown: 40; --z-drawer: 50; --z-modal: 60; --z-toast: 80; --z-tooltip: 90;
+
+  /* Foco e controles */
+  --anel-foco: 0 0 0 2px var(--cor-fundo), 0 0 0 4px var(--cor-foco);
+  --altura-controle: 2.5rem;
+  --altura-controle-pequeno: 2rem;
+}
+
+html.claro {
+  --sombra-sm: 0 1px 2px rgb(15 23 42 / 0.08);
+  --sombra-md: 0 4px 12px rgb(15 23 42 / 0.12);
+  --sombra-lg: 0 12px 32px rgb(15 23 42 / 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --mov-rapido: 0ms; --mov-normal: 0ms; --mov-lento: 0ms; }
+}
