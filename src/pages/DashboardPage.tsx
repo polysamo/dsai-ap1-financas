@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { GraficoDespesasPorCategoria, GraficoReceitasDespesas } from '../components/Graficos';
 import { ProjecaoCard } from '../components/ProjecaoCard';
 import { RecorrenciasPanel } from '../components/RecorrenciasPanel';
 import { Cartao, EstadoVazio, TituloPagina, Valor } from '../components/ui';
 import { KpiCard, MonthPicker } from '../components/novos';
+import { Badge } from '../ds';
 import { saldoTotal } from '../domain/contas';
 import { formatarData, hojeISO, mesDe, mesValido, nomeMes } from '../domain/date';
 import { formatarMoeda, percentual } from '../domain/money';
@@ -14,12 +15,14 @@ import { calcularProjecao, despesasPorCategoria, resumoMes, serieMensal } from '
 import { saudeFinanceira } from '../domain/saude';
 import { MedidorNota } from '../components/saude/MedidorNota';
 import { useEstado } from '../state/store';
+import { useAtalhoNovo } from '../lib/atalhos';
 import './DashboardPage.css';
 
 const ROTULO_ESTADO = { atencao: 'Atenção', estourado: 'Estourado' } as const;
 
 export function DashboardPage() {
   const estado = useEstado();
+  const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const hoje = hojeISO();
   const mesParam = params.get('mes') ?? '';
@@ -36,10 +39,14 @@ export function DashboardPage() {
   const metasAtivas = ordenarMetas(estado.metas.filter((m) => m.status === 'ativa'));
   const semContas = estado.contas.filter((c) => !c.arquivada).length === 0;
   const saude = useMemo(() => saudeFinanceira(estado, hoje), [estado, hoje]);
+  useAtalhoNovo(() => navigate('/transacoes'));
 
   return (
     <div>
-      <TituloPagina>Dashboard</TituloPagina>
+      <TituloPagina
+        descricao="Visão geral do saldo, do mês, do orçamento, das metas e da projeção financeira."
+        acoes={<Link to="/transacoes" className="dashboard__link dashboard__link--primario">Nova transação</Link>}
+      >Dashboard</TituloPagina>
       <div className="dashboard">
         {semContas && estado.transacoes.length === 0 ? (
           <EstadoVazio
@@ -103,7 +110,10 @@ export function DashboardPage() {
         <div className="dashboard__duas-colunas">
           <Cartao titulo="Orçamento do mês" acoes={<Link to={`/orcamento?mes=${mes}`} className="dashboard__link-cartao">Abrir orçamento</Link>}>
             {!temLimites ? (
-              <p className="dashboard__texto-mudo">Nenhum limite definido para {nomeMes(mes)}. Defina limites na tela Orçamento.</p>
+              <div className="dashboard__vazio-cartao">
+                <p className="dashboard__texto-mudo">Nenhum limite definido para {nomeMes(mes)}.</p>
+                <Link to={`/orcamento?mes=${mes}`} className="dashboard__link dashboard__link--secundario">Definir limites</Link>
+              </div>
             ) : alertasOrcamento.length === 0 ? (
               <p className="dashboard__texto">Todas as categorias estão dentro do limite.</p>
             ) : (
@@ -111,10 +121,10 @@ export function DashboardPage() {
                 {alertasOrcamento.map((l) => (
                   <li key={l.categoria.id} className="dashboard__item">
                     <span>{l.categoria.nome}</span>
-                    <span className={l.estado === 'estourado' ? 'dashboard__estado dashboard__estado--estourado' : 'dashboard__estado dashboard__estado--atencao'}>
+                    <Badge tom={l.estado === 'estourado' ? 'perigo' : 'aviso'}>
                       {ROTULO_ESTADO[l.estado as 'atencao' | 'estourado']}
                       {l.percentual !== null ? ` · ${l.percentual}%` : ''}
-                    </span>
+                    </Badge>
                   </li>
                 ))}
               </ul>
@@ -122,7 +132,10 @@ export function DashboardPage() {
           </Cartao>
           <Cartao titulo="Metas ativas" acoes={<Link to="/metas" className="dashboard__link-cartao">Abrir metas</Link>}>
             {metasAtivas.length === 0 ? (
-              <p className="dashboard__texto-mudo">Nenhuma meta ativa.</p>
+              <div className="dashboard__vazio-cartao">
+                <p className="dashboard__texto-mudo">Nenhuma meta ativa.</p>
+                <Link to="/metas" className="dashboard__link dashboard__link--secundario">Criar meta</Link>
+              </div>
             ) : (
               <ul className="dashboard__lista dashboard__lista--larga" aria-label="Metas ativas">
                 {metasAtivas.map((m) => (

@@ -273,6 +273,7 @@ describe('dashboard: tela', () => {
     await usuario.click(screen.getByLabelText('Recorrência Curso ativa'));
     expect(screen.getByTestId('efeito-mensal').textContent).toBe(antes);
     await usuario.click(screen.getByRole('button', { name: 'Excluir recorrência Curso' }));
+    await usuario.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Excluir' }));
     expect(store.getSnapshot().estado.recorrencias).toHaveLength(0);
   });
 
@@ -283,7 +284,7 @@ describe('dashboard: tela', () => {
     await usuario.selectOptions(screen.getByLabelText('Categoria da recorrência'), 'Lazer');
     await usuario.type(screen.getByLabelText('Valor mensal'), '0');
     await usuario.click(screen.getByRole('button', { name: 'Adicionar recorrência' }));
-    expect(screen.getByRole('alert')).toHaveTextContent('maior que zero');
+    expect(screen.getAllByRole('alert').some((alerta) => alerta.textContent?.includes('maior que zero'))).toBe(true);
   });
 
   it('critério 10: avisa em texto quando o saldo projetado fica negativo', () => {

@@ -9,8 +9,10 @@ import {
   excluirRecorrencia,
 } from '../domain/projecao';
 import type { AppState, Recorrencia, Resultado, TipoMovimento } from '../domain/types';
-import { useEstado, useStore } from '../state/store';
-import { Alerta, Botao, CampoSelect, CampoTexto, Cartao } from './ui';
+import { useEstado } from '../state/store';
+import { useFeedback } from '../state/useFeedback';
+import { Botao, CampoSelect, CampoTexto, Cartao } from './ui';
+import { ConfirmDialog } from './ConfirmDialog';
 import './RecorrenciasPanel.css';
 
 interface FormProps {
@@ -18,11 +20,12 @@ interface FormProps {
   inicial?: Recorrencia;
   onSalvar: (dados: { descricao: string; tipo: TipoMovimento; valor: number; categoriaId: string }) => Resultado<void>;
   onCancelar?: () => void;
+  onErro?: (mensagem: string) => void;
 }
 
 type Erros = Partial<Record<'descricao' | 'valor' | 'categoriaId' | 'geral', string>>;
 
-function RecorrenciaForm({ estado, inicial, onSalvar, onCancelar }: FormProps) {
+function RecorrenciaForm({ estado, inicial, onSalvar, onCancelar, onErro }: FormProps) {
   const [descricao, setDescricao] = useState(inicial?.descricao ?? '');
   const [tipo, setTipo] = useState<TipoMovimento>(inicial?.tipo ?? 'despesa');
   const [valor, setValor] = useState(inicial ? valorParaCampo(inicial.valor) : '');
@@ -32,7 +35,12 @@ function RecorrenciaForm({ estado, inicial, onSalvar, onCancelar }: FormProps) {
   const enviar = (e: FormEvent) => {
     e.preventDefault();
     const centavos = parseValor(valor);
-    if (centavos === null) return setErros({ valor: 'Informe um valor válido, como 1.500,00.' });
+    if (centavos === null) {
+      const mensagem = 'Informe um valor válido, como 1.500,00.';
+      setErros({ valor: mensagem });
+      onErro?.(mensagem);
+      return;
+    }
     const r = onSalvar({ descricao, tipo, valor: centavos, categoriaId });
     if (!r.ok) return setErros(r.campo ? { [r.campo]: r.erro } : { geral: r.erro });
     setErros({});
@@ -62,11 +70,7 @@ function RecorrenciaForm({ estado, inicial, onSalvar, onCancelar }: FormProps) {
         <OpcoesCategorias categorias={estado.categorias} tipo={tipo} manterId={inicial?.categoriaId} />
       </CampoSelect>
       <CampoTexto label="Valor mensal" value={valor} onChange={(e) => setValor(e.target.value)} erro={erros.valor} inputMode="decimal" placeholder="0,00" />
-      {erros.geral ? (
-        <div className="recorrencias__form-linha">
-          <Alerta>{erros.geral}</Alerta>
-        </div>
-      ) : null}
+      {erros.geral ? <p className="recorrencias__form-linha" role="alert">{erros.geral}</p> : null}
       <div className="recorrencias__acoes-form">
         <Botao type="submit">{inicial ? 'Salvar recorrência' : 'Adicionar recorrência'}</Botao>
         {onCancelar ? (
@@ -80,9 +84,10 @@ function RecorrenciaForm({ estado, inicial, onSalvar, onCancelar }: FormProps) {
 }
 
 export function RecorrenciasPanel() {
-  const store = useStore();
   const estado = useEstado();
   const [editandoId, setEditandoId] = useState<string | null>(null);
+  const [excluindo, setExcluindo] = useState<Recorrencia | null>(null);
+  const { executar, erro } = useFeedback();
   const nomeCategoria = new Map(estado.categorias.map((c) => [c.id, c.nome]));
 
   return (
@@ -100,9 +105,10 @@ export function RecorrenciasPanel() {
                 <RecorrenciaForm
                   estado={estado}
                   inicial={r}
+                  onErro={erro}
                   onCancelar={() => setEditandoId(null)}
                   onSalvar={(dados) => {
-                    const res = store.aplicar((s) => editarRecorrencia(s, r.id, dados));
+                    const res = executar((s) => editarRecorrencia(s, r.id, dados), 'Recorrência salva.');
                     if (res.ok) setEditandoId(null);
                     return res;
                   }}
@@ -122,7 +128,7 @@ export function RecorrenciasPanel() {
                       type="checkbox"
                       checked={r.ativa}
                       aria-label={`Recorrência ${r.descricao} ativa`}
-                      onChange={(e) => store.aplicar((s) => alternarRecorrencia(s, r.id, e.target.checked))}
+                      onChange={(e) => executar((s) => alternarRecorrencia(s, r.id, e.target.checked), e.target.checked ? 'Recorrência ativada.' : 'Recorrência desativada.')}
                       className="recorrencias__checkbox"
                     />
                     Ativa
@@ -130,7 +136,7 @@ export function RecorrenciasPanel() {
                   <Botao variante="secundario" aria-label={`Editar recorrência ${r.descricao}`} onClick={() => setEditandoId(r.id)}>
                     Editar
                   </Botao>
-                  <Botao variante="perigo" aria-label={`Excluir recorrência ${r.descricao}`} onClick={() => store.aplicar((s) => excluirRecorrencia(s, r.id))}>
+                  <Botao variante="perigo" aria-label={`Excluir recorrência ${r.descricao}`} onClick={() => setExcluindo(r)}>
                     Excluir
                   </Botao>
                 </div>
@@ -139,7 +145,20 @@ export function RecorrenciasPanel() {
           )}
         </ul>
       )}
-      <RecorrenciaForm estado={estado} onSalvar={(dados) => store.aplicar((s) => criarRecorrencia(s, dados))} />
+      <RecorrenciaForm estado={estado} onErro={erro} onSalvar={(dados) => executar((s) => criarRecorrencia(s, dados), 'Recorrência criada.')} />
+      {excluindo ? (
+        <ConfirmDialog
+          titulo="Excluir recorrência"
+          mensagem={`Excluir "${excluindo.descricao}" da projeção?`}
+          rotuloConfirmar="Excluir"
+          perigo
+          onCancelar={() => setExcluindo(null)}
+          onConfirmar={() => {
+            executar((s) => excluirRecorrencia(s, excluindo.id), 'Recorrência excluída.');
+            setExcluindo(null);
+          }}
+        />
+      ) : null}
     </Cartao>
   );
 }
