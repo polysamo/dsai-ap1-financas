@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState, type InputHTMLAttributes, type ReactNode } from 'react';
+import { useId, useState, type InputHTMLAttributes, type ReactNode } from 'react';
 import { nomeMes, somarMeses } from '../domain/date';
 import './novos.css';
 
@@ -69,60 +69,9 @@ export function ProgressBar({ valor, max, rotulo, mostrarEstado = true }: { valo
   );
 }
 
-const FOCAVEIS = 'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
 
 /** Painel lateral acessível: role=dialog, foco preso, Esc fecha, foco volta ao gatilho. */
-export function Drawer({ aberto, titulo, onFechar, children }: { aberto: boolean; titulo: string; onFechar: () => void; children: ReactNode }) {
-  const painel = useRef<HTMLDivElement>(null);
-  const fechar = useRef(onFechar);
-  fechar.current = onFechar;
-
-  useEffect(() => {
-    if (!aberto) return;
-    const anterior = document.activeElement as HTMLElement | null;
-    const el = painel.current;
-    (el?.querySelector<HTMLElement>(FOCAVEIS) ?? el)?.focus();
-    const tecla = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.stopPropagation();
-        fechar.current();
-        return;
-      }
-      if (e.key !== 'Tab' || !el) return;
-      const itens = Array.from(el.querySelectorAll<HTMLElement>(FOCAVEIS));
-      if (itens.length === 0) return;
-      const primeiro = itens[0];
-      const ultimo = itens[itens.length - 1];
-      if (e.shiftKey && document.activeElement === primeiro) {
-        e.preventDefault();
-        ultimo.focus();
-      } else if (!e.shiftKey && document.activeElement === ultimo) {
-        e.preventDefault();
-        primeiro.focus();
-      }
-    };
-    document.addEventListener('keydown', tecla);
-    return () => {
-      document.removeEventListener('keydown', tecla);
-      anterior?.focus?.();
-    };
-  }, [aberto]);
-
-  if (!aberto) return null;
-  return (
-    <div className="drawer-fundo" onMouseDown={(e) => e.target === e.currentTarget && onFechar()}>
-      <div ref={painel} className="drawer" role="dialog" aria-modal="true" aria-label={titulo} tabIndex={-1}>
-        <div className="drawer__topo">
-          <h2 className="drawer__titulo">{titulo}</h2>
-          <button type="button" className="drawer__fechar" aria-label="Fechar" onClick={onFechar}>
-            ×
-          </button>
-        </div>
-        <div className="drawer__corpo">{children}</div>
-      </div>
-    </div>
-  );
-}
+export { Drawer } from '../ds/Drawer';
 
 const paraExibicao = (iso: string) => (/^\d{4}-\d{2}-\d{2}$/.test(iso) ? `${iso.slice(8)}/${iso.slice(5, 7)}/${iso.slice(0, 4)}` : '');
 
@@ -167,7 +116,7 @@ export function DateField({ label, erro, dica, value, onChange, className = '', 
         autoComplete="off"
         aria-invalid={erro ? true : undefined}
         aria-describedby={msg ? `${id}-msg` : undefined}
-        className={`ui-campo__controle tabular-nums ${erro ? 'ui-campo__controle--erro' : ''} ${className}`}
+        className={`ds-controle tabular-nums ${erro ? 'ds-controle--erro' : ''} ${className}`}
         {...props}
         value={texto}
         onChange={(e) => {

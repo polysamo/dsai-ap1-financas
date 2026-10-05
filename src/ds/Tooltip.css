@@ -1,0 +1,16 @@
+.ds-dica { position: relative; display: inline-flex; }
+.ds-dica__balao {
+  position: absolute;
+  z-index: var(--z-tooltip);
+  bottom: calc(100% + var(--esp-2));
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--esp-1) var(--esp-2);
+  border-radius: var(--raio-xs);
+  background: var(--cor-texto);
+  color: var(--cor-fundo);
+  font-size: var(--texto-xs);
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: var(--sombra-sm);
+}

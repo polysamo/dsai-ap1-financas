@@ -1,0 +1,6 @@
+.ds-banner { display: flex; align-items: center; gap: var(--esp-3); padding: var(--esp-3) var(--esp-4); border-radius: var(--raio); border: 1px solid; font-size: var(--texto-sm); }
+.ds-banner__texto { flex: 1; min-width: 0; }
+.ds-banner--info { border-color: var(--cor-info); background: var(--cor-info-suave); }
+.ds-banner--sucesso { border-color: var(--cor-sucesso); background: var(--cor-sucesso-suave); }
+.ds-banner--aviso { border-color: var(--cor-aviso); background: var(--cor-aviso-suave); }
+.ds-banner--erro { border-color: var(--cor-perigo); background: var(--cor-perigo-suave); }

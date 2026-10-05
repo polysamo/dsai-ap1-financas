@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Alerta, Botao, Cartao, TituloPagina, Valor } from '../components/ui';
-import { Drawer } from '../components/Drawer';
+import { Drawer } from '../ds/Drawer';
 import { EmptyState } from '../components/EmptyState';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { ContaForm } from '../components/ContaForm';

@@ -7,7 +7,7 @@ import { BaixaForm } from '../components/agenda/BaixaForm';
 import { CalendarioGrade } from '../components/agenda/CalendarioGrade';
 import { ResumoAgenda } from '../components/agenda/ResumoAgenda';
 import { ConfirmDialog } from '../components/ConfirmDialog';
-import { Drawer } from '../components/Drawer';
+import { Drawer } from '../ds/Drawer';
 import { Alerta, Botao, Cartao, CampoTexto, EstadoVazio, TituloPagina } from '../components/ui';
 import {
   agendamentosDoMes,

@@ -1,3 +1,0 @@
-.confirm-mensagem { margin: var(--esp-2) 0 0; font-size: var(--texto-sm); color: var(--cor-texto-suave); }
-.confirm-campo { margin-top: var(--esp-3); }
-.confirm-acoes { display: flex; justify-content: flex-end; gap: var(--esp-2); margin-top: var(--esp-4); }

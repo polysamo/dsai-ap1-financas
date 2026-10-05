@@ -44,7 +44,7 @@ export function LancamentoRapido() {
       <div className="rapido__linha">
         <input
           id={id}
-          className="ui-campo__controle rapido__campo"
+          className="ds-controle rapido__campo"
           value={texto}
           placeholder="almoço 32,50 ontem @nubank #trabalho"
           autoComplete="off"

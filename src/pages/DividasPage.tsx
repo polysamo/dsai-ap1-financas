@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ConfirmDialog } from '../components/ConfirmDialog';
-import { Drawer } from '../components/Drawer';
+import { Drawer } from '../ds/Drawer';
 import { DividaForm } from '../components/dividas/DividaForm';
 import { PagamentoDividaForm } from '../components/dividas/PagamentoDividaForm';
 import { ResumoDivida } from '../components/dividas/ResumoDivida';

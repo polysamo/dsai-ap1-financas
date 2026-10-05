@@ -4,7 +4,7 @@ import { AtivoCard } from '../components/investimentos/AtivoCard';
 import { AtivoForm } from '../components/investimentos/AtivoForm';
 import { GraficoPatrimonio } from '../components/investimentos/GraficoPatrimonio';
 import { ResumoCarteira } from '../components/investimentos/ResumoCarteira';
-import { Drawer } from '../components/Drawer';
+import { Drawer } from '../ds/Drawer';
 import { EmptyState } from '../components/EmptyState';
 import { Botao, Cartao, TituloPagina } from '../components/ui';
 import { hojeISO } from '../domain/date';

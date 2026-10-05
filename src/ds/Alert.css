@@ -1,0 +1,11 @@
+.ds-alerta { border: 1px solid; border-left-width: 4px; border-radius: var(--raio-pequeno); padding: var(--esp-2) var(--esp-3); font-size: var(--texto-sm); }
+.ds-alerta__titulo { display: block; margin-bottom: var(--esp-1); }
+.ds-alerta__texto { color: var(--cor-texto); }
+.ds-alerta--erro { border-color: var(--cor-perigo); background: var(--cor-perigo-suave); }
+.ds-alerta--erro .ds-alerta__titulo { color: var(--cor-perigo); }
+.ds-alerta--aviso { border-color: var(--cor-aviso); background: var(--cor-aviso-suave); }
+.ds-alerta--aviso .ds-alerta__titulo { color: var(--cor-aviso); }
+.ds-alerta--sucesso { border-color: var(--cor-sucesso); background: var(--cor-sucesso-suave); }
+.ds-alerta--sucesso .ds-alerta__titulo { color: var(--cor-sucesso); }
+.ds-alerta--info { border-color: var(--cor-info); background: var(--cor-info-suave); }
+.ds-alerta--info .ds-alerta__titulo { color: var(--cor-info); }

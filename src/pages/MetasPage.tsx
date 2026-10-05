@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { MetaCard } from '../components/MetaCard';
 import { MetaForm } from '../components/MetaForm';
-import { Drawer } from '../components/Drawer';
+import { Drawer } from '../ds/Drawer';
 import { EmptyState } from '../components/EmptyState';
 import { Botao, TituloPagina } from '../components/ui';
 import { hojeISO } from '../domain/date';

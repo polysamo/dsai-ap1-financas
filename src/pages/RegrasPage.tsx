@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { RegraForm } from '../components/regras/RegraForm';
 import { RegraItem } from '../components/regras/RegraItem';
-import { Drawer } from '../components/Drawer';
+import { Drawer } from '../ds/Drawer';
 import { EmptyState } from '../components/EmptyState';
 import { Alerta, Botao, Cartao, CampoSelect, TituloPagina } from '../components/ui';
 import {

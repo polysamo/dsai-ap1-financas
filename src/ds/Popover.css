@@ -1,0 +1,14 @@
+.ds-popover { position: relative; display: inline-block; }
+.ds-popover__painel {
+  position: absolute;
+  z-index: var(--z-dropdown);
+  top: calc(100% + var(--esp-2));
+  left: 0;
+  min-width: 14rem;
+  max-width: min(22rem, 90vw);
+  padding: var(--esp-3);
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+  box-shadow: var(--sombra-md);
+}

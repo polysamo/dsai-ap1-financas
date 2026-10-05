@@ -4,7 +4,7 @@ import { CompraParceladaForm } from '../components/CompraParceladaForm';
 import { LimiteCartaoBarra } from '../components/LimiteCartaoBarra';
 import { PagamentoFaturaForm } from '../components/PagamentoFaturaForm';
 import { Alerta, Botao, CampoSelect, CampoTexto, Cartao, EstadoVazio, TituloPagina, Valor } from '../components/ui';
-import { Drawer } from '../components/Drawer';
+import { Drawer } from '../ds/Drawer';
 import { EmptyState } from '../components/EmptyState';
 import {
   cartoesAtivos,
