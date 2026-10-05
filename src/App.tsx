@@ -9,6 +9,7 @@ import { SaudePage } from './pages/SaudePage';
 import { DesejosPage } from './pages/DesejosPage';
 import { EventosPage } from './pages/EventosPage';
 import { BeneficiariosPage } from './pages/BeneficiariosPage';
+import { DesafiosPage } from './pages/DesafiosPage';
 import { AlertasPage } from './pages/AlertasPage';
 import { CalendarioPage } from './pages/CalendarioPage';
 import { CartoesPage } from './pages/CartoesPage';
@@ -56,6 +57,7 @@ export function AppRoutes() {
         <Route path="/metas" element={<MetasPage />} />
         <Route path="/desejos" element={<DesejosPage />} />
         <Route path="/eventos" element={<EventosPage />} />
+        <Route path="/desafios" element={<DesafiosPage />} />
         <Route path="/regras" element={<RegrasPage />} />
         <Route path="/investimentos" element={<InvestimentosPage />} />
         <Route path="/independencia" element={<IndependenciaPage />} />

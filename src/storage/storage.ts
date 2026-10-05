@@ -34,6 +34,7 @@ export function estadoInicial(): AppState {
     desejos: [],
     eventos: [],
     beneficiarios: { nomes: {}, mesclas: {} },
+    desafios: [],
   };
 }
 

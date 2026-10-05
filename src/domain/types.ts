@@ -11,6 +11,7 @@ import type { PreferenciasAlertas } from './alertas';
 import type { Desejo } from './desejos';
 import type { Evento } from './eventos';
 import type { DadosBeneficiarios } from './beneficiarios';
+import type { Desafio } from './desafios';
 
 export type Centavos = number;
 /** Data no formato AAAA-MM-DD. */
@@ -251,6 +252,8 @@ export interface AppState {
   eventos?: Evento[];
   /** Nomes e mesclas de beneficiários; ausente em dados antigos. */
   beneficiarios?: DadosBeneficiarios;
+  /** Desafios de economia; ausente em dados antigos. */
+  desafios?: Desafio[];
 }
 
 export type Resultado<T> = { ok: true; valor: T } | { ok: false; erro: string; campo?: string };

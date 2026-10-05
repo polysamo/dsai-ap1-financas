@@ -1,0 +1,40 @@
+.desafios-pagina { display: flex; flex-direction: column; gap: var(--esp-4); }
+.desafios-form { display: grid; gap: var(--esp-3); grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); align-items: start; }
+.desafios-form__categorias { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: var(--esp-2) var(--esp-4); margin: 0; padding: 0; border: 0; }
+.desafios-form__categorias legend { width: 100%; margin-bottom: var(--esp-2); }
+.desafios-form__categorias label { display: inline-flex; align-items: center; gap: var(--esp-1); font-size: var(--texto-sm); }
+.desafios-form__sub { color: var(--cor-texto-suave); }
+.desafios-form__acoes { align-self: end; }
+.desafios-secao__titulo { margin: 0 0 var(--esp-3); font-size: var(--texto-xs); text-transform: uppercase; letter-spacing: 0.04em; color: var(--cor-texto-mudo); }
+.desafios-grade { display: grid; gap: var(--esp-3); grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr)); }
+
+.desafio {
+  --cor-desafio: var(--cor-info);
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  padding: var(--esp-4);
+  border: 1px solid var(--cor-borda);
+  border-top: 3px solid var(--cor-desafio);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+}
+.desafio--concluido { --cor-desafio: var(--cor-sucesso); }
+.desafio--falhou { --cor-desafio: var(--cor-perigo); }
+.desafio--abandonado, .desafio--futuro { --cor-desafio: var(--cor-borda-forte); }
+.desafio__cabecalho { display: flex; justify-content: space-between; gap: var(--esp-2); }
+.desafio__nome { margin: 0; font-size: var(--texto-lg); }
+.desafio__tipo { margin: var(--esp-1) 0 0; font-size: var(--texto-xs); color: var(--cor-texto-mudo); }
+.desafio__situacao { font-size: var(--texto-xs); font-weight: 600; color: var(--cor-desafio); white-space: nowrap; }
+.desafio__linha { margin: 0; font-size: var(--texto-sm); }
+.desafio__dica { margin: 0; font-size: var(--texto-sm); color: var(--cor-texto-suave); }
+.desafio__trilho { height: 0.5rem; border-radius: var(--raio-total); background: var(--cor-superficie-3); overflow: hidden; }
+.desafio__barra { height: 100%; background: var(--cor-desafio); }
+.desafio__semanas { display: grid; gap: var(--esp-1); grid-template-columns: repeat(13, minmax(0, 1fr)); }
+.desafio__semana { position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1; border: 1px solid var(--cor-borda); border-radius: var(--raio-pequeno); font-size: var(--texto-xs); cursor: pointer; }
+.desafio__semana input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+.desafio__semana:has(input:checked) { background: var(--cor-sucesso-suave); border-color: var(--cor-sucesso); color: var(--cor-sucesso); }
+.desafio__semana:has(input:focus-visible) { outline: 2px solid var(--cor-foco); outline-offset: 1px; }
+.desafio__semana--atual { border-color: var(--cor-primaria); font-weight: 700; }
+.desafio__quebras { margin: 0; padding-left: var(--esp-5); font-size: var(--texto-sm); color: var(--cor-perigo); }
+.desafio__acoes { display: flex; gap: var(--esp-2); }
