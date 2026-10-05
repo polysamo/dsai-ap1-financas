@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react';
+import { OpcoesCategorias } from '../OpcoesCategorias';
 import type { DadosBaixa } from '../../domain/agenda';
 import { hojeISO } from '../../domain/date';
 import type { Agendamento, Categoria, Conta, Resultado } from '../../domain/types';
@@ -51,11 +52,7 @@ export function BaixaForm({ item, categorias, contas, onConfirmar, onCancelar }:
       </CampoSelect>
       <CampoSelect label="Categoria do pagamento" value={categoriaId} onChange={(e) => setCategoriaId(e.target.value)} erro={erros.categoriaId}>
         <option value="">Selecione</option>
-        {opcoes.map((c) => (
-          <option key={c.id} value={c.id}>
-            {c.nome}
-          </option>
-        ))}
+        <OpcoesCategorias categorias={categorias} tipo={item.tipo} />
       </CampoSelect>
       <CampoTexto label="Data do pagamento" type="date" value={data} onChange={(e) => setData(e.target.value)} erro={erros.data} />
       {erros.geral ? (

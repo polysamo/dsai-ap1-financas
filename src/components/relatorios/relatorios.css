@@ -116,4 +116,4 @@
   .relatorio-campo {
     display: none;
   }
-}
+}.relatorio-opcao { display: inline-flex; align-items: center; gap: var(--esp-2); font-size: var(--texto-sm); color: var(--cor-texto-suave); }

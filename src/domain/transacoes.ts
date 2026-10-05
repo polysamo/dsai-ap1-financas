@@ -1,3 +1,4 @@
+import { filhasDe, paiEfetivo, validarPai } from './subcategorias';
 import { efeitoTransacao } from './contas';
 import { dataValida } from './date';
 import { novoId, proximoTempo } from './id';
@@ -135,6 +136,8 @@ export { efeitoTransacao };
 export interface DadosCategoria {
   nome: string;
   tipo: TipoMovimento;
+  /** Cria como subcategoria desta categoria de primeiro nível. */
+  paiId?: string;
 }
 
 export function validarNomeCategoria(categorias: Categoria[], nome: string, tipo: TipoMovimento, ignorarId?: string): Resultado<string> {
@@ -151,7 +154,11 @@ export function validarNomeCategoria(categorias: Categoria[], nome: string, tipo
 export function criarCategoria(estado: AppState, dados: DadosCategoria): Resultado<AppState> {
   const nome = validarNomeCategoria(estado.categorias, dados.nome, dados.tipo);
   if (!nome.ok) return nome;
-  const categoria: Categoria = { id: novoId(), nome: nome.valor, tipo: dados.tipo, arquivada: false };
+  if (dados.paiId) {
+    const pai = validarPai(estado.categorias, dados.tipo, dados.paiId);
+    if (!pai.ok) return pai;
+  }
+  const categoria: Categoria = { id: novoId(), nome: nome.valor, tipo: dados.tipo, arquivada: false, ...(dados.paiId ? { paiId: dados.paiId } : {}) };
   return ok({ ...estado, categorias: [...estado.categorias, categoria] });
 }
 
@@ -163,9 +170,13 @@ export function renomearCategoria(estado: AppState, id: string, nomeNovo: string
   return ok({ ...estado, categorias: estado.categorias.map((c) => (c.id === id ? { ...c, nome: nome.valor } : c)) });
 }
 
+/** Arquivar um pai arquiva as subcategorias; reativar uma subcategoria exige o pai ativo. */
 export function arquivarCategoria(estado: AppState, id: string, arquivada = true): Resultado<AppState> {
-  if (!estado.categorias.some((c) => c.id === id)) return falha('Categoria não encontrada.');
-  return ok({ ...estado, categorias: estado.categorias.map((c) => (c.id === id ? { ...c, arquivada } : c)) });
+  const categoria = estado.categorias.find((c) => c.id === id);
+  if (!categoria) return falha('Categoria não encontrada.');
+  if (!arquivada && paiEfetivo(estado.categorias, categoria)?.arquivada) return falha('Reative primeiro a categoria pai.');
+  const afetada = (c: Categoria) => c.id === id || (arquivada && c.paiId === id);
+  return ok({ ...estado, categorias: estado.categorias.map((c) => (afetada(c) ? { ...c, arquivada } : c)) });
 }
 
 export function categoriaEmUso(estado: AppState, id: string): boolean {
@@ -180,6 +191,7 @@ export function categoriaEmUso(estado: AppState, id: string): boolean {
 export function excluirCategoria(estado: AppState, id: string, destinoId?: string): Resultado<AppState> {
   const categoria = estado.categorias.find((c) => c.id === id);
   if (!categoria) return falha('Categoria não encontrada.');
+  if (filhasDe(estado.categorias, id).length > 0) return falha('Mova ou exclua as subcategorias antes.');
   let transacoes = estado.transacoes;
   let recorrencias = estado.recorrencias;
   if (categoriaEmUso(estado, id)) {

@@ -22,3 +22,4 @@
   .categorias__nova-acao { padding-top: var(--esp-6); }
 }
 @media (min-width: 1024px) { .categorias__grupos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.categorias__item--sub { padding-left: var(--esp-6); border-left: 2px solid var(--cor-borda); }

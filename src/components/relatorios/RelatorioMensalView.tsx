@@ -13,7 +13,9 @@ import './relatorios.css';
 export function RelatorioMensalView() {
   const estado = useEstado();
   const [mes, setMes] = useState(mesDe(hojeISO()));
-  const relatorio = useMemo(() => relatorioMensal(estado, mes), [estado, mes]);
+  const [agrupar, setAgrupar] = useState(true);
+  const relatorio = useMemo(() => relatorioMensal(estado, mes, agrupar), [estado, mes, agrupar]);
+  const temSubcategorias = estado.categorias.some((c) => c.paiId);
 
   return (
     <div className="relatorio">
@@ -23,6 +25,12 @@ export function RelatorioMensalView() {
           <div className="relatorio-campo">
             <CampoTexto label="Mês do relatório" type="month" value={mes} onChange={(e) => mesValido(e.target.value) && setMes(e.target.value)} />
           </div>
+          {temSubcategorias ? (
+            <label className="relatorio-opcao">
+              <input type="checkbox" checked={agrupar} onChange={(e) => setAgrupar(e.target.checked)} />
+              Agrupar subcategorias
+            </label>
+          ) : null}
           <BarraExportacao linhas={csvMensal(relatorio)} nomeArquivo={nomeArquivoRelatorio('mensal', mes)} desabilitado={relatorio.quantidade === 0} />
         </div>
       </Cartao>

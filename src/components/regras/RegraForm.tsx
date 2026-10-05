@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react';
+import { OpcoesCategorias } from '../OpcoesCategorias';
 import { MODOS_PADRAO, PADRAO_MAX, type DadosRegra } from '../../domain/regras';
 import { formatarTags, parseTags, TAG_TAMANHO_MAX, TAGS_MAX } from '../../domain/tags';
 import type { AppState, ModoPadrao, RegraCategoria, Resultado, TipoMovimento } from '../../domain/types';
@@ -22,7 +23,6 @@ export function RegraForm({ estado, inicial, onSalvar, onCancelar }: Props) {
   const [tags, setTags] = useState(formatarTags(inicial?.tags));
   const [erros, setErros] = useState<Erros>({});
 
-  const categorias = estado.categorias.filter((c) => c.tipo === tipo && (!c.arquivada || c.id === inicial?.categoriaId));
 
   const trocarTipo = (novo: TipoMovimento) => {
     setTipo(novo);
@@ -51,12 +51,7 @@ export function RegraForm({ estado, inicial, onSalvar, onCancelar }: Props) {
       </CampoSelect>
       <CampoSelect label="Categoria de destino" value={categoriaId} onChange={(e) => setCategoriaId(e.target.value)} erro={erros.categoriaId}>
         <option value="">Selecione…</option>
-        {categorias.map((c) => (
-          <option key={c.id} value={c.id}>
-            {c.nome}
-            {c.arquivada ? ' (arquivada)' : ''}
-          </option>
-        ))}
+        <OpcoesCategorias categorias={estado.categorias} tipo={tipo} manterId={inicial?.categoriaId} />
       </CampoSelect>
       <CampoTexto
         label="Tags da regra"

@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react';
+import { OpcoesCategorias } from '../OpcoesCategorias';
 import { REPETICOES_MAX, type DadosAgendamento } from '../../domain/agenda';
 import { hojeISO } from '../../domain/date';
 import { parseValor } from '../../domain/money';
@@ -24,7 +25,6 @@ export function AgendamentoForm({ categorias, contas, onSalvar }: Props) {
   const [repeticoes, setRepeticoes] = useState('1');
   const [erros, setErros] = useState<Erros>({});
 
-  const opcoes = categorias.filter((c) => !c.arquivada && c.tipo === tipo);
   const contasAtivas = contas.filter((c) => !c.arquivada);
 
   const enviar = (e: FormEvent) => {
@@ -65,11 +65,7 @@ export function AgendamentoForm({ categorias, contas, onSalvar }: Props) {
       <CampoTexto label="Vencimento" type="date" value={vencimento} onChange={(e) => setVencimento(e.target.value)} erro={erros.vencimento} />
       <CampoSelect label="Categoria do lançamento" value={categoriaId} onChange={(e) => setCategoriaId(e.target.value)} erro={erros.categoriaId}>
         <option value="">Selecione</option>
-        {opcoes.map((c) => (
-          <option key={c.id} value={c.id}>
-            {c.nome}
-          </option>
-        ))}
+        <OpcoesCategorias categorias={categorias} tipo={tipo} />
       </CampoSelect>
       <CampoSelect label="Conta (opcional)" value={contaId} onChange={(e) => setContaId(e.target.value)} erro={erros.contaId}>
         <option value="">Escolher ao pagar</option>

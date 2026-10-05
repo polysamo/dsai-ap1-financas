@@ -41,6 +41,8 @@ export interface Categoria {
   nome: string;
   tipo: TipoMovimento;
   arquivada: boolean;
+  /** Categoria pai (um nível só); ausente nas de primeiro nível. */
+  paiId?: string;
 }
 
 export interface Transacao {

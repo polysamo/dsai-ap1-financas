@@ -1,4 +1,5 @@
 import { dataValida, mesDe } from './date';
+import { nomeCompleto, raizDe } from './subcategorias';
 import { falha, ok, type AppState, type Categoria, type Centavos, type DataISO, type Mes, type Resultado, type TipoMovimento, type Transacao } from './types';
 
 /** Percentual com uma casa decimal (ex.: 33,3); null se o total for zero. */
@@ -35,9 +36,11 @@ export interface QuebraPorCategoria {
   total: Centavos;
 }
 
-function quebrar(transacoes: Transacao[], categorias: Categoria[], tipo: TipoMovimento): QuebraPorCategoria {
-  const nome = nomeDe(categorias);
-  const soma = somaPorCategoria(transacoes, tipo);
+/** Soma por categoria; com `agrupar`, as subcategorias entram na linha do pai. */
+function quebrar(transacoes: Transacao[], categorias: Categoria[], tipo: TipoMovimento, agrupar = false): QuebraPorCategoria {
+  const nome = (id: string) => nomeCompleto(categorias, id);
+  const doTipo = agrupar ? transacoes.map((t) => ({ ...t, categoriaId: raizDe(categorias, t.categoriaId) })) : transacoes;
+  const soma = somaPorCategoria(doTipo, tipo);
   const total = [...soma.values()].reduce((s, v) => s + v.total, 0);
   const linhas = [...soma.entries()]
     .map(([categoriaId, v]): LinhaCategoria => ({ categoriaId, nome: nome(categoriaId), valor: v.total, percentual: percentualDecimal(v.total, total) }))
@@ -57,10 +60,10 @@ export interface RelatorioMensal {
   quantidade: number;
 }
 
-export function relatorioMensal(estado: Pick<AppState, 'transacoes' | 'categorias'>, mes: Mes): RelatorioMensal {
+export function relatorioMensal(estado: Pick<AppState, 'transacoes' | 'categorias'>, mes: Mes, agruparSubcategorias = true): RelatorioMensal {
   const doMes = estado.transacoes.filter((t) => mesDe(t.data) === mes);
-  const despesasPorCategoria = quebrar(doMes, estado.categorias, 'despesa');
-  const receitasPorCategoria = quebrar(doMes, estado.categorias, 'receita');
+  const despesasPorCategoria = quebrar(doMes, estado.categorias, 'despesa', agruparSubcategorias);
+  const receitasPorCategoria = quebrar(doMes, estado.categorias, 'receita', agruparSubcategorias);
   const receitas = receitasPorCategoria.total;
   const despesas = despesasPorCategoria.total;
   return {

@@ -1,3 +1,4 @@
+import { arvoreCategorias, nomeCompleto, somarNaRaiz } from './subcategorias';
 import { mesDe, mesValido, somarMeses } from './date';
 import { falha, ok, type AppState, type Categoria, type Centavos, type Mes, type Resultado, type Transacao } from './types';
 
@@ -28,8 +29,13 @@ export function gastoPorCategoria(transacoes: Transacao[], mes: Mes): Map<string
 
 export interface LinhaOrcamento {
   categoria: Categoria;
+  /** Nome completo ("Pai › Filha" nas subcategorias). */
+  nome: string;
   limite: Centavos | null;
+  /** Gasto da categoria somado ao das subcategorias. */
   gasto: Centavos;
+  /** Só o gasto lançado na própria categoria. */
+  gastoProprio: Centavos;
   restante: Centavos | null;
   percentual: number | null;
   estado: EstadoOrcamento | null;
@@ -38,21 +44,24 @@ export interface LinhaOrcamento {
 export function linhasOrcamento(estado: AppState, mes: Mes): LinhaOrcamento[] {
   const gastos = gastoPorCategoria(estado.transacoes, mes);
   const limites = new Map(estado.orcamentos.filter((o) => o.mes === mes).map((o) => [o.categoriaId, o.limite]));
-  return estado.categorias
-    .filter((c) => c.tipo === 'despesa' && (!c.arquivada || limites.has(c.id) || (gastos.get(c.id) ?? 0) > 0))
-    .map((categoria): LinhaOrcamento => {
+  const comFilhas = somarNaRaiz(gastos, estado.categorias);
+  const entra = (c: Categoria) => !c.arquivada || limites.has(c.id) || (gastos.get(c.id) ?? 0) > 0 || (comFilhas.get(c.id) ?? 0) > 0;
+  return arvoreCategorias(estado.categorias, 'despesa', entra)
+    .map(({ categoria, nivel }): LinhaOrcamento => {
       const limite = limites.get(categoria.id) ?? null;
-      const gasto = gastos.get(categoria.id) ?? 0;
+      const gastoProprio = gastos.get(categoria.id) ?? 0;
+      const gasto = nivel === 0 ? (comFilhas.get(categoria.id) ?? 0) : gastoProprio;
       return {
         categoria,
+        nome: nomeCompleto(estado.categorias, categoria.id),
         limite,
         gasto,
+        gastoProprio,
         restante: limite === null ? null : limite - gasto,
         percentual: limite === null ? null : percentualConsumido(gasto, limite),
         estado: limite === null ? null : estadoDoConsumo(gasto, limite),
       };
-    })
-    .sort((a, b) => a.categoria.nome.localeCompare(b.categoria.nome, 'pt-BR'));
+    });
 }
 
 export interface TotaisOrcamento {
@@ -61,16 +70,20 @@ export interface TotaisOrcamento {
   gastoSemOrcamento: Centavos;
 }
 
+/**
+ * Totais sem contar duas vezes: o limite de uma subcategoria cujo pai tem limite já está dentro do dele,
+ * e cada gasto próprio conta como "com limite" se a categoria ou o pai tiverem limite.
+ */
 export function totaisOrcamento(linhas: LinhaOrcamento[]): TotaisOrcamento {
+  const limitePorId = new Map(linhas.map((l) => [l.categoria.id, l.limite]));
+  const paiTemLimite = (l: LinhaOrcamento) => l.categoria.paiId !== undefined && (limitePorId.get(l.categoria.paiId) ?? null) !== null;
   let limites = 0;
   let gastoComLimite = 0;
   let gastoSemOrcamento = 0;
   for (const l of linhas) {
-    if (l.limite === null) gastoSemOrcamento += l.gasto;
-    else {
-      limites += l.limite;
-      gastoComLimite += l.gasto;
-    }
+    if (l.limite !== null && !paiTemLimite(l)) limites += l.limite;
+    if (l.limite !== null || paiTemLimite(l)) gastoComLimite += l.gastoProprio;
+    else gastoSemOrcamento += l.gastoProprio;
   }
   return { limites, gastoComLimite, gastoSemOrcamento };
 }

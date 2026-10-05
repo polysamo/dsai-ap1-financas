@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react';
+import { OpcoesCategorias } from './OpcoesCategorias';
 import { Link } from 'react-router-dom';
 import { hojeISO } from '../domain/date';
 import { parseValor, valorParaCampo } from '../domain/money';
@@ -39,7 +40,6 @@ export function TransacaoForm({ estado, inicial, onSalvar, onCancelar }: Props) 
     );
   }
 
-  const categorias = estado.categorias.filter((c) => c.tipo === tipo && (!c.arquivada || c.id === inicial?.categoriaId));
 
   const trocarTipo = (novo: TipoMovimento) => {
     setTipo(novo);
@@ -72,12 +72,7 @@ export function TransacaoForm({ estado, inicial, onSalvar, onCancelar }: Props) 
       </CampoSelect>
       <CampoSelect label="Categoria" value={categoriaId} onChange={(e) => setCategoriaId(e.target.value)} erro={erros.categoriaId}>
         <option value="">Selecione…</option>
-        {categorias.map((c) => (
-          <option key={c.id} value={c.id}>
-            {c.nome}
-            {c.arquivada ? ' (arquivada)' : ''}
-          </option>
-        ))}
+        <OpcoesCategorias categorias={estado.categorias} tipo={tipo} manterId={inicial?.categoriaId} />
       </CampoSelect>
       <CampoTexto label="Valor" value={valor} onChange={(e) => setValor(e.target.value)} erro={erros.valor} inputMode="decimal" placeholder="0,00" />
       <CampoTexto label="Data" type="date" value={data} onChange={(e) => setData(e.target.value)} erro={erros.data} />

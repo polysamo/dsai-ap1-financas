@@ -1,4 +1,5 @@
 import './OfxPrevia.css';
+import { OpcoesCategorias } from './OpcoesCategorias';
 import { formatarData } from '../domain/date';
 import { formatarMoeda } from '../domain/money';
 import type { LinhaOfx, OrigemDuplicata } from '../domain/ofx';
@@ -28,7 +29,6 @@ export function OfxPrevia({ linhas, categorias, onSelecionar, onCategoria }: Pro
   return (
     <ul className="ofx-previa" aria-label="Prévia da importação OFX">
       {linhas.map((l) => {
-        const opcoes = categorias.filter((c) => c.tipo === l.tipo && !c.arquivada);
         const s = situacao(l);
         const rotulo = `lançamento ${l.indice}`;
         const destaque = l.erro ? 'ofx-previa__linha--erro' : l.duplicata ? 'ofx-previa__linha--duplicata' : '';
@@ -62,11 +62,7 @@ export function OfxPrevia({ linhas, categorias, onSelecionar, onCategoria }: Pro
                 value={l.categoriaId ?? ''}
                 onChange={(e) => onCategoria(l.indice, e.target.value)}
               >
-                {opcoes.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.nome}
-                  </option>
-                ))}
+                <OpcoesCategorias categorias={categorias} tipo={l.tipo} />
               </select>
             )}
           </li>

@@ -13,6 +13,7 @@ import { Alerta, Botao, Cartao, EstadoVazio, TituloPagina, Valor } from '../comp
 import { excluirParcela } from '../domain/cartoes';
 import { dataValida, formatarData, hojeISO, mesDe, primeiroDia, ultimoDia } from '../domain/date';
 import { formatarMoeda } from '../domain/money';
+import { nomeCompleto } from '../domain/subcategorias';
 import { formatarTags } from '../domain/tags';
 import {
   criarTransacao,
@@ -224,7 +225,7 @@ export function TransacoesPage() {
                       <div className="transacoes__info">
                         <p className="transacoes__descricao">{rotulo}</p>
                         <p className="transacoes__meta">
-                          {formatarData(t.data)} · {cat?.nome ?? 'Sem categoria'}
+                          {formatarData(t.data)} · {cat ? nomeCompleto(estado.categorias, cat.id) : 'Sem categoria'}
                           {cat?.arquivada ? ' (arquivada)' : ''} · {nomeConta.get(t.contaId) ?? 'Conta removida'}
                         </p>
                         {t.tags?.length ? <p className="transacoes__meta">Tags: {formatarTags(t.tags)}</p> : null}

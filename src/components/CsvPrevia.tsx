@@ -1,4 +1,5 @@
 import { formatarData } from '../domain/date';
+import { OpcoesCategorias } from './OpcoesCategorias';
 import { formatarMoeda } from '../domain/money';
 import type { LinhaInterpretada } from '../domain/csv';
 import { formatarTags } from '../domain/tags';
@@ -24,7 +25,6 @@ export function CsvPrevia({ linhas, categorias, onSelecionar, onCategoria }: Pro
   return (
     <ul className="csv-previa" aria-label="Prévia da importação">
       {linhas.map((l) => {
-        const opcoes = categorias.filter((c) => c.tipo === l.tipo && !c.arquivada);
         const estado = l.erro ? `Erro: ${l.erro}` : l.duplicata ? 'Possível duplicata' : 'Pronta';
         const cor = l.erro ? 'csv-previa-estado--erro' : l.duplicata ? 'csv-previa-estado--duplicata' : 'csv-previa-estado--pronta';
         const rotulo = `linha ${l.indice}`;
@@ -59,11 +59,7 @@ export function CsvPrevia({ linhas, categorias, onSelecionar, onCategoria }: Pro
                 onChange={(e) => onCategoria(l.indice, e.target.value)}
                 className="csv-previa-categoria"
               >
-                {opcoes.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.nome}
-                  </option>
-                ))}
+                <OpcoesCategorias categorias={categorias} tipo={l.tipo} />
               </select>
             ) : (
               <span />

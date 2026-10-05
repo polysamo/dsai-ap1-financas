@@ -32,7 +32,7 @@ interface Props {
 }
 
 export function LinhaOrcamentoItem({ linha, onDefinir, onRemover }: Props) {
-  const { categoria, limite, gasto, restante, percentual, estado } = linha;
+  const { categoria, nome, limite, gasto, restante, percentual, estado } = linha;
   const [editando, setEditando] = useState(false);
   const [texto, setTexto] = useState(limite === null ? '' : valorParaCampo(limite));
   const [erro, setErro] = useState<string | undefined>();
@@ -52,13 +52,13 @@ export function LinhaOrcamentoItem({ linha, onDefinir, onRemover }: Props) {
     <li className="orcamento-linha" data-testid={`orcamento-${categoria.id}`}>
       <div className="orcamento-cabecalho">
         <p className="orcamento-nome">
-          {categoria.nome}
+          <span className={categoria.paiId ? 'orcamento-subcategoria' : undefined}>{nome}</span>
           {categoria.arquivada ? <span className="orcamento-selo">arquivada</span> : null}
         </p>
         <div className="orcamento-acoes">
           <Botao
             variante="secundario"
-            aria-label={`${limite === null ? 'Definir limite de' : 'Editar limite de'} ${categoria.nome}`}
+            aria-label={`${limite === null ? 'Definir limite de' : 'Editar limite de'} ${nome}`}
             onClick={() => {
               setTexto(limite === null ? '' : valorParaCampo(limite));
               setErro(undefined);
@@ -68,7 +68,7 @@ export function LinhaOrcamentoItem({ linha, onDefinir, onRemover }: Props) {
             {limite === null ? 'Definir limite' : 'Editar limite'}
           </Botao>
           {limite !== null ? (
-            <Botao variante="secundario" aria-label={`Remover limite de ${categoria.nome}`} onClick={onRemover}>
+            <Botao variante="secundario" aria-label={`Remover limite de ${nome}`} onClick={onRemover}>
               Remover limite
             </Botao>
           ) : null}
@@ -76,9 +76,9 @@ export function LinhaOrcamentoItem({ linha, onDefinir, onRemover }: Props) {
       </div>
 
       {editando ? (
-        <form onSubmit={salvar} noValidate aria-label={`Limite de ${categoria.nome}`} className="orcamento-form">
+        <form onSubmit={salvar} noValidate aria-label={`Limite de ${nome}`} className="orcamento-form">
           <div className="orcamento-form-campo">
-            <CampoTexto label={`Limite mensal de ${categoria.nome}`} value={texto} onChange={(e) => setTexto(e.target.value)} erro={erro} inputMode="decimal" placeholder="0,00" />
+            <CampoTexto label={`Limite mensal de ${nome}`} value={texto} onChange={(e) => setTexto(e.target.value)} erro={erro} inputMode="decimal" placeholder="0,00" />
           </div>
           <div className="orcamento-form-acoes">
             <Botao type="submit">Salvar limite</Botao>
@@ -97,7 +97,7 @@ export function LinhaOrcamentoItem({ linha, onDefinir, onRemover }: Props) {
         <div className="orcamento-detalhe">
           <div
             role="progressbar"
-            aria-label={`Consumo do orçamento de ${categoria.nome}`}
+            aria-label={`Consumo do orçamento de ${nome}`}
             aria-valuemin={0}
             aria-valuemax={100}
             aria-valuenow={Math.min(percentual ?? (gasto > 0 ? 100 : 0), 100)}

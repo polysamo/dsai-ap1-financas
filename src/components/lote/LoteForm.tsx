@@ -5,6 +5,7 @@ import type { AlteracaoLote } from '../../domain/lote';
 import { parseTags } from '../../domain/tags';
 import type { AppState, Resultado } from '../../domain/types';
 import { DateField } from '../novos';
+import { OpcoesCategorias } from '../OpcoesCategorias';
 import { Botao, CampoSelect, CampoTexto } from '../ui';
 import type { AcaoLote } from './BarraLote';
 
@@ -39,7 +40,6 @@ export function LoteForm({ acao, estado, onAplicar, onCancelar }: Props) {
     setErro(r.ok ? undefined : r.erro);
   };
 
-  const categorias = estado.categorias.filter((c) => !c.arquivada);
   const contas = ordenarContas(estado.contas.filter((c) => !c.arquivada));
 
   return (
@@ -49,13 +49,7 @@ export function LoteForm({ acao, estado, onAplicar, onCancelar }: Props) {
           <option value="">Selecione…</option>
           {(['despesa', 'receita'] as const).map((tipo) => (
             <optgroup key={tipo} label={tipo === 'despesa' ? 'Despesas' : 'Receitas'}>
-              {categorias
-                .filter((c) => c.tipo === tipo)
-                .map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.nome}
-                  </option>
-                ))}
+              <OpcoesCategorias categorias={estado.categorias} tipo={tipo} />
             </optgroup>
           ))}
         </CampoSelect>

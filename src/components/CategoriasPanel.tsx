@@ -7,32 +7,62 @@ import {
   excluirCategoria,
   renomearCategoria,
 } from '../domain/transacoes';
+import { arvoreCategorias, definirPai, paiEfetivo } from '../domain/subcategorias';
 import type { Categoria, TipoMovimento } from '../domain/types';
 import { useEstado, useStore } from '../state/store';
 import { Alerta, Botao, Cartao, CampoSelect, CampoTexto } from './ui';
 import './CategoriasPanel.css';
 
+/** Categorias que podem ser pai: ativas, de primeiro nível, do tipo, exceto a própria. */
+function OpcoesPai({ categorias, tipo, exceto }: { categorias: Categoria[]; tipo: TipoMovimento; exceto?: string }) {
+  const possiveis = categorias
+    .filter((c) => c.tipo === tipo && !c.arquivada && c.id !== exceto && !paiEfetivo(categorias, c))
+    .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+  return (
+    <>
+      <option value="">Nenhuma (primeiro nível)</option>
+      {possiveis.map((c) => (
+        <option key={c.id} value={c.id}>
+          {c.nome}
+        </option>
+      ))}
+    </>
+  );
+}
+
 function NovaCategoria() {
   const store = useStore();
+  const { categorias } = useEstado();
   const [nome, setNome] = useState('');
   const [tipo, setTipo] = useState<TipoMovimento>('despesa');
-  const [erro, setErro] = useState<string | undefined>();
+  const [paiId, setPaiId] = useState('');
+  const [erro, setErro] = useState<{ texto: string; campo?: string } | undefined>();
 
   const enviar = (e: FormEvent) => {
     e.preventDefault();
-    const r = store.aplicar((s) => criarCategoria(s, { nome, tipo }));
+    const r = store.aplicar((s) => criarCategoria(s, { nome, tipo, ...(paiId ? { paiId } : {}) }));
     if (r.ok) {
       setNome('');
       setErro(undefined);
-    } else setErro(r.erro);
+    } else setErro({ texto: r.erro, campo: r.campo });
   };
 
   return (
     <form onSubmit={enviar} noValidate aria-label="Nova categoria" className="categorias__nova">
-      <CampoTexto label="Nome da categoria" value={nome} onChange={(e) => setNome(e.target.value)} erro={erro} maxLength={60} autoComplete="off" />
-      <CampoSelect label="Tipo da categoria" value={tipo} onChange={(e) => setTipo(e.target.value as TipoMovimento)}>
+      <CampoTexto label="Nome da categoria" value={nome} onChange={(e) => setNome(e.target.value)} erro={erro?.campo !== 'paiId' ? erro?.texto : undefined} maxLength={60} autoComplete="off" />
+      <CampoSelect
+        label="Tipo da categoria"
+        value={tipo}
+        onChange={(e) => {
+          setTipo(e.target.value as TipoMovimento);
+          setPaiId('');
+        }}
+      >
         <option value="despesa">Despesa</option>
         <option value="receita">Receita</option>
+      </CampoSelect>
+      <CampoSelect label="Categoria pai" value={paiId} erro={erro?.campo === 'paiId' ? erro.texto : undefined} onChange={(e) => setPaiId(e.target.value)}>
+        <OpcoesPai categorias={categorias} tipo={tipo} />
       </CampoSelect>
       <div className="categorias__nova-acao">
         <Botao type="submit">Adicionar categoria</Botao>
@@ -41,11 +71,12 @@ function NovaCategoria() {
   );
 }
 
-function LinhaCategoria({ categoria }: { categoria: Categoria }) {
+function LinhaCategoria({ categoria, nivel }: { categoria: Categoria; nivel: 0 | 1 }) {
   const store = useStore();
   const estado = useEstado();
   const [editando, setEditando] = useState(false);
   const [nome, setNome] = useState(categoria.nome);
+  const [paiId, setPaiId] = useState(categoria.paiId ?? '');
   const [erro, setErro] = useState<string | undefined>();
   const [excluindo, setExcluindo] = useState(false);
   const [destino, setDestino] = useState('');
@@ -54,7 +85,11 @@ function LinhaCategoria({ categoria }: { categoria: Categoria }) {
 
   const salvarNome = (e: FormEvent) => {
     e.preventDefault();
-    const r = store.aplicar((s) => renomearCategoria(s, categoria.id, nome));
+    // Nome e pai numa operação só, para um único "Desfazer".
+    const r = store.aplicar((s) => {
+      const renomeada = renomearCategoria(s, categoria.id, nome);
+      return renomeada.ok ? definirPai(renomeada.valor, categoria.id, paiId || null) : renomeada;
+    });
     if (r.ok) {
       setEditando(false);
       setErro(undefined);
@@ -73,13 +108,19 @@ function LinhaCategoria({ categoria }: { categoria: Categoria }) {
           <div className="categorias__renomear-campo">
             <CampoTexto label={`Novo nome de ${categoria.nome}`} value={nome} onChange={(e) => setNome(e.target.value)} erro={erro} maxLength={60} />
           </div>
+          <div className="categorias__renomear-campo">
+            <CampoSelect label={`Categoria pai de ${categoria.nome}`} value={paiId} onChange={(e) => setPaiId(e.target.value)}>
+              <OpcoesPai categorias={estado.categorias} tipo={categoria.tipo} exceto={categoria.id} />
+            </CampoSelect>
+          </div>
           <div className="categorias__renomear-acoes">
-            <Botao type="submit">Salvar nome</Botao>
+            <Botao type="submit">Salvar</Botao>
             <Botao
               variante="secundario"
               onClick={() => {
                 setEditando(false);
                 setNome(categoria.nome);
+                setPaiId(categoria.paiId ?? '');
                 setErro(undefined);
               }}
             >
@@ -92,7 +133,7 @@ function LinhaCategoria({ categoria }: { categoria: Categoria }) {
   }
 
   return (
-    <li className="categorias__item">
+    <li className={`categorias__item${nivel === 1 ? ' categorias__item--sub' : ''}`}>
       <div className="categorias__linha">
         <p className="categorias__nome">
           {categoria.nome}
@@ -156,11 +197,10 @@ function LinhaCategoria({ categoria }: { categoria: Categoria }) {
 
 export function CategoriasPanel() {
   const { categorias } = useEstado();
-  const ordenar = (lista: Categoria[]) => [...lista].sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
-  const grupos: Array<[string, Categoria[]]> = [
-    ['Despesas', ordenar(categorias.filter((c) => c.tipo === 'despesa'))],
-    ['Receitas', ordenar(categorias.filter((c) => c.tipo === 'receita'))],
-  ];
+  const grupos = [
+    ['Despesas', arvoreCategorias(categorias, 'despesa')],
+    ['Receitas', arvoreCategorias(categorias, 'receita')],
+  ] as const;
   return (
     <div className="categorias">
       <Cartao titulo="Nova categoria">
@@ -171,8 +211,8 @@ export function CategoriasPanel() {
         {grupos.map(([titulo, lista]) => (
           <Cartao key={titulo} titulo={titulo}>
             <ul className="categorias__lista">
-              {lista.map((c) => (
-                <LinhaCategoria key={c.id} categoria={c} />
+              {lista.map(({ categoria, nivel }) => (
+                <LinhaCategoria key={categoria.id} categoria={categoria} nivel={nivel} />
               ))}
             </ul>
           </Cartao>

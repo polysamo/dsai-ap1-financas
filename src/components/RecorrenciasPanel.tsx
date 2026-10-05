@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react';
+import { OpcoesCategorias } from './OpcoesCategorias';
 import { formatarMoeda, parseValor, valorParaCampo } from '../domain/money';
 import {
   RECORRENCIA_DESCRICAO_MAX,
@@ -27,7 +28,6 @@ function RecorrenciaForm({ estado, inicial, onSalvar, onCancelar }: FormProps) {
   const [valor, setValor] = useState(inicial ? valorParaCampo(inicial.valor) : '');
   const [categoriaId, setCategoriaId] = useState(inicial?.categoriaId ?? '');
   const [erros, setErros] = useState<Erros>({});
-  const categorias = estado.categorias.filter((c) => c.tipo === tipo && (!c.arquivada || c.id === inicial?.categoriaId));
 
   const enviar = (e: FormEvent) => {
     e.preventDefault();
@@ -59,11 +59,7 @@ function RecorrenciaForm({ estado, inicial, onSalvar, onCancelar }: FormProps) {
       </CampoSelect>
       <CampoSelect label="Categoria da recorrência" value={categoriaId} onChange={(e) => setCategoriaId(e.target.value)} erro={erros.categoriaId}>
         <option value="">Selecione…</option>
-        {categorias.map((c) => (
-          <option key={c.id} value={c.id}>
-            {c.nome}
-          </option>
-        ))}
+        <OpcoesCategorias categorias={estado.categorias} tipo={tipo} manterId={inicial?.categoriaId} />
       </CampoSelect>
       <CampoTexto label="Valor mensal" value={valor} onChange={(e) => setValor(e.target.value)} erro={erros.valor} inputMode="decimal" placeholder="0,00" />
       {erros.geral ? (

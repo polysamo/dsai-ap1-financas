@@ -19,3 +19,4 @@
 .orcamento-estado--atencao { color: var(--cor-aviso); }
 .orcamento-estado--estourado { color: var(--cor-perigo); }
 .orcamento-texto { color: var(--cor-texto-suave); }
+.orcamento-subcategoria { padding-left: var(--esp-4); }
