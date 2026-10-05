@@ -1,0 +1,4 @@
+.ds-filtros { display: flex; flex-direction: column; gap: var(--esp-2); padding: var(--esp-3) var(--esp-4); border: 1px solid var(--cor-borda); border-radius: var(--raio); background: var(--cor-superficie); }
+.ds-filtros__campos { display: grid; gap: var(--esp-3); grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); align-items: end; }
+.ds-filtros__rodape { display: flex; align-items: center; justify-content: space-between; gap: var(--esp-3); min-height: 1.5rem; }
+.ds-filtros__resumo { margin: 0; font-size: var(--texto-xs); color: var(--cor-texto-mudo); }

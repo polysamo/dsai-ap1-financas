@@ -2,6 +2,7 @@ import type { HTMLAttributes, ReactNode } from 'react';
 import { EmptyState } from './novos';
 import { Alert } from '../ds/Alert';
 import { Card } from '../ds/Card';
+import { PageHeader } from '../ds/PageHeader';
 import { Button } from '../ds/Button';
 import { Input } from '../ds/Input';
 import { Select } from '../ds/Select';
@@ -11,14 +12,6 @@ import './ui.css';
 const juntar = (...partes: (string | false | undefined)[]) => partes.filter(Boolean).join(' ');
 
 
-export function TituloPagina({ children, acoes }: { children: ReactNode; acoes?: ReactNode }) {
-  return (
-    <div className="ui-titulo-pagina">
-      <h1 className="ui-titulo-pagina__texto">{children}</h1>
-      {acoes}
-    </div>
-  );
-}
 
 export const EstadoVazio = EmptyState;
 
@@ -40,3 +33,8 @@ export const CampoTexto = Input;
 export const CampoSelect = Select;
 export const Alerta = Alert;
 export const Cartao = Card;
+
+/** Cabeçalho de página; `children` é o título. Veja `PageHeader` para a descrição. */
+export function TituloPagina({ children, acoes, descricao }: { children: ReactNode; acoes?: ReactNode; descricao?: string }) {
+  return <PageHeader titulo={children} acoes={acoes} descricao={descricao} />;
+}

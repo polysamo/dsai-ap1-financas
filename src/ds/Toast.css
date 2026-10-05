@@ -21,3 +21,6 @@
 .ds-toast--info { border-left-color: var(--cor-info); }
 @keyframes ds-toast-entrar { from { transform: translateY(0.5rem); opacity: 0; } to { transform: none; opacity: 1; } }
 @media (max-width: 47.99rem) { .ds-toasts { bottom: 5rem; left: var(--esp-4); width: auto; } }
+.ds-toast__acao { padding: var(--esp-1) var(--esp-2); border: 0; border-radius: var(--raio-xs); background: none; color: var(--cor-primaria); font: inherit; font-size: var(--texto-sm); font-weight: var(--peso-semibold); text-decoration: underline; cursor: pointer; }
+.ds-toast__acao:hover { background: var(--cor-superficie-alt); }
+.ds-toast__acao:focus-visible { outline: none; box-shadow: var(--anel-foco); }

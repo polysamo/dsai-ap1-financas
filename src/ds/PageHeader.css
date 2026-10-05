@@ -1,0 +1,9 @@
+.ds-pagina-cabecalho { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: var(--esp-3); margin-bottom: var(--esp-4); }
+.ds-pagina-cabecalho__texto { min-width: 0; flex: 1 1 18rem; }
+.ds-pagina-cabecalho__titulo { margin: 0; font-size: var(--texto-2xl); font-weight: var(--peso-negrito); line-height: var(--linha-justa); color: var(--cor-texto); }
+.ds-pagina-cabecalho__descricao { margin: var(--esp-1) 0 0; max-width: 42rem; font-size: var(--texto-sm); line-height: var(--linha-normal); color: var(--cor-texto-mudo); }
+.ds-pagina-cabecalho__acoes { display: flex; flex-wrap: wrap; align-items: center; gap: var(--esp-2); }
+@media (max-width: 47.99rem) {
+  .ds-pagina-cabecalho__acoes { width: 100%; }
+  .ds-pagina-cabecalho__acoes > * { flex: 1 1 auto; }
+}

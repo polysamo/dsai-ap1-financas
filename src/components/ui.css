@@ -1,15 +1,6 @@
 
 
 
-.ui-titulo-pagina {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--esp-3);
-  margin-bottom: var(--esp-4);
-}
-.ui-titulo-pagina__texto { margin: 0; font-size: var(--texto-2xl); font-weight: 700; color: var(--cor-texto); }
 
 .ui-vazio {
   border: 1px dashed var(--cor-borda-forte);

@@ -6,16 +6,24 @@ import './Toast.css';
 
 export const DURACAO_TOAST_PADRAO = 5000;
 
+export interface AcaoToast {
+  rotulo: string;
+  /** Executada ao clicar; a notificação fecha em seguida. */
+  aoClicar: () => void;
+}
+
 interface Toast {
   id: number;
   tipo: TipoAlerta;
   texto: string;
+  acao?: AcaoToast;
 }
 
 interface Opcoes {
   tipo?: TipoAlerta;
   /** Milissegundos até sumir; 0 mantém até fechar. */
   duracao?: number;
+  acao?: AcaoToast;
 }
 
 interface Contexto {
@@ -44,9 +52,9 @@ export function ToastProvider({ children, maximo = 4 }: { children: ReactNode; m
   }, []);
 
   const mostrar = useCallback(
-    (texto: string, { tipo = 'info', duracao = DURACAO_TOAST_PADRAO }: Opcoes = {}) => {
+    (texto: string, { tipo = 'info', duracao = DURACAO_TOAST_PADRAO, acao }: Opcoes = {}) => {
       const id = proximo.current++;
-      setToasts((t) => [...t, { id, tipo, texto }].slice(-maximo));
+      setToasts((t) => [...t, { id, tipo, texto, acao }].slice(-maximo));
       if (duracao > 0) timers.current.set(id, window.setTimeout(() => fechar(id), duracao));
       return id;
     },
@@ -68,6 +76,18 @@ export function ToastProvider({ children, maximo = 4 }: { children: ReactNode; m
           {toasts.map((t) => (
             <div key={t.id} role={t.tipo === 'erro' ? 'alert' : 'status'} className={`ds-toast ds-toast--${t.tipo}`}>
               <span className="ds-toast__texto">{t.texto}</span>
+              {t.acao ? (
+                <button
+                  type="button"
+                  className="ds-toast__acao"
+                  onClick={() => {
+                    t.acao?.aoClicar();
+                    fechar(t.id);
+                  }}
+                >
+                  {t.acao.rotulo}
+                </button>
+              ) : null}
               <IconButton aria-label="Fechar notificação" icone="✕" tamanho="pequeno" onClick={() => fechar(t.id)} />
             </div>
           ))}

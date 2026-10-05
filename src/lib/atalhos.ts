@@ -21,6 +21,7 @@ export const atalhos: Atalho[] = [
   { teclas: 'g i', letra: 'i', rota: '/importar', descricao: 'Ir para Importar CSV', grupo: 'Navegação' },
   { teclas: 'g r', letra: 'r', rota: '/relatorios', descricao: 'Ir para Relatórios', grupo: 'Navegação' },
   { teclas: '?', descricao: 'Mostrar a lista de atalhos', grupo: 'Busca e ajuda' },
+  { teclas: 'n', descricao: 'Criar um novo item na tela atual', grupo: 'Edição' },
   { teclas: 'Ctrl+K', descricao: 'Abrir a busca global (também /)', grupo: 'Busca e ajuda' },
   { teclas: 'Ctrl+Z', descricao: 'Desfazer a última alteração', grupo: 'Edição' },
   { teclas: 'Ctrl+Shift+Z', descricao: 'Refazer a alteração desfeita (também Ctrl+Y)', grupo: 'Edição' },
@@ -75,4 +76,18 @@ export function useAtalhos(aoAjuda: () => void) {
       limpar();
     };
   }, [navegar, aoAjuda]);
+}
+
+/** A tecla `n` chama `aoCriar` fora de campos de edição, sem modificadoras e sem diálogo aberto. */
+export function useAtalhoNovo(aoCriar: () => void) {
+  useEffect(() => {
+    const aoTeclar = (e: KeyboardEvent) => {
+      if (e.key !== 'n' || e.ctrlKey || e.altKey || e.metaKey || emCampoDeEdicao(e.target)) return;
+      if (document.querySelector('[role="dialog"][aria-modal="true"]')) return;
+      e.preventDefault();
+      aoCriar();
+    };
+    document.addEventListener('keydown', aoTeclar);
+    return () => document.removeEventListener('keydown', aoTeclar);
+  }, [aoCriar]);
 }
