@@ -5,6 +5,7 @@ import { gruposNavegacao, itensRodape, rotuloDe } from '../navegacao';
 import { PreferenciasProvider } from '../state/preferencias';
 import { BotaoOcultarValores } from './BotaoOcultarValores';
 import { Drawer } from './novos';
+import { AvisoHistorico, BotoesHistorico, useHistoricoUI } from './historico/ControlesHistorico';
 import './Layout.css';
 
 const classeLink = ({ isActive }: { isActive: boolean }) => `layout-link${isActive ? ' layout-link--ativo' : ''}`;
@@ -90,14 +91,17 @@ function BarraInferior() {
 
 export function Layout() {
   const estreito = useEstreito();
+  const historico = useHistoricoUI();
   return (
     <PreferenciasProvider>
       <div className="layout-raiz">
         {estreito ? null : <Sidebar />}
         <div className="layout-conteudo">
           <div className="layout-topo">
+            <BotoesHistorico ui={historico} />
             <BotaoOcultarValores />
           </div>
+          <AvisoHistorico ui={historico} />
           <OnboardingEAtalhos />
           <main className="layout-principal">
             <Outlet />

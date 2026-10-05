@@ -1,0 +1,18 @@
+.historico-botoes { display: flex; gap: var(--esp-2); margin-right: auto; }
+.historico-aviso {
+  position: fixed;
+  left: 50%;
+  bottom: var(--esp-6);
+  transform: translateX(-50%);
+  z-index: 60;
+  padding: var(--esp-2) var(--esp-4);
+  border-radius: var(--raio);
+  background: var(--cor-superficie-3);
+  color: var(--cor-texto);
+  box-shadow: var(--sombra);
+  font-size: var(--texto-sm);
+}
+.historico-aviso--erro { background: var(--cor-perigo-suave); color: var(--cor-perigo); }
+@media (max-width: 47.99rem) {
+  .historico-aviso { bottom: 5rem; }
+}

@@ -4,7 +4,6 @@
 .transacoes__aba:focus-visible { outline: 2px solid var(--cor-foco); outline-offset: 0; }
 .transacoes__aba--ativa, .transacoes__aba--ativa:hover { border-bottom-color: var(--cor-primaria); color: var(--cor-primaria); }
 .transacoes__painel { display: flex; flex-direction: column; gap: var(--esp-4); }
-.transacoes__desfazer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--esp-2); }
 .transacoes__totais { display: grid; gap: var(--esp-3); grid-template-columns: minmax(0, 1fr); }
 .transacoes__rotulo-total { margin: 0; font-size: var(--texto-sm); color: var(--cor-texto-mudo); }
 .transacoes__total { margin: 0; font-size: var(--texto-xl); font-weight: 700; }

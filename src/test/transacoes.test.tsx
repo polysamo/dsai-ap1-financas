@@ -13,7 +13,6 @@ import {
   filtrarTransacoes,
   ordenarTransacoes,
   renomearCategoria,
-  restaurarTransacao,
   totaisTransacoes,
   validarTransacao,
   type DadosTransacao,
@@ -106,15 +105,6 @@ describe('transações: validação e CRUD (critérios 1, 2, 3, 9, 10)', () => {
     }
   });
 
-  it('critério 10: restaurar devolve a transação excluída exatamente como era', () => {
-    const t = trans('t1', { valor: 1234, descricao: 'Original' });
-    const estado = { ...base(), transacoes: [t] };
-    const removida = excluirTransacao(estado, 't1');
-    expect(removida.ok).toBe(true);
-    if (!removida.ok) return;
-    const volta = restaurarTransacao(removida.valor, t);
-    expect(volta.ok && volta.valor.transacoes).toEqual([t]);
-  });
 });
 
 describe('transações: lista, filtros e totais (critérios 4, 5, 6, 11)', () => {
@@ -236,6 +226,7 @@ describe('transações: tela', () => {
     expect(store.getSnapshot().estado.transacoes).toHaveLength(0);
     await usuario.click(screen.getByRole('button', { name: 'Desfazer' }));
     expect(store.getSnapshot().estado.transacoes).toHaveLength(1);
+    expect(screen.getByText('Desfeito: transação excluída')).toBeInTheDocument();
     expect(screen.getByText('Padaria')).toBeInTheDocument();
   });
 

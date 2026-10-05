@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { Drawer, KpiCard } from '../components/novos';
 import { CategoriasPanel } from '../components/CategoriasPanel';
 import { ConfirmDialog } from '../components/ConfirmDialog';
@@ -17,7 +17,6 @@ import {
   excluirTransacao,
   filtrarTransacoes,
   ordenarTransacoes,
-  restaurarTransacao,
   totaisTransacoes,
   type FiltrosTransacoes,
 } from '../domain/transacoes';
@@ -26,7 +25,6 @@ import { useEstado, useStore } from '../state/store';
 import './TransacoesPage.css';
 
 const TAMANHO_PAGINA = 50;
-const TEMPO_DESFAZER_MS = 8000;
 
 function filtrosPadrao(): FiltrosTransacoes {
   const mes = mesDe(hojeISO());
@@ -44,14 +42,7 @@ export function TransacoesPage() {
   const [criando, setCriando] = useState(false);
   const [editandoId, setEditandoId] = useState<string | null>(null);
   const [excluindo, setExcluindo] = useState<Transacao | null>(null);
-  const [removida, setRemovida] = useState<Transacao | null>(null);
   const [erro, setErro] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!removida) return;
-    const timer = setTimeout(() => setRemovida(null), TEMPO_DESFAZER_MS);
-    return () => clearTimeout(timer);
-  }, [removida]);
 
   const filtradas = useMemo(() => ordenarTransacoes(filtrarTransacoes(estado.transacoes, filtros)), [estado.transacoes, filtros]);
   const totais = useMemo(() => totaisTransacoes(filtradas), [filtradas]);
@@ -62,13 +53,6 @@ export function TransacoesPage() {
   const mudarFiltros = (f: FiltrosTransacoes) => {
     setFiltros(f);
     setLimite(TAMANHO_PAGINA);
-  };
-
-  const desfazer = () => {
-    if (!removida) return;
-    const r = store.aplicar((s) => restaurarTransacao(s, removida));
-    setErro(r.ok ? null : r.erro);
-    setRemovida(null);
   };
 
   const abaClasse = (a: Aba) =>
@@ -98,16 +82,6 @@ export function TransacoesPage() {
       ) : (
         <div role="tabpanel" id="painel-transacoes" aria-labelledby="aba-transacoes" className="transacoes__painel">
           {erro ? <Alerta>{erro}</Alerta> : null}
-          {removida ? (
-            <Alerta tipo="aviso">
-              <span className="transacoes__desfazer">
-                Transação excluída.
-                <Botao variante="secundario" onClick={desfazer}>
-                  Desfazer
-                </Botao>
-              </span>
-            </Alerta>
-          ) : null}
 
           <Drawer aberto={criando} titulo="Nova transação" onFechar={() => setCriando(false)}>
               <TransacaoForm
@@ -218,10 +192,7 @@ export function TransacoesPage() {
           onEscolher={(escopo) => {
             const alvo = excluindo;
             const r = store.aplicar((s) => excluirParcela(s, alvo.id, escopo));
-            if (r.ok) {
-              setRemovida(escopo === 'uma' ? alvo : null);
-              setErro(null);
-            } else setErro(r.erro);
+            setErro(r.ok ? null : r.erro);
             setExcluindo(null);
           }}
         />
@@ -229,17 +200,14 @@ export function TransacoesPage() {
       {excluindo && !excluindo.parcela ? (
         <ConfirmDialog
           titulo="Excluir transação?"
-          mensagem={`Excluir "${excluindo.descricao || 'transação'}" de ${formatarData(excluindo.data)}? Você poderá desfazer por alguns segundos.`}
+          mensagem={`Excluir "${excluindo.descricao || 'transação'}" de ${formatarData(excluindo.data)}? Você poderá desfazer com o botão Desfazer no topo ou Ctrl+Z.`}
           rotuloConfirmar="Excluir"
           perigo
           onCancelar={() => setExcluindo(null)}
           onConfirmar={() => {
             const alvo = excluindo;
             const r = store.aplicar((s) => excluirTransacao(s, alvo.id));
-            if (r.ok) {
-              setRemovida(alvo);
-              setErro(null);
-            } else setErro(r.erro);
+            setErro(r.ok ? null : r.erro);
             setExcluindo(null);
           }}
         />

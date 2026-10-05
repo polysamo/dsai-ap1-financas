@@ -72,15 +72,6 @@ export function excluirTransacao(estado: AppState, id: string): Resultado<AppSta
   return ok({ ...estado, transacoes: estado.transacoes.filter((t) => t.id !== id) });
 }
 
-/** Desfaz uma exclusão, devolvendo a transação exatamente como era. */
-export function restaurarTransacao(estado: AppState, transacao: Transacao): Resultado<AppState> {
-  if (estado.transacoes.some((t) => t.id === transacao.id)) return ok(estado);
-  if (!estado.contas.some((c) => c.id === transacao.contaId) || !estado.categorias.some((c) => c.id === transacao.categoriaId)) {
-    return falha('A conta ou a categoria desta transação não existe mais.');
-  }
-  return ok({ ...estado, transacoes: [...estado.transacoes, transacao] });
-}
-
 export interface FiltrosTransacoes {
   de?: DataISO;
   ate?: DataISO;
