@@ -1,0 +1,14 @@
+.design { display: flex; flex-direction: column; gap: var(--esp-4); }
+.design-intro { margin: 0; color: var(--cor-texto-suave); font-size: var(--texto-sm); }
+.design-intro code { padding: 0 var(--esp-1); border-radius: var(--raio-xs); background: var(--cor-superficie-3); }
+.design-demo { display: flex; flex-direction: column; gap: var(--esp-4); }
+.design-linha { display: flex; flex-wrap: wrap; align-items: center; gap: var(--esp-3); }
+.design-grade { display: grid; gap: var(--esp-4); grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); align-items: start; }
+.design-pilha { display: flex; flex-direction: column; gap: var(--esp-3); }
+.design-escalas { display: flex; flex-direction: column; gap: var(--esp-2); }
+.design-escala { display: grid; grid-template-columns: 5rem repeat(10, minmax(0, 1fr)); gap: 2px; align-items: center; }
+.design-escala__nome { font-size: var(--texto-xs); color: var(--cor-texto-mudo); }
+.design-escala__amostra { height: 1.75rem; border-radius: var(--raio-xs); }
+.design-tipografia { display: flex; flex-direction: column; gap: var(--esp-1); }
+.design-sombras { display: flex; flex-wrap: wrap; gap: var(--esp-4); }
+.design-sombra { display: inline-flex; padding: var(--esp-4) var(--esp-6); border-radius: var(--raio); background: var(--cor-superficie-2); font-size: var(--texto-sm); }

@@ -34,6 +34,7 @@ export const itensNavegacao: ItemNavegacao[] = [
   { to: '/importar', rotulo: 'Importar CSV' },
   { to: '/importar-ofx', rotulo: 'Importar OFX' },
   { to: '/ajuda', rotulo: 'Ajuda' },
+  { to: '/design', rotulo: 'Design system' },
 ];
 
 export interface GrupoNavegacao {

@@ -10,6 +10,7 @@ import { DesejosPage } from './pages/DesejosPage';
 import { EventosPage } from './pages/EventosPage';
 import { BeneficiariosPage } from './pages/BeneficiariosPage';
 import { DesafiosPage } from './pages/DesafiosPage';
+import { DesignPage } from './pages/DesignPage';
 import { AlertasPage } from './pages/AlertasPage';
 import { CalendarioPage } from './pages/CalendarioPage';
 import { CartoesPage } from './pages/CartoesPage';
@@ -71,6 +72,7 @@ export function AppRoutes() {
         <Route path="/configuracoes" element={<ConfiguracoesPage />} />
         <Route path="/dados" element={<Navigate to="/configuracoes" replace />} />
         <Route path="/ajuda" element={<AjudaPage />} />
+        <Route path="/design" element={<DesignPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

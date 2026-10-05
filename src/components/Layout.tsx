@@ -3,6 +3,7 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { OnboardingEAtalhos } from './OnboardingEAtalhos';
 import { gruposNavegacao, itensRodape, rotuloDe } from '../navegacao';
 import { PreferenciasProvider } from '../state/preferencias';
+import { ToastProvider } from '../ds/Toast';
 import { BotaoOcultarValores } from './BotaoOcultarValores';
 import { Drawer } from './novos';
 import { BuscaGlobal, useAtalhoBusca } from './busca/BuscaGlobal';
@@ -108,6 +109,7 @@ export function Layout() {
   useAtalhoBusca(abrirBusca);
   return (
     <PreferenciasProvider>
+      <ToastProvider>
       <div className="layout-raiz">
         {estreito ? null : <Sidebar />}
         <div className="layout-conteudo">
@@ -127,6 +129,7 @@ export function Layout() {
         {estreito ? <BarraInferior onBuscar={abrirBusca} /> : null}
         {buscando ? <BuscaGlobal onFechar={() => setBuscando(false)} /> : null}
       </div>
+      </ToastProvider>
     </PreferenciasProvider>
   );
 }
