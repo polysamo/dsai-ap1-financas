@@ -1,19 +1,20 @@
-import { useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useCallback, useMemo } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { LinhaOrcamentoItem } from '../components/LinhaOrcamentoItem';
 import { Alerta, Botao, Cartao, EstadoVazio, TituloPagina } from '../components/ui';
 import { KpiCard, MonthPicker } from '../components/novos';
 import { hojeISO, mesDe, mesValido, somarMeses } from '../domain/date';
 import { formatarMoeda } from '../domain/money';
 import { copiarMesAnterior, definirLimite, linhasOrcamento, mesTemLimites, removerLimite, totaisOrcamento } from '../domain/orcamento';
-import { useEstado, useStore } from '../state/store';
+import { useEstado } from '../state/store';
+import { useFeedback } from '../state/useFeedback';
+import { useAtalhoNovo } from '../lib/atalhos';
 import './OrcamentoPage.css';
 
 export function OrcamentoPage() {
-  const store = useStore();
   const estado = useEstado();
   const [params, setParams] = useSearchParams();
-  const [erro, setErro] = useState<string | null>(null);
+  const { executar, erro } = useFeedback();
 
   const mesParam = params.get('mes') ?? '';
   const mes = mesValido(mesParam) ? mesParam : mesDe(hojeISO());
@@ -24,14 +25,18 @@ export function OrcamentoPage() {
   const semLimites = !mesTemLimites(estado, mes);
   const podeCopiar = semLimites && mesTemLimites(estado, somarMeses(mes, -1));
   const estouradas = linhas.filter((l) => l.estado === 'estourado').length;
+  const abrirPrimeiroLimite = useCallback(() => {
+    const botao = document.querySelector<HTMLButtonElement>('[aria-label^="Definir limite de"], [aria-label^="Editar limite de"]');
+    botao?.click();
+    setTimeout(() => document.querySelector<HTMLInputElement>('form[aria-label^="Limite de"] input')?.focus());
+  }, []);
+  useAtalhoNovo(abrirPrimeiroLimite);
 
   return (
     <div>
-      <TituloPagina>Orçamento</TituloPagina>
+      <TituloPagina descricao="Compare limites mensais e gastos por categoria para decidir onde ajustar." acoes={<Botao onClick={abrirPrimeiroLimite}>Definir limite</Botao>}>Orçamento</TituloPagina>
       <div className="orcamento-pagina">
         <MonthPicker mes={mes} onChange={irPara} />
-
-        {erro ? <Alerta>{erro}</Alerta> : null}
 
         {podeCopiar ? (
           <Alerta tipo="aviso">
@@ -40,8 +45,7 @@ export function OrcamentoPage() {
               <Botao
                 variante="secundario"
                 onClick={() => {
-                  const r = store.aplicar((s) => copiarMesAnterior(s, mes));
-                  setErro(r.ok ? null : r.erro);
+                  executar((s) => copiarMesAnterior(s, mes), 'Limites copiados do mês anterior.');
                 }}
               >
                 Copiar limites do mês anterior
@@ -51,7 +55,7 @@ export function OrcamentoPage() {
         ) : null}
 
         {linhas.length === 0 ? (
-          <EstadoVazio titulo="Nenhuma categoria de despesa">Crie categorias de despesa na tela Transações para definir limites.</EstadoVazio>
+          <EstadoVazio titulo="Nenhuma categoria de despesa" acao={<Link to="/transacoes" className="orcamento-link-acao">Ir para Transações</Link>}>Crie categorias de despesa na tela Transações para definir limites.</EstadoVazio>
         ) : (
           <>
             <div className="orcamento-totais" role="group" aria-label="Totais do mês">
@@ -76,8 +80,9 @@ export function OrcamentoPage() {
                       <LinhaOrcamentoItem
                         key={l.categoria.id}
                         linha={l}
-                        onDefinir={(limite) => store.aplicar((s) => definirLimite(s, l.categoria.id, mes, limite))}
-                        onRemover={() => store.aplicar((s) => removerLimite(s, l.categoria.id, mes))}
+                        onDefinir={(limite) => executar((s) => definirLimite(s, l.categoria.id, mes, limite), 'Limite salvo.')}
+                        onRemover={() => executar((s) => removerLimite(s, l.categoria.id, mes), 'Limite removido.')}
+                        onErro={erro}
                       />
                     ))}
                   </ul>

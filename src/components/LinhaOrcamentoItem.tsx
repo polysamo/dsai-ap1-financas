@@ -3,6 +3,8 @@ import type { EstadoOrcamento, LinhaOrcamento } from '../domain/orcamento';
 import { formatarMoeda, parseValor, valorParaCampo } from '../domain/money';
 import type { Resultado } from '../domain/types';
 import { Botao, CampoTexto, Valor } from './ui';
+import { Badge } from '../ds';
+import { ConfirmDialog } from './ConfirmDialog';
 import './LinhaOrcamentoItem.css';
 
 const ROTULO_ESTADO: Record<EstadoOrcamento, string> = {
@@ -11,37 +13,43 @@ const ROTULO_ESTADO: Record<EstadoOrcamento, string> = {
   estourado: 'Estourado',
 };
 
-const ICONE_ESTADO: Record<EstadoOrcamento, string> = { normal: '✓', atencao: '!', estourado: '✕' };
-
 const COR_BARRA: Record<EstadoOrcamento, string> = {
   normal: 'orcamento-barra--normal',
   atencao: 'orcamento-barra--atencao',
   estourado: 'orcamento-barra--estourado',
 };
 
-const COR_TEXTO: Record<EstadoOrcamento, string> = {
-  normal: 'orcamento-estado--normal',
-  atencao: 'orcamento-estado--atencao',
-  estourado: 'orcamento-estado--estourado',
-};
+const TOM_ESTADO = { normal: 'sucesso', atencao: 'aviso', estourado: 'perigo' } as const;
 
 interface Props {
   linha: LinhaOrcamento;
   onDefinir: (limite: number) => Resultado<void>;
-  onRemover: () => void;
+  onRemover: () => Resultado<void>;
+  onErro?: (mensagem: string) => void;
 }
 
-export function LinhaOrcamentoItem({ linha, onDefinir, onRemover }: Props) {
+export function LinhaOrcamentoItem({ linha, onDefinir, onRemover, onErro }: Props) {
   const { categoria, nome, limite, gasto, restante, percentual, estado } = linha;
   const [editando, setEditando] = useState(false);
   const [texto, setTexto] = useState(limite === null ? '' : valorParaCampo(limite));
   const [erro, setErro] = useState<string | undefined>();
+  const [confirmando, setConfirmando] = useState(false);
 
   const salvar = (e: FormEvent) => {
     e.preventDefault();
     const valor = parseValor(texto);
-    if (valor === null) return setErro('Informe um valor válido, como 500,00.');
-    if (valor < 0) return setErro('O limite não pode ser negativo.');
+    if (valor === null) {
+      const mensagem = 'Informe um valor válido, como 500,00.';
+      setErro(mensagem);
+      onErro?.(mensagem);
+      return;
+    }
+    if (valor < 0) {
+      const mensagem = 'O limite não pode ser negativo.';
+      setErro(mensagem);
+      onErro?.(mensagem);
+      return;
+    }
     const r = onDefinir(valor);
     if (!r.ok) return setErro(r.erro);
     setErro(undefined);
@@ -68,7 +76,7 @@ export function LinhaOrcamentoItem({ linha, onDefinir, onRemover }: Props) {
             {limite === null ? 'Definir limite' : 'Editar limite'}
           </Botao>
           {limite !== null ? (
-            <Botao variante="secundario" aria-label={`Remover limite de ${nome}`} onClick={onRemover}>
+            <Botao variante="secundario" aria-label={`Remover limite de ${nome}`} onClick={() => setConfirmando(true)}>
               Remover limite
             </Botao>
           ) : null}
@@ -106,10 +114,11 @@ export function LinhaOrcamentoItem({ linha, onDefinir, onRemover }: Props) {
             <div className={`orcamento-barra ${COR_BARRA[estado!]}`} style={{ width: `${Math.min(percentual ?? (gasto > 0 ? 100 : 0), 100)}%` }} />
           </div>
           <div className="orcamento-resumo">
-            <span className={`orcamento-estado ${COR_TEXTO[estado!]}`} data-testid="estado">
-              <span aria-hidden="true">{ICONE_ESTADO[estado!]} </span>
-              {ROTULO_ESTADO[estado!]}
-              {percentual !== null ? ` · ${percentual}%` : ''}
+            <span data-testid="estado">
+              <Badge tom={TOM_ESTADO[estado!]} className="orcamento-estado">
+                {ROTULO_ESTADO[estado!]}
+                {percentual !== null ? ` · ${percentual}%` : ''}
+              </Badge>
             </span>
             <span className="orcamento-texto">
               Gasto <span data-testid="gasto">{formatarMoeda(gasto)}</span> de <span data-testid="limite">{formatarMoeda(limite)}</span>
@@ -127,6 +136,19 @@ export function LinhaOrcamentoItem({ linha, onDefinir, onRemover }: Props) {
           </div>
         </div>
       )}
+      {confirmando ? (
+        <ConfirmDialog
+          titulo="Remover limite"
+          mensagem={`Remover o limite de ${nome}?`}
+          rotuloConfirmar="Remover"
+          perigo
+          onCancelar={() => setConfirmando(false)}
+          onConfirmar={() => {
+            const r = onRemover();
+            if (r.ok) setConfirmando(false);
+          }}
+        />
+      ) : null}
     </li>
   );
 }

@@ -8,6 +8,8 @@
 .orcamento-total-valor { margin: 0; font-size: var(--texto-xl); font-weight: 700; }
 .orcamento-lista { margin: 0; padding: 0; list-style: none; }
 .orcamento-lista > li + li { border-top: 1px solid var(--cor-borda); }
+.orcamento-link-acao { display: inline-flex; padding: var(--esp-2) var(--esp-3); border-radius: var(--raio-pequeno); background: var(--cor-primaria); color: var(--cor-sobre-primaria); font-weight: 600; text-decoration: none; }
+.orcamento-link-acao:hover { background: var(--cor-primaria-hover); }
 @media (min-width: 640px) { .orcamento-totais { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 480px) { .orcamento-mes-nome { margin-left: 0; width: 100%; } }
 

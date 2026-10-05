@@ -156,11 +156,11 @@ describe('orçamento: tela', () => {
     await usuario.click(screen.getByRole('button', { name: 'Definir limite de Lazer' }));
     await usuario.type(screen.getByLabelText('Limite mensal de Lazer'), '-5');
     await usuario.click(screen.getByRole('button', { name: 'Salvar limite' }));
-    expect(screen.getByRole('alert')).toHaveTextContent('não pode ser negativo');
+    expect(screen.getAllByRole('alert').some((alerta) => alerta.textContent?.includes('não pode ser negativo'))).toBe(true);
     await usuario.clear(screen.getByLabelText('Limite mensal de Lazer'));
     await usuario.type(screen.getByLabelText('Limite mensal de Lazer'), 'abc');
     await usuario.click(screen.getByRole('button', { name: 'Salvar limite' }));
-    expect(screen.getByRole('alert')).toHaveTextContent('valor válido');
+    expect(screen.getAllByRole('alert').some((alerta) => alerta.textContent?.includes('valor válido'))).toBe(true);
     expect(lerEstadoSalvo().orcamentos).toEqual([]);
   });
 
