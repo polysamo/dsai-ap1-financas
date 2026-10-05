@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from 'react';
+import { Fragment, useCallback, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Drawer, KpiCard } from '../components/novos';
 import { CategoriasPanel } from '../components/CategoriasPanel';
@@ -10,7 +10,10 @@ import { BarraLote, ROTULO_ACAO_LOTE, type AcaoLote } from '../components/lote/B
 import { LoteForm } from '../components/lote/LoteForm';
 import { LancamentoRapido } from '../components/LancamentoRapido';
 import { aplicarLote, excluirLote, mensagemLote, restringirSelecao, resumoSelecao, type ResultadoLote } from '../domain/lote';
-import { Alerta, Botao, Cartao, EstadoVazio, TituloPagina, Valor } from '../components/ui';
+import { Botao, Cartao, EstadoVazio, TituloPagina, Valor } from '../components/ui';
+import { Tabs } from '../ds/Tabs';
+import { useAtalhoNovo } from '../lib/atalhos';
+import { useFeedback } from '../state/useFeedback';
 import { excluirParcela } from '../domain/cartoes';
 import { dataValida, formatarData, hojeISO, mesDe, primeiroDia, ultimoDia } from '../domain/date';
 import { formatarMoeda } from '../domain/money';
@@ -66,8 +69,7 @@ export function TransacoesPage() {
   const [criando, setCriando] = useState(false);
   const [editandoId, setEditandoId] = useState<string | null>(null);
   const [excluindo, setExcluindo] = useState<Transacao | null>(null);
-  const [erro, setErro] = useState<string | null>(null);
-  const [mensagem, setMensagem] = useState<string | null>(null);
+  const { executar, sucesso, erro: avisarErro } = useFeedback();
   const [marcadas, setMarcadas] = useState<ReadonlySet<string>>(new Set());
   const [acaoLote, setAcaoLote] = useState<AcaoLote | null>(null);
   const [excluindoLote, setExcluindoLote] = useState(false);
@@ -100,8 +102,7 @@ export function TransacoesPage() {
       return ok(lote.valor.estado);
     });
     if (!r.ok || !resumo) return r;
-    setMensagem(mensagemLote(resumo, verbo));
-    setErro(null);
+    sucesso(mensagemLote(resumo, verbo), true);
     setMarcadas(new Set());
     setAcaoLote(null);
     return ok(undefined);
@@ -109,7 +110,7 @@ export function TransacoesPage() {
 
   const confirmarExclusaoLote = () => {
     const r = executarLote((s) => excluirLote(s, selecao), 'excluída');
-    if (!r.ok) setErro(r.erro);
+    if (!r.ok) avisarErro(r.erro);
     setExcluindoLote(false);
   };
 
@@ -118,34 +119,17 @@ export function TransacoesPage() {
     setLimite(TAMANHO_PAGINA);
   };
 
-  const abaClasse = (a: Aba) =>
-    `transacoes__aba${aba === a ? ' transacoes__aba--ativa' : ''}`;
+  const filtrosAtivos = JSON.stringify(filtros) !== JSON.stringify(filtrosPadrao());
+  const resumoFiltros = `${filtradas.length} de ${estado.transacoes.length} ${estado.transacoes.length === 1 ? 'transação' : 'transações'}`;
+  const abrirCriacao = useCallback(() => {
+    if (aba !== 'transacoes') return;
+    setCriando(true);
+    setEditandoId(null);
+  }, [aba]);
+  useAtalhoNovo(abrirCriacao);
 
-  return (
-    <div>
-      <TituloPagina
-        acoes={aba === 'transacoes' ? <Botao onClick={() => { setCriando(true); setEditandoId(null); }}>Nova transação</Botao> : undefined}
-      >
-        Transações
-      </TituloPagina>
-
-      <div role="tablist" aria-label="Seções" className="transacoes__abas">
-        <button role="tab" type="button" id="aba-transacoes" aria-selected={aba === 'transacoes'} aria-controls="painel-transacoes" className={abaClasse('transacoes')} onClick={() => setAba('transacoes')}>
-          Transações
-        </button>
-        <button role="tab" type="button" id="aba-categorias" aria-selected={aba === 'categorias'} aria-controls="painel-categorias" className={abaClasse('categorias')} onClick={() => setAba('categorias')}>
-          Categorias
-        </button>
-      </div>
-
-      {aba === 'categorias' ? (
-        <div role="tabpanel" id="painel-categorias" aria-labelledby="aba-categorias">
-          <CategoriasPanel />
-        </div>
-      ) : (
-        <div role="tabpanel" id="painel-transacoes" aria-labelledby="aba-transacoes" className="transacoes__painel">
-          {erro ? <Alerta>{erro}</Alerta> : null}
-          {mensagem ? <Alerta tipo="sucesso">{mensagem}</Alerta> : null}
+  const painelTransacoes = (
+    <div className="transacoes__painel">
           <LancamentoRapido />
 
           <Drawer aberto={criando} titulo="Nova transação" onFechar={() => setCriando(false)}>
@@ -154,16 +138,16 @@ export function TransacoesPage() {
                 onCancelar={() => setCriando(false)}
                 onSalvar={(dados) => {
                   const r = store.aplicar((s) => criarTransacao(s, dados));
-                  if (r.ok) setCriando(false);
+                  if (r.ok) {
+                    setCriando(false);
+                    sucesso('Transação registrada.', true);
+                  }
                   return r;
                 }}
               />
           </Drawer>
 
-          <details className="transacoes__filtros">
-            <summary>Filtros</summary>
-            <FiltrosTransacoesForm estado={estado} filtros={filtros} onChange={mudarFiltros} onLimpar={() => mudarFiltros(filtrosPadrao())} />
-          </details>
+          <FiltrosTransacoesForm estado={estado} filtros={filtros} onChange={mudarFiltros} onLimpar={() => mudarFiltros(filtrosPadrao())} ativo={filtrosAtivos} resumo={resumoFiltros} />
 
           <div className="transacoes__totais" aria-label="Totais do filtro" role="group">
             <KpiCard rotulo="Receitas" tom="receita" valor={<span data-testid="total-receitas">{formatarMoeda(totais.receitas)}</span>} />
@@ -209,7 +193,10 @@ export function TransacoesPage() {
                           onCancelar={() => setEditandoId(null)}
                           onSalvar={(dados) => {
                             const r = store.aplicar((s) => editarTransacao(s, t.id, dados));
-                            if (r.ok) setEditandoId(null);
+                            if (r.ok) {
+                              setEditandoId(null);
+                              sucesso('Transação atualizada.', true);
+                            }
                             return r;
                           }}
                         />
@@ -255,8 +242,27 @@ export function TransacoesPage() {
               ) : null}
             </Cartao>
           )}
-        </div>
-      )}
+    </div>
+  );
+
+  return (
+    <div>
+      <TituloPagina
+        descricao="Receitas e despesas de todas as contas, com busca, filtros, categorias e edição em lote."
+        acoes={aba === 'transacoes' ? <Botao onClick={abrirCriacao}>Nova transação</Botao> : undefined}
+      >
+        Transações
+      </TituloPagina>
+
+      <Tabs
+        rotulo="Seções"
+        valor={aba}
+        aoMudar={(id) => setAba(id as Aba)}
+        abas={[
+          { id: 'transacoes', rotulo: 'Transações', conteudo: painelTransacoes },
+          { id: 'categorias', rotulo: 'Categorias', conteudo: <CategoriasPanel /> },
+        ]}
+      />
 
       <Drawer aberto={acaoLote !== null} titulo={acaoLote ? ROTULO_ACAO_LOTE[acaoLote] : ''} onFechar={() => setAcaoLote(null)}>
         {acaoLote ? <LoteForm key={acaoLote} acao={acaoLote} estado={estado} onAplicar={(alteracao) => executarLote((s) => aplicarLote(s, selecao, alteracao))} onCancelar={() => setAcaoLote(null)} /> : null}
@@ -277,8 +283,7 @@ export function TransacoesPage() {
           onCancelar={() => setExcluindo(null)}
           onEscolher={(escopo) => {
             const alvo = excluindo;
-            const r = store.aplicar((s) => excluirParcela(s, alvo.id, escopo));
-            setErro(r.ok ? null : r.erro);
+            executar((s) => excluirParcela(s, alvo.id, escopo), escopo === 'uma' ? 'Parcela excluída.' : 'Compra parcelada excluída.');
             setExcluindo(null);
           }}
         />
@@ -292,8 +297,7 @@ export function TransacoesPage() {
           onCancelar={() => setExcluindo(null)}
           onConfirmar={() => {
             const alvo = excluindo;
-            const r = store.aplicar((s) => excluirTransacao(s, alvo.id));
-            setErro(r.ok ? null : r.erro);
+            executar((s) => excluirTransacao(s, alvo.id), 'Transação excluída.');
             setExcluindo(null);
           }}
         />

@@ -1,24 +1,23 @@
+import { FilterBar } from '../ds/FilterBar';
 import { listarTags } from '../domain/tags';
 import type { FiltrosTransacoes } from '../domain/transacoes';
 import type { AppState, TipoMovimento } from '../domain/types';
-import { Botao, CampoSelect, CampoTexto } from './ui';
-import './FiltrosTransacoes.css';
+import { CampoSelect, CampoTexto } from './ui';
 
 interface Props {
   estado: AppState;
   filtros: FiltrosTransacoes;
   onChange: (filtros: FiltrosTransacoes) => void;
   onLimpar: () => void;
+  /** Algum filtro difere do padrão. */
+  ativo: boolean;
+  resumo: string;
 }
 
-export function FiltrosTransacoesForm({ estado, filtros, onChange, onLimpar }: Props) {
+export function FiltrosTransacoesForm({ estado, filtros, onChange, onLimpar, ativo, resumo }: Props) {
   const atualizar = (parcial: Partial<FiltrosTransacoes>) => onChange({ ...filtros, ...parcial });
   return (
-    <form
-      aria-label="Filtros de transações"
-      onSubmit={(e) => e.preventDefault()}
-      className="transacoes-filtros"
-    >
+    <FilterBar ativo={ativo} aoLimpar={onLimpar} resumo={resumo}>
       <CampoTexto label="De" type="date" value={filtros.de ?? ''} onChange={(e) => atualizar({ de: e.target.value || undefined })} />
       <CampoTexto label="Até" type="date" value={filtros.ate ?? ''} onChange={(e) => atualizar({ ate: e.target.value || undefined })} />
       <CampoSelect label="Filtrar por conta" value={filtros.contaId ?? ''} onChange={(e) => atualizar({ contaId: e.target.value || undefined })}>
@@ -52,11 +51,6 @@ export function FiltrosTransacoesForm({ estado, filtros, onChange, onLimpar }: P
         ))}
       </CampoSelect>
       <CampoTexto label="Buscar na descrição" value={filtros.texto ?? ''} onChange={(e) => atualizar({ texto: e.target.value || undefined })} autoComplete="off" />
-      <div className="transacoes-filtros__limpar">
-        <Botao variante="secundario" onClick={onLimpar}>
-          Limpar filtros
-        </Botao>
-      </div>
-    </form>
+    </FilterBar>
   );
 }

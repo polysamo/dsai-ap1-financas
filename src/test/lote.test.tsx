@@ -147,7 +147,7 @@ describe('lote: tela de transações', () => {
     expect(screen.getByText(/2 transações alteradas\. 1 pulada/)).toBeInTheDocument();
     expect(store.getSnapshot().estado.transacoes.filter((t) => t.categoriaId === 'cat-lazer')).toHaveLength(2);
     expect(screen.queryByRole('region', { name: 'Ações em lote' })).not.toBeInTheDocument();
-    await usuario.click(screen.getByRole('button', { name: 'Desfazer' }));
+    await usuario.click(within(screen.getByRole('banner')).getByRole('button', { name: 'Desfazer' }));
     expect(store.getSnapshot().estado.transacoes.filter((t) => t.categoriaId === 'cat-lazer')).toHaveLength(0);
   });
 

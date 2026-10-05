@@ -224,7 +224,7 @@ describe('transações: tela', () => {
     await usuario.click(screen.getByRole('button', { name: 'Excluir Padaria' }));
     await usuario.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Excluir' }));
     expect(store.getSnapshot().estado.transacoes).toHaveLength(0);
-    await usuario.click(screen.getByRole('button', { name: 'Desfazer' }));
+    await usuario.click(within(screen.getByRole('banner')).getByRole('button', { name: 'Desfazer' }));
     expect(store.getSnapshot().estado.transacoes).toHaveLength(1);
     expect(screen.getByText('Desfeito: transação excluída')).toBeInTheDocument();
     expect(screen.getByText('Padaria')).toBeInTheDocument();

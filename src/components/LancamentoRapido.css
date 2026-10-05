@@ -14,7 +14,6 @@
 .rapido__pecas { display: flex; flex-wrap: wrap; gap: var(--esp-1); margin: 0; padding: 0; list-style: none; }
 .rapido__pecas li { padding: 2px var(--esp-2); border-radius: var(--raio-total); background: var(--cor-primaria-suave); color: var(--cor-texto); font-size: var(--texto-xs); }
 .rapido__erro { margin: 0; font-size: var(--texto-sm); color: var(--cor-perigo); }
-.rapido__ok { margin: 0; font-size: var(--texto-sm); color: var(--cor-sucesso); }
 .rapido__ajuda summary { cursor: pointer; font-size: var(--texto-xs); color: var(--cor-texto-mudo); }
 .rapido__ajuda ul { margin: var(--esp-2) 0 0; padding-left: var(--esp-5); font-size: var(--texto-sm); color: var(--cor-texto-suave); }
 .rapido__ajuda code { font-size: var(--texto-xs); padding: 0 var(--esp-1); border-radius: var(--raio-pequeno); background: var(--cor-superficie-3); }

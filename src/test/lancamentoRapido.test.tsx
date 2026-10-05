@@ -117,7 +117,7 @@ describe('lançamento rápido: tela', () => {
     expect(transacoes).toHaveLength(1);
     expect(transacoes[0]).toMatchObject({ contaId: 'nu', categoriaId: 'cat-lazer', valor: 3000, descricao: 'cinema', tags: ['fds'] });
     expect(campo).toHaveValue('');
-    expect(screen.getByText(/Lançado: cinema R\$\s30,00/)).toHaveAttribute('role', 'status');
+    expect(screen.getByText(/Lançado: cinema R\$\s30,00/).closest('[role="status"]')).not.toBeNull();
     expect(store.getSnapshot().historico.passado).toHaveLength(1);
   });
 

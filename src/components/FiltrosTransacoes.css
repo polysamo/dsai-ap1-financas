@@ -1,4 +1,0 @@
-.transacoes-filtros { display: grid; gap: var(--esp-3); grid-template-columns: minmax(0, 1fr); }
-.transacoes-filtros__limpar { display: flex; align-items: flex-end; }
-@media (min-width: 640px) { .transacoes-filtros { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (min-width: 1024px) { .transacoes-filtros { grid-template-columns: repeat(4, minmax(0, 1fr)); } }

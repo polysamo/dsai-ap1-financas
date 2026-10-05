@@ -6,6 +6,7 @@ import { nomeCompleto } from '../domain/subcategorias';
 import { formatarTags } from '../domain/tags';
 import { criarTransacao } from '../domain/transacoes';
 import { useEstado, useStore } from '../state/store';
+import { useFeedback } from '../state/useFeedback';
 import { Botao } from './ui';
 import './LancamentoRapido.css';
 
@@ -14,7 +15,8 @@ export function LancamentoRapido() {
   const estado = useEstado();
   const id = useId();
   const [texto, setTexto] = useState('');
-  const [aviso, setAviso] = useState<{ erro: boolean; texto: string } | null>(null);
+  const [aviso, setAviso] = useState<string | null>(null);
+  const { sucesso, erro } = useFeedback();
   const hoje = hojeISO();
   const leitura = useMemo(() => (texto.trim() ? interpretar(texto, estado, hoje) : null), [texto, estado, hoje]);
   const nomeConta = (contaId: string) => estado.contas.find((c) => c.id === contaId)?.nome ?? '';
@@ -23,16 +25,17 @@ export function LancamentoRapido() {
     e.preventDefault();
     if (!leitura) return;
     if (!leitura.ok) {
-      setAviso({ erro: true, texto: leitura.erro });
+      setAviso(leitura.erro);
       return;
     }
     const i = leitura.valor;
     const r = store.aplicar((s) => criarTransacao(s, paraDadosTransacao(i)));
     if (!r.ok) {
-      setAviso({ erro: true, texto: r.erro });
+      erro(r.erro);
       return;
     }
-    setAviso({ erro: false, texto: `Lançado: ${i.descricao || 'transação'} ${formatarMoeda(i.valor)}` });
+    sucesso(`Lançado: ${i.descricao || 'transação'} ${formatarMoeda(i.valor)}`, true);
+    setAviso(null);
     setTexto('');
   };
 
@@ -71,7 +74,7 @@ export function LancamentoRapido() {
             {leitura.valor.descricao ? <li>"{leitura.valor.descricao}"</li> : null}
           </ul>
         ) : null}
-        {aviso ? <p role={aviso.erro ? 'alert' : 'status'} className={aviso.erro ? 'rapido__erro' : 'rapido__ok'}>{aviso.texto}</p> : null}
+        {aviso ? <p role="alert" className="rapido__erro">{aviso}</p> : null}
       </div>
       <details className="rapido__ajuda">
         <summary>Como escrever</summary>
