@@ -8,6 +8,7 @@ import {
   type Centavos,
   type DataISO,
   type Divida,
+  type EfeitoAmortizacao,
   type PagamentoDivida,
   type Resultado,
   type SistemaAmortizacao,
@@ -37,6 +38,8 @@ export interface DadosPagamentoDivida {
   valor: Centavos;
   /** Número da parcela paga; omitido numa amortização extra. */
   parcela?: number;
+  /** Efeito da amortização extra; padrão 'prazo'. */
+  efeito?: EfeitoAmortizacao;
 }
 
 export interface LinhaAmortizacao {
@@ -65,6 +68,10 @@ export interface ResumoDivida {
   quitada: boolean;
   proxima: LinhaSituacao | null;
   atrasadas: { quantidade: number; valor: Centavos };
+  /** Juros da tabela contratual menos os da tabela efetiva (com as extras). */
+  economiaJuros: Centavos;
+  /** Parcelas da tabela contratual menos as da efetiva. */
+  parcelasAMenos: number;
 }
 
 export interface ResumoSimulacao {
@@ -92,24 +99,6 @@ function parcelaPrice({ principal, taxaBp, parcelas }: TermosDivida): Centavos {
   return Math.round((principal * i) / (1 - Math.pow(1 + i, -parcelas)));
 }
 
-function calcularParcelas(termos: TermosDivida): Omit<LinhaAmortizacao, 'vencimento'>[] {
-  const { principal, taxaBp, parcelas, sistema } = termos;
-  const fixaPrice = sistema === 'price' ? parcelaPrice(termos) : 0;
-  const fixaSac = Math.floor(principal / parcelas);
-  const linhas: Omit<LinhaAmortizacao, 'vencimento'>[] = [];
-  let saldo = principal;
-  for (let numero = 1; numero <= parcelas; numero++) {
-    const juros = jurosDoPeriodo(saldo, taxaBp);
-    const ultima = numero === parcelas;
-    const previsto = sistema === 'price' ? fixaPrice - juros : fixaSac;
-    // A última parcela absorve o resto do arredondamento.
-    const amortizacao = ultima ? saldo : Math.min(Math.max(previsto, 0), saldo);
-    saldo -= amortizacao;
-    linhas.push({ numero, juros, amortizacao, parcela: juros + amortizacao, saldo });
-  }
-  return linhas;
-}
-
 /** Data da parcela k (1 = primeira): k−1 meses depois, no mesmo dia, limitado ao último dia do mês. */
 export function dataDaParcelaDivida(primeira: DataISO, numero: number): DataISO {
   const mes = somarMeses(mesDe(primeira), numero - 1);
@@ -118,9 +107,72 @@ export function dataDaParcelaDivida(primeira: DataISO, numero: number): DataISO 
   return `${mes}-${String(dia).padStart(2, '0')}`;
 }
 
-/** Tabela de amortização completa da dívida (contratual, sem considerar pagamentos). */
+/** Amortização extra já reduzida ao que a construção da tabela precisa. */
+interface Extra {
+  data: DataISO;
+  valor: Centavos;
+  efeito: EfeitoAmortizacao;
+}
+
+/** Períodos necessários para zerar `saldo` pagando a parcela Price `fixa` (ou amortizando `amortSac` no SAC). */
+function periodosNecessarios(saldo: Centavos, taxaBp: number, sistema: SistemaAmortizacao, fixa: Centavos, amortSac: Centavos): number | null {
+  if (sistema === 'sac') return amortSac > 0 ? Math.ceil(saldo / amortSac) : null;
+  if (taxaBp === 0) return fixa > 0 ? Math.ceil(saldo / fixa) : null;
+  const i = taxaBp / 10000;
+  // Parcela que não cobre os juros nunca quita a dívida.
+  if (fixa <= saldo * i) return null;
+  return Math.ceil(-Math.log(1 - (saldo * i) / fixa) / Math.log(1 + i) - 1e-9);
+}
+
+/**
+ * Constrói a tabela em ordem. Antes dos juros de cada parcela, aplica as extras com data anterior ao
+ * vencimento dela: com efeito 'prazo' mantém parcela/amortização e antecipa o fim; com 'parcela' mantém o
+ * fim e recalcula o valor sobre o saldo e as parcelas restantes. A última parcela absorve o arredondamento.
+ */
+function construirTabela(termos: TermosDivida, primeiraParcela: DataISO, extras: Extra[] = []): LinhaAmortizacao[] {
+  const { principal, taxaBp, parcelas, sistema } = termos;
+  const pendentes = [...extras].sort((a, b) => a.data.localeCompare(b.data));
+  let fixa = sistema === 'price' ? parcelaPrice(termos) : 0;
+  let amortSac = Math.floor(principal / parcelas);
+  let fim = parcelas;
+  let saldo = principal;
+  const linhas: LinhaAmortizacao[] = [];
+  for (let numero = 1; numero <= fim && saldo > 0; numero++) {
+    const vencimento = dataDaParcelaDivida(primeiraParcela, numero);
+    while (pendentes.length > 0 && pendentes[0].data < vencimento && saldo > 0) {
+      const extra = pendentes.shift()!;
+      saldo -= Math.min(extra.valor, saldo);
+      const restantes = fim - numero + 1;
+      if (saldo === 0) break;
+      if (extra.efeito === 'parcela') {
+        fixa = sistema === 'price' ? parcelaPrice({ principal: saldo, taxaBp, parcelas: restantes, sistema }) : 0;
+        amortSac = Math.floor(saldo / restantes);
+      } else {
+        const n = periodosNecessarios(saldo, taxaBp, sistema, fixa, amortSac);
+        if (n !== null) fim = numero - 1 + Math.min(n, restantes);
+      }
+    }
+    if (saldo === 0) break;
+    const juros = jurosDoPeriodo(saldo, taxaBp);
+    const previsto = sistema === 'price' ? fixa - juros : amortSac;
+    const amortizacao = numero === fim ? saldo : Math.min(Math.max(previsto, 0), saldo);
+    saldo -= amortizacao;
+    linhas.push({ numero, vencimento, juros, amortizacao, parcela: juros + amortizacao, saldo });
+  }
+  return linhas;
+}
+
+const extrasDe = (d: Pick<Divida, 'pagamentos'>): Extra[] =>
+  d.pagamentos.filter((p) => p.parcela === undefined).map((p) => ({ data: p.data, valor: p.valor, efeito: p.efeito ?? 'prazo' }));
+
+/** Tabela de amortização contratual (sem considerar pagamentos). */
 export function gerarTabela(d: Pick<Divida, keyof TermosDivida | 'primeiraParcela'>): LinhaAmortizacao[] {
-  return calcularParcelas(d).map((l) => ({ ...l, vencimento: dataDaParcelaDivida(d.primeiraParcela, l.numero) }));
+  return construirTabela(d, d.primeiraParcela);
+}
+
+/** Tabela recalculada com as amortizações extras registradas. */
+export function gerarTabelaEfetiva(d: Pick<Divida, keyof TermosDivida | 'primeiraParcela' | 'pagamentos'>): LinhaAmortizacao[] {
+  return construirTabela(d, d.primeiraParcela, extrasDe(d));
 }
 
 function somar(valores: number[]): number {
@@ -128,7 +180,8 @@ function somar(valores: number[]): number {
 }
 
 export function resumoDivida(d: Divida, hoje: DataISO): ResumoDivida {
-  const tabela = gerarTabela(d);
+  const contratual = gerarTabela(d);
+  const tabela = gerarTabelaEfetiva(d);
   const pagoDaParcela = (n: number) => somar(d.pagamentos.filter((p) => p.parcela === n).map((p) => p.valor));
   const extras = somar(d.pagamentos.filter((p) => p.parcela === undefined).map((p) => p.valor));
 
@@ -152,13 +205,37 @@ export function resumoDivida(d: Divida, hoje: DataISO): ResumoDivida {
     quitada,
     proxima: abertas[0] ?? null,
     atrasadas: { quantidade: atrasadas.length, valor: somar(atrasadas.map((l) => l.restante)) },
+    economiaJuros: somar(contratual.map((l) => l.juros)) - somar(tabela.map((l) => l.juros)),
+    parcelasAMenos: contratual.length - tabela.length,
   };
+}
+
+export interface PreviaAmortizacao {
+  /** Valor da primeira parcela que vence depois da extra. */
+  novaParcela: Centavos;
+  /** Parcelas que ainda faltariam depois da data da extra. */
+  parcelasRestantes: number;
+  economiaJuros: Centavos;
+}
+
+/** Efeito de uma amortização extra nas duas opções, sem gravar nada; null se o valor não cabe no saldo. */
+export function previaAmortizacao(d: Divida, valor: Centavos, data: DataISO, hoje: DataISO): Record<EfeitoAmortizacao, PreviaAmortizacao> | null {
+  const { saldoDevedor } = resumoDivida(d, hoje);
+  if (!Number.isSafeInteger(valor) || valor <= 0 || valor > saldoDevedor || !dataValida(data)) return null;
+  const jurosAntes = somar(gerarTabelaEfetiva(d).map((l) => l.juros));
+  const calcular = (efeito: EfeitoAmortizacao): PreviaAmortizacao => {
+    const depois = construirTabela(d, d.primeiraParcela, [...extrasDe(d), { data, valor, efeito }]);
+    const futuras = depois.filter((l) => l.vencimento > data);
+    return { novaParcela: futuras[0]?.parcela ?? 0, parcelasRestantes: futuras.length, economiaJuros: jurosAntes - somar(depois.map((l) => l.juros)) };
+  };
+  return { prazo: calcular('prazo'), parcela: calcular('parcela') };
 }
 
 /** Compara Price e SAC para os mesmos termos, sem salvar nada. */
 export function simular(termos: Omit<TermosDivida, 'sistema'>): Record<SistemaAmortizacao, ResumoSimulacao> {
   const resumir = (sistema: SistemaAmortizacao): ResumoSimulacao => {
-    const linhas = calcularParcelas({ ...termos, sistema });
+    // A data não altera valores; só é exigida pela construção da tabela.
+    const linhas = construirTabela({ ...termos, sistema }, '2000-01-01');
     const totalPago = somar(linhas.map((l) => l.parcela));
     return { primeiraParcela: linhas[0].parcela, ultimaParcela: linhas[linhas.length - 1].parcela, totalJuros: totalPago - termos.principal, totalPago };
   };
@@ -208,7 +285,13 @@ export function registrarPagamentoDivida(estado: AppState, dividaId: string, dad
     if (linha.restante === 0) return falha('Essa parcela já está quitada.', 'parcela');
     if (dados.valor > linha.restante) return falha('O valor passa do restante da parcela.', 'valor');
   }
-  const pagamento: PagamentoDivida = { id: novoId(), data: dados.data, valor: dados.valor, ...(dados.parcela === undefined ? {} : { parcela: dados.parcela }) };
+  if (dados.efeito !== undefined && dados.efeito !== 'prazo' && dados.efeito !== 'parcela') return falha('Escolha o efeito da amortização.', 'efeito');
+  const pagamento: PagamentoDivida = {
+    id: novoId(),
+    data: dados.data,
+    valor: dados.valor,
+    ...(dados.parcela === undefined ? { efeito: dados.efeito ?? 'prazo' } : { parcela: dados.parcela }),
+  };
   return ok({ ...estado, dividas: estado.dividas.map((d) => (d.id === dividaId ? { ...d, pagamentos: [...d.pagamentos, pagamento] } : d)) });
 }
 

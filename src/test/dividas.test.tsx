@@ -247,7 +247,7 @@ describe('dívidas: tela (critérios 1, 6, 8, 10 a 14)', () => {
     await user.clear(form().getByLabelText('Valor do pagamento'));
     await user.type(form().getByLabelText('Valor do pagamento'), '500,00');
     await user.click(form().getByRole('button', { name: 'Registrar pagamento' }));
-    expect(await screen.findByText(/Amortização extra · R\$ 500,00/)).toBeInTheDocument();
+    expect(await screen.findByText(/Amortização extra \(reduz o prazo\) · R\$ 500,00/)).toBeInTheDocument();
     expect(screen.getByTestId('saldo-devedor')).toHaveTextContent('R$ 500,00');
 
     await user.click(screen.getAllByRole('button', { name: /Excluir pagamento de/ })[0]);

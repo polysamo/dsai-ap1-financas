@@ -189,6 +189,8 @@ export interface Ativo {
 
 export type TipoDivida = 'devo' | 'emprestei';
 export type SistemaAmortizacao = 'price' | 'sac';
+/** O que uma amortização extra reduz: o número de parcelas ou o valor delas. */
+export type EfeitoAmortizacao = 'prazo' | 'parcela';
 
 /** Pagamento de dívida; sem `parcela` é uma amortização extra. */
 export interface PagamentoDivida {
@@ -196,6 +198,8 @@ export interface PagamentoDivida {
   data: DataISO;
   valor: Centavos;
   parcela?: number;
+  /** Só em amortizações extras; ausente em dados antigos, lido como 'prazo'. */
+  efeito?: EfeitoAmortizacao;
 }
 
 /** Dívida ou empréstimo concedido; `taxaBp` é a taxa mensal em centésimos de ponto percentual (199 = 1,99%). */

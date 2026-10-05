@@ -64,3 +64,6 @@
 .dividas-simulacao-dados { grid-template-columns: minmax(0, 1fr); }
 .dividas-simulacao-dados dd { font-weight: 600; text-align: left; margin-bottom: var(--esp-1); }
 .dividas-form-3 { grid-template-columns: minmax(0, 1fr); }
+.dividas-efeito { display: flex; flex-wrap: wrap; gap: var(--esp-2) var(--esp-4); border: 0; padding: 0; margin: 0; }
+.dividas-efeito__opcao { display: inline-flex; align-items: center; gap: var(--esp-2); font-size: var(--texto-sm); }
+.dividas-previa { width: 100%; margin-top: var(--esp-2); }

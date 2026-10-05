@@ -10,7 +10,7 @@ import { TabelaAmortizacao } from '../components/dividas/TabelaAmortizacao';
 import { ROTULO_SISTEMA, rotulosTipo } from '../components/dividas/rotulos';
 import { Alerta, Botao, Cartao, EstadoVazio, TituloPagina } from '../components/ui';
 import { formatarData, hojeISO } from '../domain/date';
-import { criarDivida, excluirDivida, excluirPagamentoDivida, registrarPagamentoDivida, resumoDivida } from '../domain/dividas';
+import { criarDivida, excluirDivida, excluirPagamentoDivida, previaAmortizacao, registrarPagamentoDivida, resumoDivida } from '../domain/dividas';
 import { formatarMoeda, valorParaCampo } from '../domain/money';
 import { useEstado, useStore } from '../state/store';
 import '../components/dividas/dividas.css';
@@ -80,7 +80,7 @@ export function DividasPage() {
                                   <span className="dividas-linha-nome">{d.nome}</span>
                                   <span className="dividas-linha-saldo dividas-num">{formatarMoeda(r.saldoDevedor)}</span>
                                   <span className="dividas-linha-meta">
-                                    {pagas}/{d.parcelas} parcelas pagas · {r.proxima ? `próxima em ${formatarData(r.proxima.vencimento)}` : 'quitada'}
+                                    {pagas}/{r.linhas.length} parcelas pagas · {r.proxima ? `próxima em ${formatarData(r.proxima.vencimento)}` : 'quitada'}
                                   </span>
                                 </button>
                               </li>
@@ -115,7 +115,7 @@ export function DividasPage() {
                   {divida.pagamentos.map((p) => (
                     <li key={p.id} className="dividas-pagamento">
                       <span>
-                        {formatarData(p.data)} · {p.parcela === undefined ? 'Amortização extra' : `Parcela ${p.parcela}`} · {formatarMoeda(p.valor)}
+                        {formatarData(p.data)} · {p.parcela === undefined ? `Amortização extra (reduz ${p.efeito === 'parcela' ? 'a parcela' : 'o prazo'})` : `Parcela ${p.parcela}`} · {formatarMoeda(p.valor)}
                       </span>
                       <Botao
                         variante="secundario"
@@ -138,6 +138,7 @@ export function DividasPage() {
                   tipo={divida.tipo}
                   abertas={resumo.linhas.filter((l) => l.situacao !== 'paga')}
                   onSalvar={(dados) => store.aplicar((s) => registrarPagamentoDivida(s, divida.id, dados, hoje))}
+                  previa={(valor, data) => previaAmortizacao(divida, valor, data, hoje)}
                 />
               )}
             </Cartao>

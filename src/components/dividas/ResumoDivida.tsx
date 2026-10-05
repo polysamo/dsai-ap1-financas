@@ -37,6 +37,15 @@ export function ResumoDivida({ resumo, tipo }: { resumo: Resumo; tipo: TipoDivid
             {proxima ? `Nº ${proxima.numero}, ${formatarData(proxima.vencimento)}, ${formatarMoeda(proxima.restante)}` : 'Nenhuma'}
           </dd>
         </div>
+        {resumo.economiaJuros > 0 || resumo.parcelasAMenos > 0 ? (
+          <div>
+            <dt className="dividas-rotulo">Economia com amortizações</dt>
+            <dd data-testid="economia">
+              {formatarMoeda(resumo.economiaJuros)} de juros
+              {resumo.parcelasAMenos > 0 ? ` e ${resumo.parcelasAMenos} ${resumo.parcelasAMenos === 1 ? 'parcela' : 'parcelas'} a menos` : ''}
+            </dd>
+          </div>
+        ) : null}
       </dl>
     </div>
   );
