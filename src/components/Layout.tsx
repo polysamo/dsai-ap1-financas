@@ -1,18 +1,21 @@
-import { useCallback, useEffect, useState } from 'react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import { OnboardingEAtalhos } from './OnboardingEAtalhos';
-import { gruposNavegacao, itensRodape, rotuloDe } from '../navegacao';
+import { tituloDaRota } from '../navegacao';
 import { PreferenciasProvider } from '../state/preferencias';
 import { ToastProvider } from '../ds/Toast';
-import { BotaoOcultarValores } from './BotaoOcultarValores';
-import { Drawer } from './novos';
 import { BuscaGlobal, useAtalhoBusca } from './busca/BuscaGlobal';
-import { AvisoHistorico, BotoesHistorico, useHistoricoUI } from './historico/ControlesHistorico';
+import { AvisoHistorico, useHistoricoUI } from './historico/ControlesHistorico';
+import { BarraInferior } from './layout/BarraInferior';
+import { Cabecalho } from './layout/Cabecalho';
+import { CarregandoRota } from './layout/CarregandoRota';
+import { LimiteDeErro } from './layout/LimiteDeErro';
+import { Sidebar } from './layout/Sidebar';
+import { usePreferenciasLayout } from './layout/usePreferenciasLayout';
 import './Layout.css';
 
-const classeLink = ({ isActive }: { isActive: boolean }) => `layout-link${isActive ? ' layout-link--ativo' : ''}`;
-const classeAba = ({ isActive }: { isActive: boolean }) => `layout-aba${isActive ? ' layout-aba--ativa' : ''}`;
 const CONSULTA_ESTREITO = '(max-width: 47.99rem)';
+export const TITULO_APP = 'Finanças Pessoais';
 
 /** Verdadeiro em telas estreitas; sem matchMedia (testes) assume desktop. */
 function useEstreito(): boolean {
@@ -28,107 +31,55 @@ function useEstreito(): boolean {
   return estreito;
 }
 
-function Sidebar() {
-  return (
-    <aside className="layout-sidebar">
-      <span className="layout-marca">Finanças Pessoais</span>
-      <nav aria-label="Principal" className="layout-nav">
-        {gruposNavegacao.map((g) => (
-          <div key={g.titulo} className="layout-grupo">
-            <span className="layout-grupo__titulo">{g.titulo}</span>
-            {g.itens.map((to) => (
-              <NavLink key={to} to={to} end={to === '/'} className={classeLink}>
-                {rotuloDe(to)}
-              </NavLink>
-            ))}
-          </div>
-        ))}
-      </nav>
-      <nav aria-label="Secundária" className="layout-rodape">
-        {itensRodape.map((i) => (
-          <NavLink key={i.to} to={i.to} className={classeLink}>
-            {i.rotulo}
-          </NavLink>
-        ))}
-      </nav>
-    </aside>
-  );
-}
-
-function BarraInferior({ onBuscar }: { onBuscar: () => void }) {
-  const [mais, setMais] = useState(false);
+/** Título do documento acompanha a tela atual. */
+function useTituloDoDocumento() {
   const { pathname } = useLocation();
-  useEffect(() => setMais(false), [pathname]);
-  return (
-    <>
-      <nav aria-label="Principal" className="layout-barra">
-        <NavLink to="/" end className={classeAba}>
-          Dashboard
-        </NavLink>
-        <NavLink to="/transacoes" className={classeAba}>
-          Transações
-        </NavLink>
-        <NavLink to="/transacoes" className="layout-aba layout-aba--nova" aria-label="Nova transação">
-          +
-        </NavLink>
-        <NavLink to="/orcamento" className={classeAba}>
-          Orçamento
-        </NavLink>
-        <button type="button" className="layout-aba" aria-haspopup="dialog" aria-expanded={mais} onClick={() => setMais(true)}>
-          Mais
-        </button>
-      </nav>
-      <Drawer aberto={mais} titulo="Mais" onFechar={() => setMais(false)}>
-        <button
-          type="button"
-          className="layout-link"
-          onClick={() => {
-            setMais(false);
-            onBuscar();
-          }}
-        >
-          Buscar
-        </button>
-        <nav aria-label="Mais páginas" className="layout-nav">
-          {[...gruposNavegacao.flatMap((g) => g.itens), ...itensRodape.map((i) => i.to)].map((to) => (
-            <NavLink key={to} to={to} end={to === '/'} className={classeLink}>
-              {rotuloDe(to)}
-            </NavLink>
-          ))}
-        </nav>
-      </Drawer>
-    </>
-  );
+  useEffect(() => {
+    document.title = pathname === '/' ? TITULO_APP : `${tituloDaRota(pathname)} · ${TITULO_APP}`;
+  }, [pathname]);
 }
 
 export function Layout() {
   const estreito = useEstreito();
+  const { pathname } = useLocation();
   const historico = useHistoricoUI();
+  const layout = usePreferenciasLayout();
+  const principal = useRef<HTMLElement>(null);
   const [buscando, setBuscando] = useState(false);
   const abrirBusca = useCallback(() => setBuscando(true), []);
   useAtalhoBusca(abrirBusca);
+  useTituloDoDocumento();
+
   return (
     <PreferenciasProvider>
       <ToastProvider>
-      <div className="layout-raiz">
-        {estreito ? null : <Sidebar />}
-        <div className="layout-conteudo">
-          <div className="layout-topo">
-            <BotoesHistorico ui={historico} />
-            <button type="button" className="layout-buscar" aria-keyshortcuts="Control+K" onClick={abrirBusca}>
-              Buscar <kbd>Ctrl K</kbd>
-            </button>
-            <BotaoOcultarValores />
+        <a
+          href="#conteudo"
+          className="layout-pular"
+          onClick={(e) => {
+            e.preventDefault();
+            principal.current?.focus();
+          }}
+        >
+          Pular para o conteúdo
+        </a>
+        <div className="layout-raiz">
+          {estreito ? null : <Sidebar recolhida={layout.recolhida} gruposFechados={layout.gruposFechados} aoAlternarRecolhida={layout.alternarRecolhida} aoAlternarGrupo={layout.alternarGrupo} />}
+          <div className="layout-conteudo">
+            <Cabecalho historico={historico} aoBuscar={abrirBusca} />
+            <AvisoHistorico ui={historico} />
+            <OnboardingEAtalhos />
+            <main id="conteudo" ref={principal} tabIndex={-1} className="layout-principal">
+              <LimiteDeErro key={pathname}>
+                <Suspense fallback={<CarregandoRota />}>
+                  <Outlet context={{ abrirBusca }} />
+                </Suspense>
+              </LimiteDeErro>
+            </main>
           </div>
-          <AvisoHistorico ui={historico} />
-          <OnboardingEAtalhos />
-          <main className="layout-principal">
-            <Outlet />
-          </main>
+          {estreito ? <BarraInferior aoBuscar={abrirBusca} /> : null}
+          {buscando ? <BuscaGlobal onFechar={() => setBuscando(false)} /> : null}
         </div>
-        {estreito ? <BarraInferior onBuscar={abrirBusca} /> : null}
-        {buscando ? <BuscaGlobal onFechar={() => setBuscando(false)} /> : null}
-      </div>
       </ToastProvider>
     </PreferenciasProvider>
   );

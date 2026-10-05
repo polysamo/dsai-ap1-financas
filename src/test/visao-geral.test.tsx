@@ -171,7 +171,7 @@ describe('visão geral: execução (critérios 1, 9, 10 e 11)', () => {
   it('o cabeçalho quebra linha e a página não rola na horizontal em telas estreitas', () => {
     const { container } = renderizarApp('/configuracoes');
     expect(container.querySelector('nav')?.className).toContain('layout-nav');
-    expect(container.firstElementChild?.className).toContain('layout-raiz');
+    expect(container.querySelector('.layout-raiz')).not.toBeNull();
   });
 
   it('carregar dados de exemplo preenche o estado', async () => {

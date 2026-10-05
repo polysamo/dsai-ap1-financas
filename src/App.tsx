@@ -1,4 +1,5 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { lazy } from 'react';
+import { BrowserRouter, Navigate, Route, Routes, useOutletContext } from 'react-router-dom';
 import { FluxoPage } from './pages/FluxoPage';
 import { FalhaCarregamento } from './components/FalhaCarregamento';
 import { Layout } from './components/Layout';
@@ -10,7 +11,16 @@ import { DesejosPage } from './pages/DesejosPage';
 import { EventosPage } from './pages/EventosPage';
 import { BeneficiariosPage } from './pages/BeneficiariosPage';
 import { DesafiosPage } from './pages/DesafiosPage';
-import { DesignPage } from './pages/DesignPage';
+import { AtalhosPage } from './pages/AtalhosPage';
+import { NaoEncontradaPage } from './pages/NaoEncontradaPage';
+
+const DesignPage = lazy(() => import('./pages/DesignPage').then((m) => ({ default: m.DesignPage })));
+
+/** 404 com o botão de busca ligado ao casco. */
+function NaoEncontrada() {
+  const { abrirBusca } = useOutletContext<{ abrirBusca: () => void }>();
+  return <NaoEncontradaPage aoBuscar={abrirBusca} />;
+}
 import { AlertasPage } from './pages/AlertasPage';
 import { CalendarioPage } from './pages/CalendarioPage';
 import { CartoesPage } from './pages/CartoesPage';
@@ -73,7 +83,8 @@ export function AppRoutes() {
         <Route path="/dados" element={<Navigate to="/configuracoes" replace />} />
         <Route path="/ajuda" element={<AjudaPage />} />
         <Route path="/design" element={<DesignPage />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/atalhos" element={<AtalhosPage />} />
+        <Route path="*" element={<NaoEncontrada />} />
       </Route>
     </Routes>
   );

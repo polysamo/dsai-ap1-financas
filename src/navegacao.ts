@@ -34,6 +34,7 @@ export const itensNavegacao: ItemNavegacao[] = [
   { to: '/importar', rotulo: 'Importar CSV' },
   { to: '/importar-ofx', rotulo: 'Importar OFX' },
   { to: '/ajuda', rotulo: 'Ajuda' },
+  { to: '/atalhos', rotulo: 'Atalhos' },
   { to: '/design', rotulo: 'Design system' },
 ];
 
@@ -52,7 +53,21 @@ export const gruposNavegacao: GrupoNavegacao[] = [
 
 export const itensRodape: ItemNavegacao[] = [
   { to: '/ajuda', rotulo: 'Ajuda' },
+  { to: '/atalhos', rotulo: 'Atalhos' },
   { to: '/configuracoes', rotulo: 'Configurações' },
 ];
 
 export const rotuloDe = (to: string) => itensNavegacao.find((i) => i.to === to)?.rotulo ?? to;
+
+/** Título do grupo da sidebar a que a rota pertence; undefined para rodapé e rotas soltas. */
+export const grupoDe = (to: string): string | undefined => gruposNavegacao.find((g) => g.itens.includes(to))?.titulo;
+
+/** Duas letras para o menu recolhido: iniciais das duas primeiras palavras ou as duas primeiras letras. */
+export function siglaDe(rotulo: string): string {
+  const palavras = rotulo.trim().split(/\s+/);
+  const sigla = palavras.length > 1 ? palavras[0][0] + palavras[1][0] : rotulo.trim().slice(0, 2);
+  return sigla.toLocaleUpperCase('pt-BR');
+}
+
+/** Nome da tela para trilha e título do documento; rotas desconhecidas são "Página não encontrada". */
+export const tituloDaRota = (to: string): string => itensNavegacao.find((i) => i.to === to)?.rotulo ?? 'Página não encontrada';

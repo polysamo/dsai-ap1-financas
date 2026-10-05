@@ -7,21 +7,31 @@ export interface Atalho {
   /** Letra que segue o `g`; ausente para atalhos que não são de navegação. */
   letra?: string;
   rota?: string;
+  grupo: GrupoAtalho;
 }
 
+export type GrupoAtalho = 'Navegação' | 'Edição' | 'Busca e ajuda';
+
 export const atalhos: Atalho[] = [
-  { teclas: 'g d', letra: 'd', rota: '/', descricao: 'Ir para o Dashboard' },
-  { teclas: 'g t', letra: 't', rota: '/transacoes', descricao: 'Ir para Transações' },
-  { teclas: 'g c', letra: 'c', rota: '/contas', descricao: 'Ir para Contas' },
-  { teclas: 'g o', letra: 'o', rota: '/orcamento', descricao: 'Ir para Orçamento' },
-  { teclas: 'g m', letra: 'm', rota: '/metas', descricao: 'Ir para Metas' },
-  { teclas: 'g i', letra: 'i', rota: '/importar', descricao: 'Ir para Importar CSV' },
-  { teclas: 'g r', letra: 'r', rota: '/relatorios', descricao: 'Ir para Relatórios' },
-  { teclas: '?', descricao: 'Mostrar a lista de atalhos' },
-  { teclas: 'Ctrl+K', descricao: 'Abrir a busca global (também /)' },
-  { teclas: 'Ctrl+Z', descricao: 'Desfazer a última alteração' },
-  { teclas: 'Ctrl+Shift+Z', descricao: 'Refazer a alteração desfeita (também Ctrl+Y)' },
+  { teclas: 'g d', letra: 'd', rota: '/', descricao: 'Ir para o Dashboard', grupo: 'Navegação' },
+  { teclas: 'g t', letra: 't', rota: '/transacoes', descricao: 'Ir para Transações', grupo: 'Navegação' },
+  { teclas: 'g c', letra: 'c', rota: '/contas', descricao: 'Ir para Contas', grupo: 'Navegação' },
+  { teclas: 'g o', letra: 'o', rota: '/orcamento', descricao: 'Ir para Orçamento', grupo: 'Navegação' },
+  { teclas: 'g m', letra: 'm', rota: '/metas', descricao: 'Ir para Metas', grupo: 'Navegação' },
+  { teclas: 'g i', letra: 'i', rota: '/importar', descricao: 'Ir para Importar CSV', grupo: 'Navegação' },
+  { teclas: 'g r', letra: 'r', rota: '/relatorios', descricao: 'Ir para Relatórios', grupo: 'Navegação' },
+  { teclas: '?', descricao: 'Mostrar a lista de atalhos', grupo: 'Busca e ajuda' },
+  { teclas: 'Ctrl+K', descricao: 'Abrir a busca global (também /)', grupo: 'Busca e ajuda' },
+  { teclas: 'Ctrl+Z', descricao: 'Desfazer a última alteração', grupo: 'Edição' },
+  { teclas: 'Ctrl+Shift+Z', descricao: 'Refazer a alteração desfeita (também Ctrl+Y)', grupo: 'Edição' },
 ];
+
+const ORDEM_GRUPOS: GrupoAtalho[] = ['Navegação', 'Edição', 'Busca e ajuda'];
+
+/** Atalhos agrupados na ordem de exibição, sem grupos vazios. */
+export function atalhosPorGrupo(): { grupo: GrupoAtalho; atalhos: Atalho[] }[] {
+  return ORDEM_GRUPOS.map((grupo) => ({ grupo, atalhos: atalhos.filter((a) => a.grupo === grupo) })).filter((g) => g.atalhos.length > 0);
+}
 
 const LIMITE_SEQUENCIA_MS = 1500;
 

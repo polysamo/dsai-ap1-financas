@@ -1,71 +1,10 @@
 .layout-raiz { min-height: 100vh; display: flex; overflow-x: hidden; }
-.layout-sidebar {
-  position: sticky;
-  top: 0;
-  align-self: flex-start;
-  height: 100vh;
-  width: 14.5rem;
-  flex: none;
-  display: flex;
-  flex-direction: column;
-  gap: var(--esp-4);
-  padding: var(--esp-4) var(--esp-3);
-  background: var(--cor-superficie);
-  overflow-y: auto;
-}
-.layout-marca { padding: 0 var(--esp-3); font-size: var(--texto-base); font-weight: 700; color: var(--cor-primaria); }
-.layout-nav { display: flex; flex: 1 1 auto; flex-direction: column; gap: var(--esp-4); min-width: 0; }
-.layout-grupo { display: flex; flex-direction: column; gap: 2px; }
-.layout-grupo__titulo { padding: 0 var(--esp-3) var(--esp-1); font-size: var(--texto-xs); color: var(--cor-texto-mudo); }
-.layout-rodape { display: flex; flex-direction: column; gap: 2px; padding-top: var(--esp-2); border-top: 1px solid var(--cor-borda); }
-.layout-link {
-  position: relative;
-  border-radius: var(--raio-pequeno);
-  padding: var(--esp-2) var(--esp-3);
-  font-size: var(--texto-sm);
-  color: var(--cor-texto-suave);
-  text-decoration: none;
-}
-.layout-link:hover { background: var(--cor-superficie-alt); color: var(--cor-texto); }
-.layout-link:focus { outline: none; }
-.layout-link:focus-visible { outline: 2px solid var(--cor-foco); outline-offset: 1px; }
-.layout-link--ativo, .layout-link--ativo:hover { background: var(--cor-primaria-suave); color: var(--cor-texto); font-weight: 600; }
-.layout-link--ativo::before { content: ''; position: absolute; left: 0; top: 25%; bottom: 25%; width: 3px; border-radius: 2px; background: var(--cor-primaria); }
 .layout-conteudo { flex: 1; min-width: 0; }
-.layout-topo { display: flex; justify-content: flex-end; max-width: 72rem; margin: 0 auto; padding: var(--esp-3) var(--esp-4) 0; }
 .layout-principal { box-sizing: border-box; max-width: 72rem; margin: 0 auto; padding: var(--esp-4); }
-
-.layout-barra {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
-  display: grid; grid-template-columns: repeat(5, 1fr); align-items: center;
-  background: var(--cor-superficie-alt); padding: var(--esp-1);
-}
-.layout-aba {
-  display: flex; align-items: center; justify-content: center; min-height: 2.75rem;
-  border-radius: var(--raio-pequeno); font-size: var(--texto-xs); color: var(--cor-texto-suave); text-decoration: none; text-align: center;
-}
-.layout-aba:focus-visible { outline: 2px solid var(--cor-foco); outline-offset: -2px; }
-.layout-aba--ativa { color: var(--cor-primaria); font-weight: 700; }
-.layout-aba--nova { width: 2.75rem; justify-self: center; border-radius: var(--raio-total); background: var(--cor-primaria); color: var(--cor-sobre-primaria); font-size: var(--texto-xl); font-weight: 700; }
+.layout-principal:focus { outline: none; }
+.layout-carregando { display: flex; flex-direction: column; gap: var(--esp-4); align-items: flex-start; }
+.layout-pular { position: absolute; left: var(--esp-2); top: -4rem; z-index: var(--z-tooltip); padding: var(--esp-2) var(--esp-4); border-radius: var(--raio-pequeno); background: var(--cor-primaria); color: var(--cor-sobre-primaria); font-weight: var(--peso-semibold); text-decoration: none; }
+.layout-pular:focus { top: var(--esp-2); outline: none; box-shadow: var(--anel-foco); }
 @media (max-width: 47.99rem) {
   .layout-raiz { display: block; padding-bottom: 4rem; }
 }
-@media print {
-  .layout-sidebar, .layout-barra, .layout-topo { display: none; }
-}
-.layout-buscar {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--esp-3);
-  margin-right: var(--esp-3);
-  padding: var(--esp-2) var(--esp-3);
-  border: 1px solid var(--cor-borda);
-  border-radius: var(--raio-pequeno);
-  background: var(--cor-superficie);
-  color: var(--cor-texto-mudo);
-  font: inherit;
-  font-size: var(--texto-sm);
-  cursor: pointer;
-}
-.layout-buscar:hover { border-color: var(--cor-borda-forte); color: var(--cor-texto); }
-.layout-buscar kbd { font-family: inherit; font-size: var(--texto-xs); padding: 0 var(--esp-1); border: 1px solid var(--cor-borda); border-radius: var(--raio-pequeno); }

@@ -5,17 +5,18 @@ import { itensNavegacao } from '../navegacao';
 import { construirEstado, renderizarApp } from './helpers';
 
 describe('página /design', () => {
-  it('está na lista de rotas e mostra todas as seções do catálogo', () => {
+  it('está na lista de rotas e mostra todas as seções do catálogo', async () => {
     expect(itensNavegacao).toContainEqual({ to: '/design', rotulo: 'Design system' });
     renderizarApp('/design', construirEstado());
-    expect(screen.getByRole('heading', { name: 'Design system', level: 1 })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Design system', level: 1 })).toBeInTheDocument();
     for (const titulo of ['Fundação: cores, tipografia e sombras', 'Ação', 'Campos', 'Sobreposições e notificações', 'Navegação e organização', 'Exibição de dados', 'Feedback e estados']) {
       expect(screen.getByRole('heading', { name: titulo })).toBeInTheDocument();
     }
   });
 
-  it('exibe as seis escalas de cor com dez passos cada', () => {
+  it('exibe as seis escalas de cor com dez passos cada', async () => {
     renderizarApp('/design', construirEstado());
+    await screen.findByRole('heading', { name: 'Design system', level: 1 });
     for (const escala of ['neutra', 'primaria', 'sucesso', 'aviso', 'perigo', 'info']) {
       expect(within(screen.getByRole('group', { name: `Escala ${escala}` })).getAllByTitle(new RegExp(`^${escala} `))).toHaveLength(10);
     }
@@ -23,6 +24,7 @@ describe('página /design', () => {
 
   it('mostra todas as variantes de botão e alterna o tema pelo interruptor', async () => {
     renderizarApp('/design', construirEstado());
+    await screen.findByRole('heading', { name: 'Design system', level: 1 });
     for (const v of ['primario', 'secundario', 'perigo', 'fantasma', 'link']) {
       expect(screen.getByRole('button', { name: v })).toHaveClass(`ds-botao--${v}`);
     }
@@ -37,6 +39,7 @@ describe('página /design', () => {
 
   it('os exemplos de sobreposição e notificação funcionam', async () => {
     renderizarApp('/design', construirEstado());
+    await screen.findByRole('heading', { name: 'Design system', level: 1 });
     await userEvent.click(screen.getByRole('button', { name: 'Abrir modal' }));
     expect(screen.getByRole('dialog', { name: 'Exemplo de modal' })).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button', { name: 'Entendi' }));
@@ -48,8 +51,9 @@ describe('página /design', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
-  it('a tabela de exemplo ordena por valor decrescente e pagina', () => {
+  it('a tabela de exemplo ordena por valor decrescente e pagina', async () => {
     renderizarApp('/design', construirEstado());
+    await screen.findByRole('heading', { name: 'Design system', level: 1 });
     const tabela = screen.getByRole('table', { name: 'Gastos de exemplo' });
     const linhas = within(tabela).getAllByRole('row').slice(1);
     expect(linhas).toHaveLength(4);
