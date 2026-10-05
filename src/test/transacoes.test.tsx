@@ -270,7 +270,7 @@ describe('transações: tela', () => {
     await usuario.click(screen.getByRole('tab', { name: 'Categorias' }));
     await usuario.type(screen.getByLabelText('Nome da categoria'), 'Pets');
     await usuario.click(screen.getByRole('button', { name: 'Adicionar categoria' }));
-    expect(screen.getByText('Pets')).toBeInTheDocument();
+    expect(screen.getByText('Pets', { selector: '.categorias__nome' })).toBeInTheDocument();
     await usuario.click(screen.getByRole('button', { name: 'Excluir Moradia' }));
     const grupo = screen.getByRole('group', { name: 'Excluir Moradia' });
     const confirmar = within(grupo).getByRole('button', { name: 'Mover e excluir' });
