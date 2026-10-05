@@ -5,6 +5,9 @@ import { ConfirmDialog } from '../components/ConfirmDialog';
 import { ExclusaoParcelaDialog } from '../components/ExclusaoParcelaDialog';
 import { FiltrosTransacoesForm } from '../components/FiltrosTransacoes';
 import { TransacaoForm } from '../components/TransacaoForm';
+import { BarraLote, ROTULO_ACAO_LOTE, type AcaoLote } from '../components/lote/BarraLote';
+import { LoteForm } from '../components/lote/LoteForm';
+import { aplicarLote, excluirLote, mensagemLote, restringirSelecao, resumoSelecao, type ResultadoLote } from '../domain/lote';
 import { Alerta, Botao, Cartao, EstadoVazio, TituloPagina, Valor } from '../components/ui';
 import { excluirParcela } from '../domain/cartoes';
 import { formatarData, hojeISO, mesDe, primeiroDia, ultimoDia } from '../domain/date';
@@ -20,7 +23,7 @@ import {
   totaisTransacoes,
   type FiltrosTransacoes,
 } from '../domain/transacoes';
-import type { Transacao } from '../domain/types';
+import { ok, type AppState, type Resultado, type Transacao } from '../domain/types';
 import { useEstado, useStore } from '../state/store';
 import './TransacoesPage.css';
 
@@ -43,12 +46,51 @@ export function TransacoesPage() {
   const [editandoId, setEditandoId] = useState<string | null>(null);
   const [excluindo, setExcluindo] = useState<Transacao | null>(null);
   const [erro, setErro] = useState<string | null>(null);
+  const [mensagem, setMensagem] = useState<string | null>(null);
+  const [marcadas, setMarcadas] = useState<ReadonlySet<string>>(new Set());
+  const [acaoLote, setAcaoLote] = useState<AcaoLote | null>(null);
+  const [excluindoLote, setExcluindoLote] = useState(false);
 
   const filtradas = useMemo(() => ordenarTransacoes(filtrarTransacoes(estado.transacoes, filtros)), [estado.transacoes, filtros]);
   const totais = useMemo(() => totaisTransacoes(filtradas), [filtradas]);
   const nomeConta = useMemo(() => new Map(estado.contas.map((c) => [c.id, c.nome])), [estado.contas]);
   const categoria = useMemo(() => new Map(estado.categorias.map((c) => [c.id, c])), [estado.categorias]);
   const visiveis = filtradas.slice(0, limite);
+  // A seleção vale só para o filtro atual: o que saiu do filtro deixa de contar.
+  const selecao = useMemo(() => restringirSelecao(marcadas, filtradas), [marcadas, filtradas]);
+  const resumoLote = useMemo(() => resumoSelecao(filtradas, selecao), [filtradas, selecao]);
+  const todasMarcadas = filtradas.length > 0 && selecao.size === filtradas.length;
+
+  const alternar = (id: string) =>
+    setMarcadas((atual) => {
+      const nova = new Set(atual);
+      if (nova.has(id)) nova.delete(id);
+      else nova.add(id);
+      return nova;
+    });
+
+  /** Executa uma operação em lote como uma única entrada do histórico e mostra o resultado. */
+  const executarLote = (operacao: (s: AppState) => Resultado<ResultadoLote>, verbo?: string): Resultado<void> => {
+    let resumo: ResultadoLote | null = null;
+    const r = store.aplicar((s) => {
+      const lote = operacao(s);
+      if (!lote.ok) return lote;
+      resumo = lote.valor;
+      return ok(lote.valor.estado);
+    });
+    if (!r.ok || !resumo) return r;
+    setMensagem(mensagemLote(resumo, verbo));
+    setErro(null);
+    setMarcadas(new Set());
+    setAcaoLote(null);
+    return ok(undefined);
+  };
+
+  const confirmarExclusaoLote = () => {
+    const r = executarLote((s) => excluirLote(s, selecao), 'excluída');
+    if (!r.ok) setErro(r.erro);
+    setExcluindoLote(false);
+  };
 
   const mudarFiltros = (f: FiltrosTransacoes) => {
     setFiltros(f);
@@ -82,6 +124,7 @@ export function TransacoesPage() {
       ) : (
         <div role="tabpanel" id="painel-transacoes" aria-labelledby="aba-transacoes" className="transacoes__painel">
           {erro ? <Alerta>{erro}</Alerta> : null}
+          {mensagem ? <Alerta tipo="sucesso">{mensagem}</Alerta> : null}
 
           <Drawer aberto={criando} titulo="Nova transação" onFechar={() => setCriando(false)}>
               <TransacaoForm
@@ -120,6 +163,13 @@ export function TransacoesPage() {
               <p className="transacoes__contagem" aria-live="polite">
                 {filtradas.length} {filtradas.length === 1 ? 'transação' : 'transações'}
               </p>
+              <label className="transacoes__selecionar-todas">
+                <input type="checkbox" checked={todasMarcadas} onChange={() => setMarcadas(todasMarcadas ? new Set() : new Set(filtradas.map((t) => t.id)))} />
+                Selecionar todas
+              </label>
+              {selecao.size > 0 ? (
+                <BarraLote resumo={resumoLote} onAcao={setAcaoLote} onExcluir={() => setExcluindoLote(true)} onLimpar={() => setMarcadas(new Set())} />
+              ) : null}
               <ul className="transacoes__lista" aria-label="Lista de transações">
                 {visiveis.map((t, i) => {
                   const novoDia = i === 0 || visiveis[i - 1].data !== t.data;
@@ -151,6 +201,7 @@ export function TransacoesPage() {
                     <Fragment key={t.id}>
                     {cabecalhoDia}
                     <li className="transacoes__linha">
+                      <input type="checkbox" className="transacoes__marcar" aria-label={`Selecionar ${rotulo}`} checked={selecao.has(t.id)} onChange={() => alternar(t.id)} />
                       <div className="transacoes__info">
                         <p className="transacoes__descricao">{rotulo}</p>
                         <p className="transacoes__meta">
@@ -185,6 +236,19 @@ export function TransacoesPage() {
         </div>
       )}
 
+      <Drawer aberto={acaoLote !== null} titulo={acaoLote ? ROTULO_ACAO_LOTE[acaoLote] : ''} onFechar={() => setAcaoLote(null)}>
+        {acaoLote ? <LoteForm key={acaoLote} acao={acaoLote} estado={estado} onAplicar={(alteracao) => executarLote((s) => aplicarLote(s, selecao, alteracao))} onCancelar={() => setAcaoLote(null)} /> : null}
+      </Drawer>
+      {excluindoLote ? (
+        <ConfirmDialog
+          titulo="Excluir transações selecionadas?"
+          mensagem={`Excluir ${selecao.size} ${selecao.size === 1 ? 'transação' : 'transações'}? Você poderá desfazer com o botão Desfazer no topo ou Ctrl+Z.`}
+          rotuloConfirmar="Excluir"
+          perigo
+          onCancelar={() => setExcluindoLote(false)}
+          onConfirmar={confirmarExclusaoLote}
+        />
+      ) : null}
       {excluindo?.parcela ? (
         <ExclusaoParcelaDialog
           transacao={excluindo}

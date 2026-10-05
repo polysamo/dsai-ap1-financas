@@ -25,3 +25,5 @@
 .transacoes__filtros { background: var(--cor-superficie-2); border-radius: var(--raio); padding: var(--esp-3); }
 .transacoes__filtros summary { cursor: pointer; font-size: var(--texto-sm); font-weight: 600; }
 .transacoes__filtros[open] summary { margin-bottom: var(--esp-3); }
+.transacoes__selecionar-todas { display: inline-flex; align-items: center; gap: var(--esp-2); margin-bottom: var(--esp-2); font-size: var(--texto-sm); color: var(--cor-texto-suave); }
+.transacoes__marcar { width: 1.1rem; height: 1.1rem; accent-color: var(--cor-primaria); flex-shrink: 0; }
