@@ -9,6 +9,7 @@ import type { EstadoConciliacoes } from './conciliacao';
 import type { RolloverCategorias } from './orcamentoAnual';
 import type { PreferenciasAlertas } from './alertas';
 import type { Desejo } from './desejos';
+import type { Evento } from './eventos';
 
 export type Centavos = number;
 /** Data no formato AAAA-MM-DD. */
@@ -245,6 +246,8 @@ export interface AppState {
   preferenciasAlertas?: PreferenciasAlertas;
   /** Lista de desejos; ausente em dados antigos, tratada como vazia. */
   desejos?: Desejo[];
+  /** Eventos e viagens com orçamento próprio; ausente em dados antigos. */
+  eventos?: Evento[];
 }
 
 export type Resultado<T> = { ok: true; valor: T } | { ok: false; erro: string; campo?: string };

@@ -20,6 +20,7 @@ export const itensNavegacao: ItemNavegacao[] = [
   { to: '/orcamento-anual', rotulo: 'Orçamento anual' },
   { to: '/metas', rotulo: 'Metas' },
   { to: '/desejos', rotulo: 'Desejos' },
+  { to: '/eventos', rotulo: 'Eventos' },
   { to: '/investimentos', rotulo: 'Investimentos' },
   { to: '/independencia', rotulo: 'Independência' },
   { to: '/calculadoras', rotulo: 'Calculadoras' },
@@ -42,7 +43,7 @@ export interface GrupoNavegacao {
 export const gruposNavegacao: GrupoNavegacao[] = [
   { titulo: 'Visão geral', itens: ['/', '/calendario', '/relatorios', '/fluxo', '/saude', '/alertas', '/patrimonio'] },
   { titulo: 'Movimentação', itens: ['/transacoes', '/contas', '/cartoes', '/transferencias', '/assinaturas', '/conciliacao'] },
-  { titulo: 'Planejamento', itens: ['/orcamento', '/orcamento-anual', '/metas', '/desejos', '/dividas', '/investimentos', '/independencia', '/calculadoras', '/divisao'] },
+  { titulo: 'Planejamento', itens: ['/orcamento', '/orcamento-anual', '/metas', '/desejos', '/eventos', '/dividas', '/investimentos', '/independencia', '/calculadoras', '/divisao'] },
   { titulo: 'Automação', itens: ['/regras', '/importar', '/importar-ofx'] },
 ];
 

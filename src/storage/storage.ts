@@ -32,6 +32,7 @@ export function estadoInicial(): AppState {
     rolloverCategorias: [],
     preferenciasAlertas: preferenciasPadrao(),
     desejos: [],
+    eventos: [],
   };
 }
 
