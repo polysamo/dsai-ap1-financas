@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { aplicarLote, excluirLote, mensagemLote, restringirSelecao, resumoSelecao } from '../domain/lote';
 import type { AppState, Conta, Transacao } from '../domain/types';
+import { hojeISO } from '../domain/date';
 import { construirEstado, renderizarApp } from './helpers';
 
 const conta = (id: string, parcial: Partial<Conta> = {}): Conta => ({ id, nome: id, tipo: 'corrente', saldoInicial: 0, arquivada: false, criadaEm: 1, ...parcial });
@@ -107,7 +108,7 @@ describe('lote: domínio', () => {
 });
 
 describe('lote: tela de transações', () => {
-  const hoje = new Date().toISOString().slice(0, 10);
+  const hoje = hojeISO();
   const estadoTela = () =>
     base({
       transacoes: [trans('t1', { data: hoje, descricao: 'Padaria' }), trans('t2', { data: hoje, descricao: 'Feira' }), trans('s1', { data: hoje, tipo: 'receita', categoriaId: 'cat-salario', descricao: 'Salário', valor: 300000 })],

@@ -6,6 +6,7 @@ import { relatorioMensal } from '../domain/relatorios';
 import { arvoreCategorias, definirPai, nomeCompleto, raizDe, somarNaRaiz } from '../domain/subcategorias';
 import { arquivarCategoria, criarCategoria, excluirCategoria } from '../domain/transacoes';
 import type { AppState, Categoria, Transacao } from '../domain/types';
+import { hojeISO } from '../domain/date';
 import { construirEstado, renderizarApp } from './helpers';
 
 const cat = (id: string, nome: string, parcial: Partial<Categoria> = {}): Categoria => ({ id, nome, tipo: 'despesa', arquivada: false, ...parcial });
@@ -152,7 +153,7 @@ describe('subcategorias: interface', () => {
 
   it('critérios 5 e 6: formulário de transação recua filhas e a lista mostra o nome completo', async () => {
     const usuario = userEvent.setup();
-    const hoje = new Date().toISOString().slice(0, 10);
+    const hoje = hojeISO();
     renderizarApp('/transacoes', base({ transacoes: [trans('t2', 'res', 3000, { data: hoje, descricao: 'Jantar' })] }));
     expect(screen.getByText(/Alimentação › Restaurantes/)).toBeInTheDocument();
     await usuario.click(screen.getByRole('button', { name: 'Nova transação' }));
@@ -164,7 +165,7 @@ describe('subcategorias: interface', () => {
 
   it('critério 10: relatório mostra a opção de agrupar quando há subcategorias', async () => {
     const usuario = userEvent.setup();
-    const hoje = new Date().toISOString().slice(0, 10);
+    const hoje = hojeISO();
     renderizarApp('/relatorios', base({ transacoes: [trans('t2', 'res', 3000, { data: hoje }), trans('t1', 'ali', 1000, { data: hoje })] }));
     const opcao = screen.getByRole('checkbox', { name: 'Agrupar subcategorias' });
     expect(opcao).toBeChecked();

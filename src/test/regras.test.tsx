@@ -17,6 +17,7 @@ import { listarTags, parseTags, validarTags } from '../domain/tags';
 import { criarTransacao, editarTransacao, filtrarTransacoes } from '../domain/transacoes';
 import type { Conta, MapeamentoCsv, RegraCategoria, Transacao } from '../domain/types';
 import { migrar } from '../storage/storage';
+import { hojeISO } from '../domain/date';
 import { construirEstado, lerEstadoSalvo, renderizarApp } from './helpers';
 
 const conta: Conta = { id: 'a', nome: 'Banco', tipo: 'corrente', saldoInicial: 0, arquivada: false, criadaEm: 1 };
@@ -188,7 +189,7 @@ describe('tags nas transações (critérios 8 e 9)', () => {
 
   it('critério 8 e 9 na tela: campo Tags no formulário, exibição na lista e filtro por tag', async () => {
     const usuario = userEvent.setup();
-    const hoje = new Date().toISOString().slice(0, 10);
+    const hoje = hojeISO();
     const { store } = renderizarApp('/transacoes', construirEstado({ contas: [conta], transacoes: [trans({ id: 'x', data: hoje, descricao: 'Sem tag' })] }));
     await usuario.click(screen.getByRole('button', { name: 'Nova transação' }));
     const form = screen.getByRole('form', { name: 'Nova transação' });

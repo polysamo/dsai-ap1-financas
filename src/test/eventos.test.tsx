@@ -17,6 +17,7 @@ import {
 import type { AppState, Transacao } from '../domain/types';
 import { gruposNavegacao, itensNavegacao } from '../navegacao';
 import { CHAVE_ESTADO, carregar, estadoInicial } from '../storage/storage';
+import { hojeISO } from '../domain/date';
 import { construirEstado, lerEstadoSalvo, renderizarApp } from './helpers';
 
 let seq = 0;
@@ -168,7 +169,7 @@ describe('eventos: tela', () => {
 
   it('critérios 8 e 10: etiquetar com confirmação e excluir', async () => {
     const usuario = userEvent.setup();
-    const hoje = new Date().toISOString().slice(0, 10);
+    const hoje = hojeISO();
     const { store } = renderizarApp('/eventos', base({ eventos: [evento({ inicio: hoje, fim: hoje })], transacoes: [t(hoje, 5000, { tags: [] })] }));
     await usuario.click(screen.getByRole('button', { name: 'Etiquetar despesas do período (1)' }));
     await usuario.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Etiquetar' }));
