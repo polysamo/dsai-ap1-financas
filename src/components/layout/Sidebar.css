@@ -11,7 +11,12 @@
   background: var(--cor-superficie);
   overflow-y: auto;
   transition: width var(--mov-normal) var(--mov-curva);
+  scrollbar-width: thin;
+  scrollbar-color: var(--cor-borda-forte) transparent;
 }
+.layout-sidebar::-webkit-scrollbar { width: 0.5rem; }
+.layout-sidebar::-webkit-scrollbar-track { background: transparent; }
+.layout-sidebar::-webkit-scrollbar-thumb { background: var(--cor-borda-forte); border-radius: var(--raio-pequeno); }
 .layout-sidebar--recolhida { width: 4.5rem; align-items: center; padding-inline: var(--esp-2); }
 .layout-sidebar__topo { display: flex; align-items: center; justify-content: space-between; gap: var(--esp-2); }
 .layout-marca { padding: 0 var(--esp-3); font-size: var(--texto-base); font-weight: var(--peso-negrito); color: var(--cor-primaria); }
