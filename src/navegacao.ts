@@ -70,4 +70,5 @@ export function siglaDe(rotulo: string): string {
 }
 
 /** Nome da tela para trilha e título do documento; rotas desconhecidas são "Página não encontrada". */
-export const tituloDaRota = (to: string): string => itensNavegacao.find((i) => i.to === to)?.rotulo ?? 'Página não encontrada';
+export const tituloDaRota = (to: string): string =>
+  itensNavegacao.find((i) => i.to === to)?.rotulo ?? itensRodape.find((i) => i.to === to)?.rotulo ?? 'Página não encontrada';

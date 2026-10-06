@@ -94,6 +94,11 @@ describe('layout: cabeçalho e migalhas', () => {
     expect(within(trilha).getByText('Metas')).toHaveAttribute('aria-current', 'page');
   });
 
+  it('BUG-004: migalha e título das rotas de rodapé (Ajuda, Atalhos, Configurações) não caem em "Página não encontrada"', () => {
+    expect(migalhasDe('/configuracoes')).toEqual([{ rotulo: 'Início', to: '/' }, { rotulo: 'Configurações' }]);
+    expect(migalhasDe('/atalhos')).toEqual([{ rotulo: 'Início', to: '/' }, { rotulo: 'Atalhos' }]);
+  });
+
   it('critério 5: cabeçalho reúne busca, desfazer, refazer, atalhos e ocultar valores', () => {
     renderizarApp('/', construirEstado());
     const topo = screen.getByRole('banner');
