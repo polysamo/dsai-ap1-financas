@@ -19,7 +19,12 @@ Cada bug tem teste em `src/test/bugs.test.tsx` que falhava antes da correção.
 - Price e SAC: invariantes (soma das amortizações igual ao principal, saldo final zero, prazo respeitado) em 6 taxas × 5 prazos × 2 sistemas, com e sem amortizações extras.
 - Desfazer/refazer após edição em lote seguida de edição manual.
 - Saldo do Dashboard igual à soma das contas; o patrimônio separa contas negativas nos passivos (diferença esperada).
+- 2026-10-06, com o Chrome DevTools MCP: 14 rotas (Dashboard, Transações, Contas, Orçamento, Metas, Relatórios, Configurações, Design, Cartões, Dívidas, Investimentos, Assinaturas, Conciliação, rota inexistente) em 1280px claro e Transações em 360px escuro — sem erro de console, requisição falha ou rolagem horizontal; foco preso corretamente no modal "Nova transação" (Tab cicla entre Fechar e o link, não escapa); Esc fecha e devolve o foco.
+- Nenhuma cor hexadecimal fixa fora de `tokens.css` (teste `src/test/tokens.test.ts`); nenhum import direto de `recharts` fora de `src/charts`.
+- Checklist da skill `web-design-guidelines` (Vercel Web Interface Guidelines) em `src/ds`, `src/components/layout` e `src/charts`: sem `outline: none` sem substituto, sem `transition: all`, `IconButton` exige `aria-label` (checado por teste), `tabular-nums` já aplicado em `Valor`, `autoComplete` presente em 20 arquivos de campo.
 
 ## Pendente
 
-- Nenhum no momento.
+- Varredura visual com screenshot individual das 31 rotas em 360/768px e tema escuro (a varredura técnica de console/rede/rolagem cobriu uma amostra de 14 rotas nesta rodada; a cobertura completa das 31 foi feita e verificada limpa numa sessão anterior, não recapturada em imagem nesta).
+- Checagem de contraste AA ponto a ponto por elemento em cada tela (a verificação foi por inspeção visual e pela auditoria de acessibilidade do Lighthouse na home, não pixel a pixel em todas as telas).
+- Revisão com a skill `web-design-guidelines` cobrindo cada página individualmente (aplicada à camada compartilhada — `src/ds`, `src/components/layout`, `src/charts` — e a uma amostra de páginas).

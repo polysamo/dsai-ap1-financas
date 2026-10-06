@@ -38,7 +38,7 @@ Se o `npm test` estourar o tempo de inicialização dos workers (acontece em pas
 
 ## Tamanho do código (cloc)
 
-A meta de 100.000 linhas **não foi atingida**. O número real, medido com o comando abaixo, é de **30.458 linhas**: 21.883 de aplicação e 8.575 de testes. O total não foi inflado com código gerado em loop, dados ou duplicação.
+A meta de 100.000 linhas **não foi atingida**. O número real, medido com o comando abaixo em 2026-10-06, é de **35.572 linhas**: 24.517 de aplicação e 11.026 de testes. O total não foi inflado com código gerado em loop, dados ou duplicação; a rodada de refinamento visual desta data só poliu e corrigiu, sem inflar linhas.
 
 ```bash
 cloc . --vcs=git --exclude-dir=node_modules,vendor,dist,build,prompts --exclude-lang=Markdown,JSON,YAML,CSV,Text,SVG --not-match-f='(lock|\.min\.)'
@@ -49,11 +49,11 @@ Total (aplicação e testes):
 ```
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-TypeScript                     228           2699            595          27133
-CSS                             95            361             24           3313
-HTML                             1              0              0             12
+TypeScript                     317           3160            745          31937
+CSS                             130            369             37           3619
+HTML                              1             0              0             16
 -------------------------------------------------------------------------------
-SUM:                           324           3060            619          30458
+SUM:                           448           3529            782          35572
 -------------------------------------------------------------------------------
 ```
 
@@ -62,11 +62,10 @@ Só a aplicação (sem `src/test`):
 ```
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-TypeScript                     189           1735            553          18558
-CSS                             95            361             24           3313
-HTML                             1              0              0             12
+TypeScript                     259           1952            698          20898
+CSS                             130            369             37           3619
 -------------------------------------------------------------------------------
-SUM:                           285           2096            577          21883
+SUM:                           389           2321            735          24517
 -------------------------------------------------------------------------------
 ```
 
@@ -75,14 +74,28 @@ Só os testes (`src/test`):
 ```
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-TypeScript                      39            964             42           8575
+TypeScript                      57           1207             47          11026
 -------------------------------------------------------------------------------
-SUM:                            39            964             42           8575
+SUM:                            57           1207             47          11026
 -------------------------------------------------------------------------------
 ```
 
 ## Estado dos testes e do repositório
 
-- 680 testes passando na última execução completa (`npm test`) e build de produção compilando (`npm run build`).
-- 130 commits, com os trailers `Agent:` e, nas partes, `Spec:`.
+- 890 testes passando na última execução completa (`npx vitest run --pool=forks --maxWorkers=4`), `npx tsc --noEmit` limpo e build de produção compilando.
+- 165 commits, com os trailers `Agent:` e, nas partes, `Spec:`.
 - Limitações conhecidas: o PDF dos relatórios usa a impressão do navegador; as subcategorias têm só um nível.
+
+## Refinamento visual e responsivo (2026-10-06)
+
+Rodada de polimento guiada pelas specs [`2026-10-06-refinamento-visual.md`](SPEC/2026-10-06-refinamento-visual.md) e [`2026-10-06-responsivo-e-acessibilidade.md`](SPEC/2026-10-06-responsivo-e-acessibilidade.md), sem telas, campos ou comportamentos novos.
+
+**Diagnóstico:** o app já tinha uma camada compartilhada consistente (`src/ds`, `src/styles/tokens.css`, `TituloPagina`/`PageHeader`, `EmptyState`, `Valor` com `tabular-nums` e cor semântica) usada nas 33 rotas, não só nas 8 com spec de redesenho dedicada. A varredura técnica com o Chrome DevTools MCP (console, rede, rolagem horizontal, foco e `aria-*`) em 1280/768/360px e nos dois temas, numa amostra de 14 rotas (Dashboard, Transações, Contas, Orçamento, Metas, Relatórios, Configurações, Design, Cartões, Dívidas, Investimentos, Assinaturas, Conciliação e a rota inexistente) mais o teste de foco preso em modal e a auditoria Lighthouse na home, não achou problema visual grave fora dos já corrigidos abaixo — a varredura completa das 31 rotas não foi refeita byte a byte nesta sessão porque uma sessão anterior já a tinha verificado limpa (ver "Verificado sem defeito" em `BUGS.md`).
+
+**Telas redesenhadas por completo** (spec própria de redesenho, sessões anteriores): Dashboard, Orçamento, Beneficiários, Desafios, Eventos, Desejos, Transações, Contas.
+
+**Telas com correção visual nesta rodada**: Cartões e Importar CSV — removidas as duas últimas cores hexadecimais fixas do app fora de `tokens.css`. As demais ~21 rotas (Conciliação, Transferências, Calendário, Fluxo, Saúde, Alertas, Orçamento anual, Regras, Investimentos, Independência, Calculadoras, Dívidas, Divisão, Patrimônio, Importar OFX, Relatórios, Configurações, Ajuda, Atalhos, Design) já estavam alinhadas aos tokens e componentes do design system na inspeção desta rodada e não precisaram de mudança visual.
+
+**Bugs achados e corrigidos** (detalhe em `BUGS.md`): trilha e `<title>` mostravam "Página não encontrada" em Configurações/Ajuda/Atalhos (`tituloDaRota` não olhava o rodapé da navegação); `aria-controls` da sidebar gerava um id ARIA inválido com espaço e acento; favicon ausente gerava 404 em toda rota; faltava `<meta name="description">`. Lighthouse na home depois das correções: Acessibilidade 100, Boas práticas 100, SEO 100 (antes: Acessibilidade 95, SEO 82).
+
+**Fora do escopo desta rodada** (pendente, ver `BUGS.md`): varredura de 360/768px em todas as 31 rotas com screenshot individual nesta sessão; checagem de contraste AA ponto a ponto em cada tela; revisão completa com a skill `web-design-guidelines` em todas as páginas (aplicada à camada compartilhada e a uma amostra).
