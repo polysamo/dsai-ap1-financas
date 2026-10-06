@@ -1,8 +1,6 @@
 .layout-sidebar {
-  position: sticky;
-  top: 0;
-  align-self: flex-start;
-  height: 100vh;
+  align-self: stretch;
+  height: 100%;
   width: 15rem;
   flex: none;
   display: flex;
