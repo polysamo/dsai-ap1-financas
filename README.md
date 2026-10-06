@@ -99,3 +99,13 @@ Rodada de polimento guiada pelas specs [`2026-10-06-refinamento-visual.md`](SPEC
 **Bugs achados e corrigidos** (detalhe em `BUGS.md`): trilha e `<title>` mostravam "Página não encontrada" em Configurações/Ajuda/Atalhos (`tituloDaRota` não olhava o rodapé da navegação); `aria-controls` da sidebar gerava um id ARIA inválido com espaço e acento; favicon ausente gerava 404 em toda rota; faltava `<meta name="description">`. Lighthouse na home depois das correções: Acessibilidade 100, Boas práticas 100, SEO 100 (antes: Acessibilidade 95, SEO 82).
 
 **Fora do escopo desta rodada** (pendente, ver `BUGS.md`): varredura de 360/768px em todas as 31 rotas com screenshot individual nesta sessão; checagem de contraste AA ponto a ponto em cada tela; revisão completa com a skill `web-design-guidelines` em todas as páginas (aplicada à camada compartilhada e a uma amostra).
+
+## Atualização de 2026-10-06: deploy final
+
+Nota acrescentada depois do texto acima, sem alterá-lo. Os números abaixo valem para o commit publicado.
+
+- **Commit em produção:** `d628259` (`fix: barra de rolagem nativa da sidebar aparecia como borda preta`), publicado em https://dsai-ap1-financas.vercel.app com `vercel deploy --prod`. A produção serve a `<meta name="description">` do build novo.
+- **Testes:** 893 passando em 56 arquivos (`npx vitest run --pool=forks --maxWorkers=4`), com `npx tsc --noEmit` limpo e `npm run build` compilando. É a contagem mais recente e substitui o "890" citado na seção "Estado dos testes e do repositório".
+- **Commits:** 168 no repositório até este deploy. O "165" da mesma seção ficou desatualizado.
+- **Correções incluídas neste deploy:** a sidebar deixava espaço vazio ao rolar telas com conteúdo longo, e a barra de rolagem nativa do Windows aparecia sem estilo, como uma borda preta entre o menu e o conteúdo.
+- **Rodar a suíte em máquina lenta:** com muitos workers, o Vitest pode estourar o tempo de início dos workers e reportar falhas que não são de lógica. Numa máquina sobrecarregada, `--maxWorkers=2` fechou os 890 testes (então vigentes) em cerca de 2 minutos, sem falhas.
