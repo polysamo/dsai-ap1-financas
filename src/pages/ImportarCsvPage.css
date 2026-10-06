@@ -17,5 +17,5 @@
 .importar-etapa { display: flex; align-items: center; gap: var(--esp-1, 0.25rem); flex: 0 0 auto; font-size: var(--texto-xs); color: var(--cor-texto-mudo); }
 .importar-etapa__num { display: inline-grid; place-items: center; width: 1.5rem; height: 1.5rem; border-radius: 999px; border: 1px solid var(--cor-borda); }
 .importar-etapa--atual { color: var(--cor-texto); font-weight: 600; }
-.importar-etapa--atual .importar-etapa__num { background: var(--cor-primaria, #2563eb); color: #fff; border-color: transparent; }
+.importar-etapa--atual .importar-etapa__num { background: var(--cor-primaria); color: var(--cor-sobre-primaria); border-color: transparent; }
 .importar-etapa--feita .importar-etapa__num { border-color: currentColor; }
