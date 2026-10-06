@@ -9,6 +9,8 @@ Cada bug tem teste em `src/test/bugs.test.tsx` que falhava antes da correção.
 | BUG-003 | Testes (fluxo de caixa) | Rodar a suíte repetidas vezes | Sempre verde | `fluxo.test` falhava de vez em quando: `includes('a4')` casava com ids aleatórios que continham "a4" | Corrigido: comparação exata e `startsWith` |
 | BUG-004 | Configurações, Ajuda, Atalhos | Abrir qualquer rota do rodapé (`/configuracoes`, `/ajuda`, `/atalhos`) | Trilha e título do documento mostram o nome da tela | `tituloDaRota` só procurava em `itensNavegacao`; as três rotas do rodapé ficam só em `itensRodape`, então a trilha e o `<title>` mostravam "Página não encontrada" | Corrigido: `tituloDaRota` também procura em `itensRodape` (`src/navegacao.ts`) |
 | BUG-005 | Todas | Carregar a build de produção | Ícone de aba próprio, sem requisição falha | Sem `<link rel="icon">` no `index.html`, o navegador pedia `/favicon.ico` e recebia 404 | Corrigido: favicon SVG inline e `theme-color` por esquema de cor em `index.html` |
+| BUG-006 | Sidebar (todas as telas, menu expandido) | Rodar auditoria de acessibilidade (Lighthouse) na home | `aria-controls` do botão de grupo aponta para um id válido | `aria-controls={`grupo-${g.titulo}`}` gerava `"grupo-Visão geral"`, um id com espaço e acento, inválido como token ARIA | Corrigido: `idGrupo()` em `Sidebar.tsx` normaliza o título (sem acento, sem espaço) |
+| BUG-007 | Todas | Rodar auditoria de SEO (Lighthouse) na home | `<meta name="description">` presente | Faltava a tag, SEO 82/100 | Corrigido: `<meta name="description">` em `index.html` |
 
 ## Verificado sem defeito
 

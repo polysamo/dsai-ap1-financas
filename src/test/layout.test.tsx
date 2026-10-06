@@ -25,6 +25,14 @@ describe('layout: sidebar e grupos', () => {
     expect(within(rodape).getAllByRole('link').map((l) => l.textContent)).toEqual(['Ajuda', 'Atalhos', 'Configurações']);
   });
 
+  it('BUG-006: aria-controls dos grupos é um id de ARIA válido (sem espaço nem acento) e aponta para um elemento existente', () => {
+    renderizarApp('/orcamento', construirEstado());
+    const botaoVisaoGeral = within(principal()).getByRole('button', { name: /Visão geral/ });
+    const id = botaoVisaoGeral.getAttribute('aria-controls');
+    expect(id).toMatch(/^[\w-]+$/);
+    expect(document.getElementById(id!)).toBeInTheDocument();
+  });
+
   it('critério 1: fechar um grupo esconde os itens e persiste; o grupo da tela atual não fecha', async () => {
     const usuario = userEvent.setup();
     renderizarApp('/orcamento', construirEstado());

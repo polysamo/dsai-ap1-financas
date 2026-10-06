@@ -12,6 +12,14 @@ interface Props {
 
 const classeLink = ({ isActive }: { isActive: boolean }) => cx('layout-link', isActive && 'layout-link--ativo');
 
+/** Id de ARIA válido (sem espaços nem acentos) a partir do título do grupo. */
+const idGrupo = (titulo: string) =>
+  `grupo-${titulo
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/\s+/g, '-')}`;
+
 function Item({ to, rotulo, recolhida }: { to: string; rotulo: string; recolhida: boolean }) {
   return (
     <NavLink to={to} end={to === '/'} className={classeLink} aria-label={recolhida ? rotulo : undefined} title={recolhida ? rotulo : undefined}>
@@ -40,7 +48,7 @@ export function Sidebar({ recolhida, gruposFechados, aoAlternarRecolhida, aoAlte
               {recolhida ? (
                 <span className="layout-grupo__separador" aria-hidden="true" />
               ) : (
-                <button type="button" className="layout-grupo__titulo" aria-expanded={aberto} aria-controls={`grupo-${g.titulo}`} onClick={() => aoAlternarGrupo(g.titulo)}>
+                <button type="button" className="layout-grupo__titulo" aria-expanded={aberto} aria-controls={idGrupo(g.titulo)} onClick={() => aoAlternarGrupo(g.titulo)}>
                   <span>{g.titulo}</span>
                   <span aria-hidden="true" className={cx('layout-grupo__seta', aberto && 'layout-grupo__seta--aberta')}>
                     ▾
@@ -48,7 +56,7 @@ export function Sidebar({ recolhida, gruposFechados, aoAlternarRecolhida, aoAlte
                 </button>
               )}
               {aberto ? (
-                <div id={`grupo-${g.titulo}`} className="layout-grupo__itens">
+                <div id={idGrupo(g.titulo)} className="layout-grupo__itens">
                   {g.itens.map((to) => (
                     <Item key={to} to={to} rotulo={rotuloDe(to)} recolhida={recolhida} />
                   ))}
