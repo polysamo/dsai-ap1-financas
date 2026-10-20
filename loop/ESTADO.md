@@ -2,3 +2,6 @@
 
 | Volta | Item | O que o agente fez | npm test | Decisão |
 |-------|------|--------------------|----------|---------|
+| 1 | Criar src/data/regrasPadrao.ts com as regras de alimentação | Escreveu 5 regras (ifood contem, ifd* comeca, restaurante contem, mercado contem, padaria contem) e apagou o arquivo de novo porque não pôde verificar | não rodou: `npx vitest` e `npx tsc` precisam de aprovação que a sessão não tinha | escalou: o ambiente não deixa rodar `npx vitest run`, então nem a pré-condição do passo 2 nem as verificações do passo 4 puderam ser feitas; libere `npx vitest`, `npx tsc` e `npm test` para o loop |
+| - | resposta humana ao escalou da volta 1 | criei .claude/settings.local.json liberando npm test, npx vitest run e npx tsc --noEmit | - | destravado, a volta 2 pode refazer o item |
+| 2 | Criar src/data/regrasPadrao.ts com as regras de alimentação | Criou o arquivo com 5 regras de despesa → cat-alimentacao: `ifood` contem, `ifd*` comeca, `restaurante` contem, `mercado` contem (pega também SUPERMERCADO), `padaria` contem; nenhuma casa com os casos de Outros; tsc sem erro | 28 falham, 22 passam no arquivo de casos (todas as falhas são de transporte, saúde, moradia, lazer, educação e receitas); npm test: 28 falham, 915 passam, nenhuma falha fora desse arquivo | concluído |
