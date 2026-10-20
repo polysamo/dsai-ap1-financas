@@ -1,0 +1,55 @@
+[
+  { "descricao": "PAG*IFOOD", "tipo": "despesa", "esperado": "cat-alimentacao" },
+  { "descricao": "IFD*RESTAURANTE SP", "tipo": "despesa", "esperado": "cat-alimentacao" },
+  { "descricao": "IFOOD.COM AGENCIA DIGITAL", "tipo": "despesa", "esperado": "cat-alimentacao" },
+  { "descricao": "RESTAURANTE DONA BENTA LTDA", "tipo": "despesa", "esperado": "cat-alimentacao" },
+  { "descricao": "SUPERMERCADO LIDER 0231", "tipo": "despesa", "esperado": "cat-alimentacao" },
+  { "descricao": "MERCADO FORMOSA BELEM PA", "tipo": "despesa", "esperado": "cat-alimentacao" },
+  { "descricao": "PADARIA PAO QUENTE", "tipo": "despesa", "esperado": "cat-alimentacao" },
+
+  { "descricao": "UBER *TRIP", "tipo": "despesa", "esperado": "cat-transporte" },
+  { "descricao": "UBER* TRIP HELP.UBER.COM", "tipo": "despesa", "esperado": "cat-transporte" },
+  { "descricao": "99*APP 99POP", "tipo": "despesa", "esperado": "cat-transporte" },
+  { "descricao": "POSTO IPIRANGA 4412", "tipo": "despesa", "esperado": "cat-transporte" },
+  { "descricao": "AUTO POSTO SHELL BELEM", "tipo": "despesa", "esperado": "cat-transporte" },
+  { "descricao": "ESTACIONAMENTO PARQUE SHOP", "tipo": "despesa", "esperado": "cat-transporte" },
+
+  { "descricao": "DROGARIA SAO PAULO 1123", "tipo": "despesa", "esperado": "cat-saude" },
+  { "descricao": "DROGASIL 0455", "tipo": "despesa", "esperado": "cat-saude" },
+  { "descricao": "FARMACIA PAGUE MENOS", "tipo": "despesa", "esperado": "cat-saude" },
+  { "descricao": "LAB CLINICO AMARAL", "tipo": "despesa", "esperado": "cat-saude" },
+  { "descricao": "UNIMED BELEM MENSALIDADE", "tipo": "despesa", "esperado": "cat-saude" },
+
+  { "descricao": "ALUGUEL APTO 302 TRANSF", "tipo": "despesa", "esperado": "cat-moradia" },
+  { "descricao": "CELPA ENERGIA ELETRICA", "tipo": "despesa", "esperado": "cat-moradia" },
+  { "descricao": "COSANPA SANEAMENTO", "tipo": "despesa", "esperado": "cat-moradia" },
+  { "descricao": "CONDOMINIO ED SOLAR", "tipo": "despesa", "esperado": "cat-moradia" },
+  { "descricao": "VIVO FIBRA INTERNET", "tipo": "despesa", "esperado": "cat-moradia" },
+
+  { "descricao": "NETFLIX.COM", "tipo": "despesa", "esperado": "cat-lazer" },
+  { "descricao": "SPOTIFY AB", "tipo": "despesa", "esperado": "cat-lazer" },
+  { "descricao": "CINEMARK 0012", "tipo": "despesa", "esperado": "cat-lazer" },
+  { "descricao": "STEAMGAMES.COM 4259522", "tipo": "despesa", "esperado": "cat-lazer" },
+
+  { "descricao": "UDEMY ONLINE COURSES", "tipo": "despesa", "esperado": "cat-educacao" },
+  { "descricao": "MENSALIDADE FACULDADE ESTACIO", "tipo": "despesa", "esperado": "cat-educacao" },
+  { "descricao": "LIVRARIA CULTURA 0031", "tipo": "despesa", "esperado": "cat-educacao" },
+
+  { "descricao": "PIX ENVIADO MARIA S SANTOS", "tipo": "despesa", "esperado": "cat-outros-despesa" },
+  { "descricao": "PIX ENVIADO JOAO P", "tipo": "despesa", "esperado": "cat-outros-despesa" },
+  { "descricao": "TED ENVIADA 341 AG 0001", "tipo": "despesa", "esperado": "cat-outros-despesa" },
+  { "descricao": "SAQUE 24H TERMINAL 8821", "tipo": "despesa", "esperado": "cat-outros-despesa" },
+  { "descricao": "COMPRA CARTAO 4412 *****", "tipo": "despesa", "esperado": "cat-outros-despesa" },
+  { "descricao": "DEBITO AUTORIZADO 00213", "tipo": "despesa", "esperado": "cat-outros-despesa" },
+  { "descricao": "TARIFA MENSALIDADE PACOTE", "tipo": "despesa", "esperado": "cat-outros-despesa" },
+  { "descricao": "IOF COMPRA INTERNACIONAL", "tipo": "despesa", "esperado": "cat-outros-despesa" },
+
+  { "descricao": "CREDITO SALARIO EMPRESA XYZ", "tipo": "receita", "esperado": "cat-salario" },
+  { "descricao": "PAGAMENTO SALARIO FOLHA 10", "tipo": "receita", "esperado": "cat-salario" },
+  { "descricao": "RENDIMENTO POUPANCA", "tipo": "receita", "esperado": "cat-rendimentos" },
+  { "descricao": "RESGATE CDB LIQUIDEZ", "tipo": "receita", "esperado": "cat-rendimentos" },
+  { "descricao": "JUROS SOBRE CAPITAL", "tipo": "receita", "esperado": "cat-rendimentos" },
+  { "descricao": "PIX RECEBIDO ANA CLARA", "tipo": "receita", "esperado": "cat-outros-receita" },
+  { "descricao": "ESTORNO COMPRA CANCELADA", "tipo": "receita", "esperado": "cat-outros-receita" },
+  { "descricao": "DEVOLUCAO TARIFA", "tipo": "receita", "esperado": "cat-outros-receita" }
+]

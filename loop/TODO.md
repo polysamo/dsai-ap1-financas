@@ -1,0 +1,5 @@
+- [ ] Criar src/data/regrasPadrao.ts com as regras de alimentação
+- [ ] Acrescentar as regras de transporte
+- [ ] Acrescentar as regras de saúde
+- [ ] Acrescentar as regras de moradia
+- [ ] Acrescentar as regras de lazer e educação
